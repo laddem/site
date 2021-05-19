@@ -8,6 +8,8 @@ title: Academic # Website name
 baseurl: '' # Website URL
 copyright: '' # Footer text, e.g. '© {year} Me'
 
+publishDir: "../laddem.github.io"
+
 ############################
 ## LANGUAGE
 ############################
