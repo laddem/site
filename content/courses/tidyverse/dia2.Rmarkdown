@@ -1,0 +1,1187 @@
+---
+date: 2021-05-23
+title: stringr, forcats e dplyr
+type: book
+weight: 30
+---
+
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE)
+```
+
+## Operações em variáveis e bancos de dados
+
+Hoje vamos apresentar dois pacotes com finalidades mais específicas para trabalhar com variáveis de tipo caractere e fator e um pacote super importante para as operações com bancos de dados.
+
+O pacote `stringr` é uma série de adaptações da biblioteca `stringi` e serve para a manipulação de variáveis texto, incluindo funções para detecção, modificação, substituição, remoção de texto em variáveis caractere. Para dominar esse assunto, é necessário compreender o conceito de "regex", ou "expressão regular", que foge um pouco do escopo do curso, mas que será introduzido brevemente.
+
+O pacote `forcats` contém uma série de funções para trabalhar com o tipo `factor`. São funções que facilitam operações envolvendo esse tipo de variável, como contagens, troca dos nomes das categorias, agrupamento de categorias, recodificação, plotagem, etc.
+
+O pacote `dplyr` é um dos pilares do `tidyverse` e ele tem dois papéis principais: operações de manipulação de banco de dados simples e operações de bancos de dados relacionais. No primeiro tipo são incluídas as operações de criação e modificação de variáveis, medidas resumo globais e por grupos, seleção de variáveis, mudança da ordem das linhas e colunas, etc. No segundo tipo, são as operações de tipo `_join`, em que uma variável chave é utilizada para combinar registros de dois bancos de dados distintos.
+
+Os pacotes `stringr` e `forcats` são mais diretos, mas o `dplyr` pode representar um certo nível de abstração que pode incomodar usuários de longa data do R, portanto, vamos nos esforçar para demonstrar as vantagens de mudar seu workflow para incluir as funções desse pacote através de comparações com o R base.
+
+## `dplyr`
+
+### `dplyr` para manipulação de dados
+
+Talvez o pacote mais utilizado de todo o tidyverse, `dplyr` é um pacote de manipulação de bancos de dados inspirado pela linguagem SQL. A ideia é concatenar operações de **seleção de variáveis**, **filtragem de observação**, **arranjo e ordenamento**, **derivação de variáveis**, **computação de medidas resumo** para o banco todo ou para **grupos**. As funções básicas e mais utilizadas são, portanto:
+
+- `select`
+- `filter`
+- `arrange`
+- `mutate`
+- `summarize`
+- `group_by`
+
+Para praticar, vamos usar o dataset `flights`, que contém informações sobre os vôos saídos de Nova Iorque em 2013.
+
+```{r}
+library(nycflights13)
+library(dplyr)
+flights
+glimpse(flights)
+```
+
+Podemos filtrar nossas linhas: `filter`
+
+```{r}
+# Voos de primeiro de janeiro
+flights %>% filter(month == 1, day == 1)
+
+# Voos a partir de junho
+flights %>% filter(month > 6)
+
+# Voos saídos do aeroporto JFK
+flights %>% filter(origin == "JFK")
+
+# Voos com destino ao aeroporto de Albuquerque
+flights %>% filter(dest == "ABQ")
+
+# Voos com atraso de até 10 minutos
+flights %>% filter(dep_delay <= 10)
+
+# Voos com atraso de cerca de 10 minutos
+flights %>% filter(near(dep_delay, 10, tol = 2))
+
+# Voos que ocorreram entre abril e maio
+flights %>% filter(between(month, 4, 5))
+```
+
+Podemos combinar várias condições usando operadores lógicos
+
+```{r}
+# Voos até 15 de abril ou até 15 de maio
+flights %>% filter(
+  between(month, 4, 5), # mesmo que usar &
+  between(day, 1, 15)
+)
+
+# Voos entre 15 de abril e 15 de maio
+flights %>% filter(
+  month == 4 & between(day, 15, 30) | # OU
+  month == 5 & between(day, 1, 15)
+)
+
+# Voos em todas os primeiros 7 dias de cada mês, exceto em janeiro e dezembro
+flights %>% filter(
+  between(day, 1, 7),
+  !month %in% c(1, 12)
+)
+
+# Voos saidos de JFK, excluindo aqueles para os quais não tem informações de horário de saída
+flights %>% filter(
+  origin == "JFK", !is.na(dep_time)
+)
+
+# Voos com mais de 30 minutos de atraso em janeiro ou dezembro
+flights %>% filter(
+  dep_delay > 30, xor(month == 1, month == 12)
+)
+```
+
+E assim sucessivamente.
+
+Da mesma forma, temos `select` para selecionar as variáveis do banco. As duas grandes novidades são que você não precisa utilizar aspas na seleção de variáveis e que `select` introduz várias `helper functions` para facilitar a seleção de variáveis parecidas.
+
+```{r}
+# Selecionar as colunas ano, mes, dia, horario de saida e horario de chegada
+flights %>% select(year, month, day, dep_time, arr_time)
+
+# Utilizando helpers
+flights %>% select(year:dep_time, arr_time)
+
+# Mais helpers
+flights %>% select(year:day, starts_with("dep"), starts_with("arr"))
+flights %>% select(year:day, ends_with("time"))
+flights %>% select(year:day, c(ends_with("time")) & !contains("sched"))
+
+# Você pode mudar o nome das colunas durante um call para select
+flights %>% select(ano = year, mes = month, dia = day)
+
+# Ou você pode usar rename para mudar os nomes sem selecionar variáveis
+flights %>% rename(ano = year, mes = month, dia = day)
+```
+
+São realmente muitas possibilidades, vejam a documentação e os exemplos em `?select`.
+
+Utilizando `arrange` podemos facilmente organizar nosso banco a partir de variáveis de interesse:
+
+```{r}
+# Selecionar algumas variáveis e ver organizar de acordar com os mais adiantados
+flights %>% 
+  select(year:day,matches("^dep|^arr")) %>% 
+  arrange(dep_delay, arr_delay)
+
+# Ou os mais atrasados
+flights %>% 
+  select(year:day,matches("^dep|^arr")) %>% 
+  arrange(-dep_delay, -arr_delay)
+```
+
+É basicamente isso, você pode especificar uma ou muitas colunas para organizar, decidir se a ordem é ascendente ou descendente e pronto.
+
+Utilizando `mutate`, você cria variáveis derivadas das originais. Como `tibble`, essa função avalia seus argumentos de maneira preguiçosa e sequencial, o que permite você criar variáveis derivadas umas das outras muito facilmente.
+
+```{r}
+flights %>% 
+  select(sched_dep_time, dep_time, sched_arr_time, arr_time) %>% 
+  mutate(atraso_decolagem = dep_time - sched_dep_time,
+         atraso_pouso = arr_time - sched_arr_time,
+         atraso_dec_horas = atraso_decolagem / 60,
+         atraso_pouso_horas = atraso_pouso / 60)
+
+# Transmute é um atalho para quando você quer apenas as variáveis resultado e não está interessado nas intermediárias.
+flights %>% 
+  transmute(atraso_decolagem = dep_time - sched_dep_time,
+            atraso_pouso = arr_time - sched_arr_time,
+            atraso_dec_horas = atraso_decolagem / 60,
+            atraso_pouso_horas = atraso_pouso / 60)
+
+```
+
+Usando o pipe, é fazer diversas operações de transformação de variáveis simultâneamente em um único call sem a necessidade de repetir o nome do objeto e `$` a cada referência. `mutate` é uma função extremamente flexível, você pode chamar qualquer função que retorne um vetor de tamanho 1 ou de tamanho do número de linhas do banco lá dentro para criar uma variável.
+
+```{r}
+desabafo <- function(x) {
+  y <- floor(x / 60)
+  
+  dplyr::case_when(
+    # Condições ~ Resultados
+    y < 0       ~ "Opa, vou chegar cedo!",
+    y < 1       ~ "Atraso de menos de 1 hora é tolerável",
+    y >= 1      ~ paste0("Atraso de mais de ", y, " horas é f***."),
+    TRUE        ~ "Ahn?" # Condição guarda-chuva
+  )
+  
+}
+
+flights %>% 
+  select(dep_delay) %>% 
+  mutate(desabafo = desabafo(dep_delay)) %>% 
+  sample_n(10)
+```
+
+
+Utilizando `summarize` você tira medidas resumo das suas colunas de interesse:
+
+```{r}
+flights %>% 
+  summarize(atraso_decolagem_medio = mean(dep_delay, na.rm = T),
+            atraso_decolagem_desvpad = sd(dep_delay, na.rm = T),
+            atraso_pouso_medio = mean(arr_delay, na.rm = T),
+            atraso_pouso_desvpad = sd(arr_delay, na.rm = T),
+            n_voos = n())
+```
+
+Parece uma bobagem, mas quando você junta isso com a última função, `group_by`, é possível obter diversas estatísticas de interesse muito rapidamente e para vários domínios:
+
+```{r}
+# Por mês
+flights %>% 
+  group_by(month) %>% 
+  summarize(atraso_decolagem_medio = mean(dep_delay, na.rm = T),
+            atraso_decolagem_desvpad = sd(dep_delay, na.rm = T),
+            atraso_pouso_medio = mean(arr_delay, na.rm = T),
+            atraso_pouso_desvpad = sd(arr_delay, na.rm = T),
+            n_voos = n())
+
+# Por mês e aeroporto de origem
+flights %>% 
+  group_by(month, origin) %>% 
+  summarize(atraso_decolagem_medio = mean(dep_delay, na.rm = T),
+            atraso_decolagem_desvpad = sd(dep_delay, na.rm = T),
+            atraso_pouso_medio = mean(arr_delay, na.rm = T),
+            atraso_pouso_desvpad = sd(arr_delay, na.rm = T),
+            n_voos = n())
+
+```
+
+Uma vez que você se familiariza com a gramática do `dplyr`, o processo de análise exploratória se torna bastante trivial e até certo ponto, prazeiroso. Mas o que eu realmente gosto é que ele também se torna visualmente óbvio para o leitor, com cada chamado podendo ser lido como uma declaração:
+
+> Utilizando o banco de dados flights, agrupe as observações por mês e aeroporto de origem, então, calcule as médias e desvios padrão dos atrasos no pouso e na decolagem e o número de vôos para cada grupo.
+
+Você também pode rapidamente introduzir ou retirar passos em cada chamado deste utilizando o pipe, por exemplo:
+
+```{r}
+flights %>% 
+  group_by(month, origin) %>% 
+  summarize(atraso_decolagem_medio = mean(dep_delay, na.rm = T),
+            atraso_decolagem_desvpad = sd(dep_delay, na.rm = T),
+            atraso_pouso_medio = mean(arr_delay, na.rm = T),
+            atraso_pouso_desvpad = sd(arr_delay, na.rm = T),
+            n_voos = n()) %>% 
+  arrange(-atraso_decolagem_medio)
+```
+
+E a leitura fica:
+
+> Utilizando o banco de dados flights, agrupe as observações por mês e aeroporto de origem, então, calcule as médias e desvios padrão dos atrasos no pouso e na decolagem e o número de vôos para cada grupo, então, ordene os resultados pelo maior atraso.
+
+De quebra, você ainda leva para casa um dado no formato "tabela", fácil de exportar para outros softwares para embelezamento e publicação. Veja:
+
+```{r}
+resumo <- 
+  flights %>% 
+  group_by(month, origin) %>% 
+  summarize(atraso_decolagem_medio = mean(dep_delay, na.rm = T),
+            atraso_decolagem_desvpad = sd(dep_delay, na.rm = T),
+            atraso_pouso_medio = mean(arr_delay, na.rm = T),
+            atraso_pouso_desvpad = sd(arr_delay, na.rm = T),
+            n_voos = n()) %>% 
+  arrange(-atraso_decolagem_medio)
+
+print(resumo, n = Inf)
+```
+
+Lembrem-se que é necessário atribuir `<-` os resultados das operações para que elas sejam salvas. Em geral, meu workflow é assim:
+
+```{r}
+# Começo com o banco
+flights
+
+# Seleciono algumas variáveis
+flights %>% 
+  select(month, dep_delay, arr_delay)
+
+# Recorto algumas observações
+flights %>% 
+  select(month, dep_delay, arr_delay) %>% 
+  filter(between(month, 1, 6))
+
+# Escolho os dominios e calculo as medidas resumo
+flights %>% 
+  select(month, dep_delay, arr_delay) %>% 
+  filter(between(month, 1, 6)) %>% 
+  group_by(month) %>% 
+  summarise(atraso_dec_medio = mean(dep_delay, na.rm = T),
+            atraso_pou_medio = mean(arr_delay, na.rm = T))
+
+# Acho bom organizar pelos atrasos maiores
+flights %>% 
+  select(month, dep_delay, arr_delay) %>% 
+  filter(between(month, 1, 6)) %>% 
+  group_by(month) %>% 
+  summarise(atraso_dec_medio = mean(dep_delay, na.rm = T),
+            atraso_pou_medio = mean(arr_delay, na.rm = T)) %>% 
+  arrange(-atraso_dec_medio, -atraso_pou_medio)
+
+# Estou satisfeito, salvo meu resultado em outro objeto
+atrasos <- 
+  flights %>% 
+  select(month, dep_delay, arr_delay) %>% 
+  filter(between(month, 1, 6)) %>% 
+  group_by(month) %>% 
+  summarise(atraso_dec_medio = mean(dep_delay, na.rm = T),
+            atraso_pou_medio = mean(arr_delay, na.rm = T)) %>% 
+  arrange(-atraso_dec_medio, -atraso_pou_medio)
+
+atrasos
+
+```
+
+Desta forma, consigo construir interativamente meus cálculos, verificando a cada passo se estou obtendo o resultado esperado. Visto de outra perspectiva, se encontro um código programado desta forma que não funciona, posso ir apagando cada ` %>% ` para identificar onde o problema ocorreu.
+
+Espero que tenha ficado claro que o assunto não se encerra por aqui. Existem diversas outras funções úteis no pacote, como `count`, `if_else`, `case_when`, `top_n`, `bind_rows`, `bind_cols`, as novas funções `across` e `c_across` e muitas, muitas outras. Nos livros vocês encontram vários outros exemplos e funções para facilitar o processo de análise de dados, mas nossa expectativa é que essa apresentação seja um ponto de partida para vocês se aprofundarem no seu próprio ritmo.
+
+### `dplyr` para bancos de dados relacionais
+
+Nesta seção, o nosso problema não é mais a análise de dados presentes em um banco, mas o problema de relacionar informações sobre uma mesma unidade de análise que estão presentes em vários bancos de dados distintos.
+
+O banco `nycflights13` contém várias tabelas que se relacionam, e elas funcionam como um excelente exemplo de banco de dados relacionais.
+
+![Banco de dados relacional de vôos](/courses/tidyverse/dia2_files/relational-nycflights.png)
+
+Note que além do banco de dados dos vôos, temos informações sobre clima, aviões e companhias aéreas. Para nós, pode ser relevante reunir informações de diferentes fontes em um mesmo banco de dados, algo que é possível através de `joins`. Por uma questão de tempo, não vamos entrar muito a fundo no assunto, mas vamos introduzir dois conceitos chave e partir pros exemplos.
+
+- `chaves` são as variáveis que identificam cada observação em um banco de dados de forma única. Uma chave é dita "primária" quando identifica uma observação na sua própria tabela e "externa" quando ela identifica uma observação em outra tabela. Assim, qualquer operação de join é uma forma de relacionar uma chave **primária** e uma chave **externa**. Essa junção de chaves é uma **relação**, e as relações podem ser **1 para 1**, **1 para muitos** ou **muitos para 1**.
+
+- `joins` são tipos de operação no qual se opta por priorizar um grupo de observações em detrimento de outras. Podemos vê-los didaticamente a partir de duas figuras:
+
+![Joins como diagramas de Venn](/courses/tidyverse/dia2_files/join-venn.png)
+
+![Joins como "pontos"](/courses/tidyverse/dia2_files/join-outer.png)
+
+A primeira figura é interessante porque nos dá uma ideia de quais observações serão mantidas e quais serão descartadas, podemos imaginá-la como uma abstração da nossa escolha. 
+
+> Quero todas as informações sobre os vôos e os aeroportos, e as duas são igualmente importantes (inner_join, x = flights, y = airports).
+
+> Quero todas as observações do banco vôos e as informações disponíveis sobre a aeronave (left_join, x = flights, y = planes).
+
+> Quero todas as informações tanto sobre os vôos quanto sobre o clima em cada dia (full_join, x = flights, y = weather).
+
+> Quero as informações dos vôos realizados pelas companhias aéreas - minha prioridade são as cias. áreas (right_join, x = flights, y = carriers).
+
+A segunda figura é interessante porque elas mostra a mecânica de um `join`: cada observação tem a sua chave marcada com a observação correspondente no outro banco. Se as chaves são iguais, a operação é realizada, se as chaves não são iguais, a operação não é realizada. Dependendo do tipo de `join`, uma, as duas ou nenhuma das observações é descartada do banco resultante.
+
+> Antes de começar a trabalhar com bancos relacionais, é uma boa ideia dar uma explorada nas chaves, vendo suas contagens, se há erros de digitação, etc. Por uma questão de tempo, vamos pular essa fase.
+
+Se as nossas chaves forem perfeitinhas, e inclusive tiverem o mesmo nome nas duas tabelas, basta invocar o tipo de join desejado.
+
+```{r}
+# Vamos dar uma enxugada no flights para poder ver o efeito dos joins com maior facilidade.
+flights2 <- flights %>% 
+  select(year:day, hour, origin, dest, tailnum, carrier)
+
+flights2
+
+# Chaves perfeitas, mesmo nome nos dois bancos = natural join
+flights2 %>% left_join(weather) # Moleza
+flights2 %>% left_join(airlines) # Moleza
+
+# Chaves perfeitas, mas há variáveis nos dois bancos com o mesmo nome e que não são chaves
+# É necessário especificar qual a chave
+flights2 %>% left_join(planes, by = "tailnum")
+```
+
+Veja que tanto `flights2` quanto `planes` tem uma variável chamada `year`, mas elas significados diferentes. Em `flights2` é o ano do vôo, enquanto em `planes` é o ano em que a aeronave entra em serviço. Na hora que fazemos o join, uma recebe o sufixo "x" e a outra "y" para a indicar a diferença. Você pode especificar o sufixo desejado para evitar confusão:
+
+```{r}
+flights2 %>% left_join(planes, by = "tailnum", suffix = c("_flight", "_entered_service"))
+```
+
+Um aviso: cuidado com os produtos cartesianos. Não há um bom exemplo aqui no caso do `flights` porque o banco já está limpinho, mas se você especificar chaves com uma relação "muitos para muitos", ele vai registrar no banco novo uma linha para cada combinação possível de variáveis. Em bancos maiores, isso geralmente estoura sua memória e trava o R. Veja este pequeno exemplo de brinquedo.
+
+```{r}
+x <- tribble(
+  ~key, ~val_x,
+     1, "x1",
+     2, "x2",
+     2, "x3",
+     3, "x4"
+)
+y <- tribble(
+  ~key, ~val_y,
+     1, "y1",
+     2, "y2",
+     2, "y3",
+     3, "y4"
+)
+left_join(x, y, by = "key")
+```
+
+Veja que no resultado foi criada uma linha para cada combinação de val_x e val_y que tem a mesma chave repetida. Podem até existir situações em que isso seja o que você quer mesmo, mas na minha experiência até o momento isso é problema com as chaves duplicadas e é sinal de que há algo errado.
+
+Mas peraí, se você falou que tem 4 tipos de join, porque só dá exemplo de `left_join`?
+
+Na prática, operações relacionais são feitas de forma intencional: escolhemos bancos de dados de acordo com o valor que atribuímos a informação presente nele e pinçamos informações relacionadas de outros lugares para adicionar aquilo que é nosso foco. Por isso, na maioria dos casos, o `left_join` é o mais usual, porque **preserva todas as informações do meu banco x e adiciona apenas as informações do banco y que combinaram com sucesso**. Isso garante que eu não vou perder nenhuma informação do meu banco principal.
+
+Pra encerrar essa parte, mais exemplos de `joins`.
+
+```{r}
+# Minhas chaves tem nomes diferentes, então uso um vetor do tipo c("chave_x" = "chave_y")
+flights2 %>% 
+  left_join(airports, c("dest" = "faa"))
+
+# Mesma coisa, só que agora juntando as informações da origem ao invés do destino
+flights2 %>% 
+  left_join(airports, c("origin" = "faa"))
+```
+
+O assunto, obviamente, não pára por aí. Nos livros vocês encontrarão mais exemplos e funções, como é o caso do `semi_join` e do `anti_join` e das operações "set", `intersect`, `union` e `setdiff`, mas isso fica pra vocês explorarem por conta própria e virem tirar as dúvidas depois!
+
+## `stringr`
+
+`stringr` contém uma família de funções, todas começadas em `str_`, cuja principal preocupação é a **consistência**. As funções do `base` para strings são muito úteis, porém, seus argumentos estão numa ordem um pouco estranha, algumas funções são vetorizadas e outras não. Quando você se acostuma, até que não é tão ruim, mas voltando para o assunto discutido ontem de tornar o seu código mais legível, é interessante ter a simplicidade oferecida.
+
+### Basicão da string
+
+Como este curso já é pra praticantes de R, vou pular algumas coisas muito básicas de string, vamos ao que interessa.
+
+Determinados caracteres tem um significado especial dentro das strings. Quem já tentou copiar e colar um caminho de arquivo do Windows pro R sabe disso. Então, nesses casos, é precisar "escapar" caracteres. Por exemplo, se você quiser escrever aspas, você usar a contrabarra `\` para "escapar" um caractere.
+
+```{r}
+aspa_simples <- '\'' # ou "'"
+aspa_dupla <- "\"" # ou '"'
+```
+
+A regra do escape é simples, então se você quiser colocar uma contrabarra `\`
+
+```{r}
+x <- c("\\", "\"")
+x
+
+writeLines(x)
+```
+
+Outros caracteres especiais úteis: `"\n"` para pular uma linha, `\t` para Tab. Você pode ver os outros na ajuda das aspas `"`, basta digitar no console `?"'"` ou `?'"'`. 
+
+Outra coisa que dá pra fazer, se você precisar incluir um caractere distinto, é usar unicode:
+
+```{r}
+x <- "\u00b5"
+x
+```
+
+Ok, mas e o pacote `stringr`? Bem, ele tem o intuito de facilitar e dar consistência, então, todas as funções do pacote começam com as iniciais `str_` justamente para serem utilizadas com o **autocompletar** do RStudio, que pode ser acessada com os atalhos `Ctrl + Espaço` ou `Tab`. Vamos ver agora alguns exemplos de funções do pacote.
+
+Comprimento da string em caracteres:
+
+```{r}
+library(stringr)
+
+# No RStudio, basta digitar 'str_' e apertar Tab ou Ctrl + Espaço
+x <- "Ministro Sinistro"
+str_length(x)
+
+x <- c("Ministro Sinistro", "Abelha Gulosa", "p")
+str_length(x)
+```
+
+Concatenação de strings:
+
+```{r}
+str_c("x", "y", "z")
+```
+
+Use o argumento `sep` para definir caracteres que aparecerão entre as strings originais:
+
+```{r}
+str_c("x", "y", "z", sep = " + ")
+```
+
+Você pode trabalhar com strings que contém `NA`s:
+
+```{r}
+x <- c("abc", NA)
+str_c("|-", x, "-|")
+str_c("|-", str_replace_na(x), "-|")
+```
+
+`str_c` é uma função vetorizada e automaticamente recicla seus argumentos pra ter o tamanho do maior:
+
+```{r}
+# Eu na graduação
+str_c("Profe, me dá mais ", c("1", "2", "3"), " semanas pra entregar, por favor!")
+
+# Eu de manhã
+str_c("Só mais ", c("5", "10", "20", "30"), " minutinhos e eu acordo!")
+```
+
+Se algum dos objetos passados para `str_c` tiver tamanho 0, ele é descartado. Útil para usar com testes lógicos.
+
+```{r}
+nome <- "Vinicius"
+sobrenome <- "Maia"
+tem_nome_do_meio <- FALSE
+
+str_c(
+  "Meu nome é ", nome, " ",
+  # isso aqui retorna um vetor tamanho 0
+  if (tem_nome_do_meio) " de Souza", 
+  sobrenome,
+  "."
+)
+```
+
+Conhecedores de `paste` reconhecerão o argumento `collapse`, que serve para transformar vetores de strings em uma única string.
+
+```{r}
+str_c(c("Natália", "Martins", "Arruda"), collapse = " ")
+```
+
+De forma similar, conhecedores de `substring` deverão imediatamente reconhecer essa:
+
+```{r}
+x <- c("Maçã", "Banana", "Abacaxi")
+str_sub(x, 1, 3)
+str_sub(x, -3, -1)
+```
+
+`str_sub` não vai dar erro se a string for muito curta:
+
+```{r}
+str_sub("a", 1, 5)
+```
+
+Dá pra usar a forma `str_sub(x) <-` para modificar partes de strings
+
+```{r}
+str_sub(x, 1, 1) <- str_to_lower(str_sub(x, 1, 1))
+x
+```
+
+Note o uso de `str_to_lower` para mudar para minúsculas. O contrário é `str_to_upper`, também há uma para títulos, `str_to_title`, e para a primeira letra de uma frase, `str_to_sentence`.
+
+```{r}
+x <- "Ministro Sinistro"
+
+str_to_lower(x)
+str_to_upper(x)
+str_to_sentence(x)
+str_to_title(x)
+```
+
+
+Como vimos no `readr`, algumas questões relacionadas a strings dependem da língua, ou, na linguagem do pacote, são "locale dependent". Por isso nas funções onde isso é relevante, o argumento se chama `locale`. Isso não é super relevante para quem trabalha com o inglês ou as línguas do oeste europeu, considerando que a maioria das línguas tem raízes similares, mas pode ser muito importante para outros idiomas. Vejamos este exemplo com a mudança da ordem das strings.
+
+```{r}
+x <- c("abacaxi", "escarola", "banana")
+
+str_sort(x, locale = "en")  # Inglês
+
+str_sort(x, locale = "haw") # Havaiano
+```
+
+É justamente para esses casos que `str_sort` e `str_order` oferecem a alternativa de você especificar o `locale`.
+
+### Trabalhando com padrões e "expressões regulares"
+
+Expressões regulares são quase uma linguagem de programação em si, aqui, vamos dar uma passada muito rápida e ver alguns exemplos simples. São uma ferramenta muito útil, mas talvez não do interesse de todos.
+
+Basicamente, a ideia é fazer uma pesquisa na string, em busca de um padrão específico. Pode ser uma palavra, um espaço em branco, uma quebra de linha. Pode ficar muito complexo ou ser bem básico. O nosso objetivo aqui é que todos tenham a capacidade de trabalhar com padrões simples para corrigir inconsistências em bancos de dados, como no exemplo da aula anterior das colunas do dataset da OMS.
+
+Para visualizar padrões, vamos usar duas `helper functions`, `str_view` e `str_view_all`.
+
+```{r}
+x <- c("mamão", "banana", "ananas")
+str_view(x, "an")
+```
+
+O resultado sai na aba "Viewer" do seu RStudio.
+
+O primeiro padrão que podemos usar é o `.`, que identifica qualquer caractere. As vezes na documentação esse tipo de padrão genérico é chamado de "wildcard".
+
+```{r}
+str_view(x, ".a.")
+```
+
+A forma de ler essa operação é: "Identifique qualquer conjunto de caracteres que tenha uma letra a no meio deles".
+
+Se você quiser identificar um `.` numa string, você precisa usar o escape `\`. Porém, a barra também é um escape! Então, ao escrever expressões regulares, precisamos usar `\\`. Veja:
+
+```{r}
+dot <- "."
+cat(dot)
+```
+
+```{r, error=TRUE}
+# erro
+dot <- "\."
+```
+
+
+```{r}
+# agora sim
+dot <- "\\."
+cat(dot)
+```
+
+Agora em um exemplo:
+
+```{r}
+x <- c("Praia.", "Agora.", "Ou.", "Me.", "Rebelo.")
+str_view(x, "a\\.")
+str_view(x, "u\\.")
+str_view(x, "o\\.")
+```
+
+Tá, mas se a contrabarra é utilizada para denotar uma expressão regular tipo o `.`, como eu faço para pesquisar uma contrabarra?
+
+```{r}
+x <- "Jake Peralta é o melhor detetive\\gênio"
+cat(x)
+```
+
+A solução é escapar o escape do escape, sacou?
+
+```{r}
+str_view(x, "\\\\")
+```
+
+É enrolado mesmo...
+
+Para não estender muito o assunto, vamos ver vários exemplos de caracteres especiais a ser usados em expressões regulares.
+
+`^` encontra o início de uma string
+
+```{r}
+x <- c("maçã", "banana", "mamão")
+
+str_view(x, "^m")
+```
+
+`$` encontra o final
+
+```{r}
+str_view(x, "a$")
+```
+
+Para forçar a expressão a achar apenas a palavra completa, use os dois
+
+```{r}
+x <- c("vitamina de banana", "sundae de banana", "banana")
+str_view(x, "banana")
+str_view(x, "^banana$")
+```
+
+Use `classes` de caracteres para encontrar genéricos
+
+Qualquer digito:
+
+```{r}
+x <- "15 de Maio de 2021."
+str_view(x, "\\d")
+```
+
+Qualquer espaço em branco:
+
+```{r}
+str_view(x, "\\s")
+```
+
+Qualquer caractere de um grupo: `[abc]`
+
+```{r}
+str_view(x, "[M]")
+str_view(x, "[eM]")
+str_view(x, "[deM]")
+```
+
+Qualquer caractere menos esses: `[^abc]`
+
+```{r}
+str_view(x, "[^15]")
+str_view(x, "[^15 de]")
+str_view(x, "[^15 de Maio de ]")
+```
+
+Usar uma classe pra evitar digitar 5 milhões de contrabarras
+
+```{r}
+str_view(x, "[.]")
+str_view("a*c", "[*]")
+```
+
+Você pode misturar strings com classes também
+
+```{r}
+x <- c("15 de Maio de 2021.", "16 de Maio de 2021.")
+str_view(x, "1[56] de Maio")
+```
+
+Infelizmente, alguns caracteres tem significado especial dentro das classes, e você tem que usar contrabarras para fugir deles: `]` `\` `^` e `-`.
+
+Você pode lidar com repetições
+
+```{r}
+x <- c("Mariele", "Marielle", "Mariellle", "Marie")
+str_view(x, "Mariell?e") # l aparece 0 ou 1 vez
+str_view(x, "Mariel+e") # l aparece 1 ou + vezes
+str_view(x, "Mariel*") # l aparece 0 ou + vezes
+str_view(x, "Mariel{0}") # l aparece exatamente 0 vezes
+str_view(x, "Mariel{1}") # l aparece exatamente 1 vez
+str_view(x, "Mariel{2}") # l aparece exatamente 2 vezes
+str_view(x, "Mariel{3}") # l aparece exatamente 3 vezes
+str_view(x, "Mariel{1,}") # l aparece exatamente 1 vez ou mais
+str_view(x, "Mariel{2,}") # l aparece exatamente 2 vezes ou mais
+str_view(x, "Mariel{1,2}") # l aparece de 1 a 2 vezes
+str_view(x, "Mariel{2,3}") # l aparece de 2 a 3 vezes
+```
+
+Esse assunto é enorme, e ainda estamos só na superfície. Há grupos, lookarounds, e muitos outros detalhes envolvendo expressões regulares, e vocês podem consultar os livros de referência para mergulhar mais fundo. Mas vamos parar por aqui para nos concentrar no que interessa.
+
+Em geral, temos um banco de dados com strings problemáticas, tipo erros de digitação, inconsistências etc. O primeiro passo, em geral, é detectar os problemas.
+
+```{r}
+x <- c("São Paulo", "SAO PAULO", "Sao Paulo", "sp", "SP", "Sp")
+str_detect(x, "ã")
+str_detect(x, "[Ss][Pp]")
+str_detect(x, "[Ss][Aa][Oo]")
+```
+
+Você pode se utilizar do fato da resposta ser um vetor lógico para descobrir quantos problemas você tem
+
+```{r}
+# Contagens
+str_detect(x, "ã") %>% sum()
+str_detect(x, "[Ss][Pp]") %>% sum()
+str_detect(x, "[Ss][Aa][Oo]") %>% sum()
+
+# Proporções
+str_detect(x, "ã") %>% mean()
+str_detect(x, "[Ss][Pp]") %>% mean()
+str_detect(x, "[Ss][Aa][Oo]") %>% mean()
+```
+
+Depois de detectar seus problemas, você pode querer extrair uma parte dos seus casos: use `str_subset`
+
+```{r}
+str_subset(x, "[Ss][Pp]")
+```
+
+Em geral, no entanto, você vai estar trabalhando num data frame. Então use `dplyr::filter` e `str_detect`.
+
+```{r}
+df <- tibble::tibble(
+  nome = c("Marcos", "rogério", "cebolinha", "Beiçola", "nadir", "Monica"),
+  uf = x,
+  dtnsc = c("15 de Maio de 1980", "1 de Jan de 2001", "6 de Ago de 1993", 
+            "20 de Abril de 1964", "24 de Nov de 1975", "14 de Dezembro de 1997")
+)
+df %>% dplyr::filter(str_detect(uf, "[Ss][Pp]"))
+```
+
+Você pode contar quantos matches você tem `str_count`
+
+```{r}
+str_count(x, "o")
+str_count(x, "[Oo]")
+
+# e usar num data frame
+df %>% dplyr::mutate(vogais = str_count(uf, "[aeiou]"),
+                     consoantes = str_count(uf, "[^aeiou]"))
+```
+
+Você pode extrair `str_extract` as informações que você quer
+
+```{r}
+str_extract(df$dtnsc, "\\d+")
+str_extract(df$dtnsc, "\\d+$")
+str_extract(df$dtnsc, "\\D+")
+
+# Na tibble
+df %>% dplyr::mutate(
+  dia = str_extract(dtnsc, "\\d+"),
+  mes = str_extract(df$dtnsc, "\\D+"),
+  ano = str_extract(dtnsc, "\\d+$"))
+
+# Melhor ainda
+df %>% tidyr::extract(
+  dtnsc, c("dia", "mes", "ano"), 
+  regex = "(\\d+) de (\\D+) de (\\d+$)"
+)
+
+```
+
+Similar a ideia de extração, podemos substituir com `str_replace`
+
+```{r}
+str_replace(x, "[Ss][Pp]", "São Paulo")
+str_replace(x, "SAO PAULO", "São Paulo")
+str_replace(x, "a", "ã")
+```
+
+Tanto `str_extract` quanto `str_replace` substituem apenas a primeira marca, se você quiser substituir todas, utilize `str_..._all`
+
+```{r}
+str_extract_all(x, "a", simplify = TRUE)
+str_replace_all(x, "a", "ã")
+```
+
+O assunto não acaba, mas vamos parar por aqui. Novamente, recomendo consultarem os materiais para quem quiser ir mais a fundo nisso. É bem capaz de no andar da carruagem aparecerem outros exemplos nos quais a manipulação de strings pode ser importante.
+
+## `forcats`
+
+Esse é um pacotinho muito que facilita bastante a vida de quem trabalha com variável categórica, ou, no R, os `factor`s. Ele consiste em uma série de "helper functions" baseadas em funções do `base` e do `stats` que trabalham com os componentes de um `factor`, ou seja, seus `levels` e seus `values`.
+
+Imagino que todos aqui estão familiarizados com fatores e com a sua criação, então vamos direto ao que interessa. Educação é um vetor de caracteres que vem com os níveis educacionais de um população.
+
+```{r}
+educacao <- c("Superior", "Fundamental", "Médio", "Superior", "Fundamental", "Médio",
+              "Superior", "Fundamental", "Médio", "Superior", "Fundamental", "Médio")
+
+x <- factor(educacao, levels = c("Fundamental", "Médio", "Superior"))
+x
+levels(x)
+relevel(x, "Superior")
+```
+
+Em geral, diversas tarefas envolvendo fatores no `base` não são muito simples. Por exemplo, se eu quiser modificar os nomes dos níveis de um fator depois dele já estar criado, modificar a ordem dos níveis, ou agrupar diversos níveis em um só. `forcats` vem justamente oferecer soluções nesse sentido. Normalmente, estamos trabalhando com bancos de dados, e não com um vetor solitário, por isso, vamos usar o `gss_cat`, uma amostra do General Social Survey aplicado pelo NORC e pela Universidade de Chicago, que vem no pacote forcats.
+
+```{r}
+library(forcats)
+gss_cat
+```
+
+Contagens
+
+Uma das primeiras coisas que interessa ao lidar com fatores, é obter suas contagens, o que é algo muito simples utilizando a gramática do dplyr.
+
+```{r}
+# Função count
+gss_cat %>% 
+  count(race)
+
+# Incluindo níveis com contagem = 0.
+gss_cat %>% 
+  count(race, .drop = FALSE)
+
+# Visualização com ggplot
+library(ggplot2)
+gss_cat %>% 
+  ggplot(aes(race)) + geom_bar()
+
+# Incluindo níveis com contagem = 0.
+gss_cat %>% 
+  ggplot(aes(race)) + geom_bar() + scale_x_discrete(drop = FALSE)
+
+```
+
+Note o uso do argumento `drop` nos dois casos, para indicar que casos com 0 observações não devem ser removidos do resultado.
+
+### Modificando a ordem
+
+A segunda tarefa comum quando trabalhamos com fatores é modificar a ordem em que eles aparecem. Não é tanto o caso quando trabalhamos com fatores ordenados, mas diversos tipos de variáveis categóricas não possuem uma ordem lógica pre-definida e, mesmo assim, nos interessa apresentá-los de acordo com uma determinada hierarquia visual, seja porque eles são os mais frequentes ou porque queremos destacar algum elemento em particular. `forcats` implementa diversas estratégias de reordenamento de fatores. Vamos vê-las brevemente.
+
+Digamos que eu queira saber o tempo médio de televisão assistida por membros das diversas religiões. Eu poderia produzir um sumário e depois plotar isso num gráfico.
+
+```{r}
+relig_summary <- gss_cat %>%
+  group_by(relig) %>%
+  summarise(
+    age = mean(age, na.rm = TRUE),
+    tvhours = mean(tvhours, na.rm = TRUE),
+    n = n()
+  )
+
+relig_summary %>% 
+  ggplot(aes(tvhours, relig)) + geom_point()
+```
+
+O display está técnicamente correto, mas a forma desorganizada dos níveis no eixo Y dificulta a nossa capacidade de fazer comparações. Talvez fosse mais interessante ordenar este resultado por ordem decrescente do número de horas de tv. Mas, como fazer isso de forma direta, sem precisar realizar diversas computações?
+
+```{r}
+# Direto no plot
+relig_summary %>% 
+  ggplot(aes(tvhours, fct_reorder(relig, tvhours))) + geom_point()
+
+# Antes de passar o data.frame para a plotagem
+relig_summary %>% 
+  mutate(relig = fct_reorder(relig, tvhours)) %>% 
+  ggplot(aes(tvhours, relig)) + geom_point()
+```
+
+Note como posso aplicar a transformação diretamente na variável durante o processo de plotagem, ou antes, e uma invocação de `mutate`. Na minha opinião, o segundo jeito é o mais adequado, por duas razões: é mais fácil de digitar, inserir e retirar do código e é mais fácil para um leitor identificar que uma transformação foi feita na variável plotada.
+
+Outro exemplo: que tal exarminarmos a relação entre a idade e a renda declarada? Primeiro, é preciso construir um sumário, parecido com o primeiro:
+
+```{r}
+rincome_summary <- gss_cat %>%
+  group_by(rincome) %>%
+  summarise(
+    age = mean(age, na.rm = TRUE),
+    tvhours = mean(tvhours, na.rm = TRUE),
+    n = n()
+  )
+
+rincome_summary %>% 
+  mutate(rincome = fct_reorder(rincome, age)) %>% 
+  ggplot(aes(age, rincome)) + geom_point()
+```
+
+Aqui, o reordenamento das variáveis de acordo com a idade não faz muito sentido, porque os níveis de renda tem uma ordem própria. Nesse caso, não é recomendado utilizar `fct_reorder`. 
+
+```{r}
+rincome_summary %>% 
+  ggplot(aes(age, rincome)) + geom_point()
+```
+
+Só que ao plotar, notamos um problema: a categoria "Not applicable" ficou primeiro e isso desorganiza visualmente nosso gráfico. Sem problema! Utilizamos `fct_relevel` para modificar a ordem de uma variável arbitrariamente. O padrão é colocar pro começo (Parecido com o comportamento de `stats::relevel`), mas você pode especificar outra posição.
+
+```{r}
+rincome_summary %>% 
+  mutate(rincome = fct_relevel(rincome, "Not applicable")) %>% 
+  ggplot(aes(age, rincome)) + geom_point()
+```
+
+Notem como nos exemplos acima, o uso do ` %>% ` nos permite alterar partes do nosso código de maneira interativa para chegar no resultado desejado.
+
+Outro tipo de mudança de ordem interessante ocorre quando temos uma terceira "dimensão" no nosso gráfico. Em geral, utilizamos cores, formas ou linhas quebradas para diferenciar entre categorias e gostaríamos que a nossa legenda acompanhasse a tendência do gráfico. Compare:
+
+```{r}
+by_age <- gss_cat %>%
+  filter(!is.na(age)) %>%
+  count(age, marital) %>%
+  group_by(age) %>%
+  mutate(prop = n / sum(n))
+
+# Sem alteração na ordem
+by_age %>% 
+  ggplot(aes(age, prop, colour = marital)) +
+  geom_line(na.rm = TRUE)
+
+# Com alteração na ordem
+ggplot(by_age, aes(age, prop, colour = fct_reorder2(marital, age, prop))) +
+  geom_line() +
+  labs(colour = "marital")
+```
+
+No caso de `fct_reorder2`, é melhor fazer a alteração de ordem dentro da função gráfica, pois dentro uma invocação de `mutate`, ela não funcionou durante meus testes.
+
+Por último, podemos querer ordenar um gráfico de barras de acordo com a frequência das categorias, o que podemos fazer com `fct_infreq` e `fct_rev` (opcional).
+
+```{r}
+gss_cat %>%
+  mutate(marital = marital %>% fct_infreq()) %>%
+  ggplot(aes(marital)) +
+    geom_bar()
+
+# OU
+gss_cat %>%
+  mutate(marital = marital %>% fct_infreq() %>% fct_rev()) %>%
+  ggplot(aes(marital)) +
+    geom_bar()
+```
+
+Notem o uso do pipe na hora de modificar a variável "marital".
+
+### Modificando os níveis
+
+O outro tipo de operação bastante comum é a alteração nos níves do fator. Em geral, queremos que os nossos níveis sejam representativos das nossas categorias de análise, sejam de fácil leitura e entendimento e contenham um número significativo de observações. Por essa razão, frequentemente precisamos alterar os rótulos, agrupar categorias, etc.
+
+Vejamos o exemplo da variável `partyid`, que registra a identificação do entrevistado com os partidos políticos dos EUA.
+
+```{r}
+gss_cat %>% count(partyid)
+```
+
+Vamos supor que, por qualquer motivo, essa forma de representação das categorias não nos satisfaz. Vejamos algumas das ferramentas que podemos utilizar para modificar esse fator.
+
+Podemos, simplesmente, reescrever essas categorias de forma mais completa:
+
+```{r}
+gss_cat %>% 
+  mutate(partyid = fct_recode(partyid,
+    "Republicano, forte" = "Strong republican",
+    "Republicano, fraco" = "Not str republican",
+    "Independente, próx. repub." = "Ind,near rep",
+    "Independente, próx. democ." = "Ind,near dem",
+    "Independente" = "Independent",
+    "Democrata, forte" = "Strong democrat",
+    "Democrata, fraco" = "Not str democrat",
+    "Outro partido" = "Other party",
+    "Não sei" = "Don't know",
+    "Sem resposta" = "No answer"
+  )) %>% 
+  count(partyid)
+```
+
+A função utilizada é `fct_recode` e ela é a mais genérica e flexível de todas, porém, exige que cada nível seja modificado individualmente. Dentro dela, é possível agrupar vários níveis associando vários níveis antigos a um mesmo nível novo. Veja o exemplo:
+
+```{r}
+gss_cat %>% 
+  mutate(partyid = fct_recode(partyid,
+    "Republicano, forte" = "Strong republican",
+    "Republicano, fraco" = "Not str republican",
+    "Independente, próx. repub." = "Ind,near rep",
+    "Independente, próx. democ." = "Ind,near dem",
+    "Independente" = "Independent",
+    "Democrata, forte" = "Strong democrat",
+    "Democrata, fraco" = "Not str democrat",
+    # Note o nome
+    "Outro" = "Other party",
+    "Outro" = "Don't know",
+    "Outro" = "No answer"
+  )) %>% 
+  count(partyid)
+```
+
+Se você quiser recategorizar um fator que tem muitos níveis para um menor, com poucos níveis, utilize `fct_collapse`:
+
+```{r}
+gss_cat %>%
+  mutate(partyid = fct_collapse(partyid,
+    Outro = c("No answer", "Don't know", "Other party"),
+    Republicano = c("Strong republican", "Not str republican"),
+    Independente = c("Ind,near rep", "Independent", "Ind,near dem"),
+    Democrata = c("Not str democrat", "Strong democrat")
+  )) %>%
+  count(partyid)
+```
+
+Repare que do lado esquerdo, nos valores novos, não foi necessário usar aspas. É preciso cuidado com essa característica dos verbos do tidyverse. Ela se chama "tidy evaluation" e está um pouco fora do escopo do curso. Basicamente, se rolar dúvida ou der erros, se for usar acentos ou algum caractere diferente, use aspas.
+
+```{r}
+gss_cat %>%
+  mutate(partyid = fct_collapse(partyid,
+    "Outro" = c("No answer", "Don't know", "Other party"),
+    "Republicano" = c("Strong republican", "Not str republican"),
+    "Independente" = c("Ind,near rep", "Independent", "Ind,near dem"),
+    "Democrata" = c("Not str democrat", "Strong democrat")
+  )) %>%
+  count(partyid)
+```
+
+Outro tipo de mudança importante no número de níveis é agrupar os níveis menos frequentes, por exemplo, para produzir uma visualização que dê maior destaque aos níveis mais frequentes. Esse é o trabalho de `fct_lump`.
+
+```{r}
+gss_cat %>% 
+  mutate(relig = fct_lump(relig, n = 5)) %>% 
+  count(relig)
+```
+
+Note que usando o argumento `n` eu indico quantos níveis eu quero. No caso, escolhi os 5 níveis mais frequentes e todos os outros são automáticamente agrupados na categoria "Other". Posso mudar esse nome também:
+
+```{r}
+gss_cat %>% 
+  mutate(relig = fct_lump(relig, n = 5, other_level = "Outros")) %>% 
+  count(relig)
+```
+
+
+## Exercícios
+
+1. Encontre os vôos que:
+    1. Atrasaram mais de duas horas
+    2. Com destino a Houston (`IAH` ou `HOU`)
+    3. Operados pela United, American ou Delta
+    4. Decolaram entre julho e setembro
+    5. Chegaram com mais de duas horas de atraso, mas não decolaram com atraso
+    6. Atrasaram mais de uma hora para decolar, mas recuperaram mais de 30 minutos durante o voo
+    7. Decolaram entre a meia-noite e 6 da manhã (inclusive)
+    
+2. Reordene suas colunas para encontrar os voos mais rápidos (maior velocidade de voo).
+
+```{r, include=FALSE}
+flights %>% 
+  select(air_time, distance) %>% 
+  mutate(speed = distance/air_time) %>% 
+  arrange(desc(speed))
+```
+
+3. Teste várias maneiras diferentes de selecionar as variáveis `dep_time`, `dep_delay`, `arr_time` e `arr_delay` usando as várias helper functions de `select`.
+
+4. As variáveis `dep_time` e `sched_dep_time` estão num formato incorreto (veja `?flights`). Converta-as com `mutate` para um valor em minutos passados desde a meia-noite. Dica: utilize `%/%` e `%%`.
+
+5. O que o código abaixo está fazendo? Porque mesmo após o código abaixo continuam existindo diferenças entre os valores das variáveis `air_time` e `travel_time`?
+
+```{r}
+flights %>% 
+  select(air_time, dep_time, arr_time, dep_delay, arr_delay) %>% 
+  mutate(dep_hour = dep_time %/% 100,
+         dep_min = dep_time %% 100,
+         dep_time2 = dep_hour * 60 + dep_min,
+         arr_hour = arr_time %/% 100,
+         arr_min = arr_time %% 100,
+         arr_time2 = arr_hour * 60 + arr_min,
+         travel_time = arr_time2 - dep_time2) %>% 
+  select(-dep_hour, -dep_min, -arr_hour, -arr_min)
+```
+
+6. Use o stringr para concatenar as seguintes strings em uma frase
+
+```{r}
+x <- "."
+y <- "feliz"
+w <- "acordei"
+z <- "hoje"
+```
+
+
+```{r, include = FALSE}
+str_c(z, w, y, sep = " ") %>% 
+  str_c(x, sep = "") %>% 
+  str_to_sentence()
+```
+
+7. Corrija as inconsistências nas colunas país, primeiro_nome, segundo_nome e crie uma nova coluna nomes contendo as duas anteriores. No final, ordene o banco em ordem alfabética.
+
+```{r}
+df <- 
+  tibble::tribble(
+    ~pais,    ~primeiro_nome, ~segundo_nome,
+    # -------|----------------|-------------|
+    "BRASIL", "ISABELA",       "MARTINS",
+    "Brasil", "Eduardo",       "cabellos",
+    "brasil", "márcia",         "pinto",
+    "bRaSiL", "rogério",        "Marinho",
+  )
+```
+
+```{r, include=FALSE}
+df$pais <- str_to_title(df$pais)
+df$primeiro_nome <-  str_to_title(df$primeiro_nome)
+df$segundo_nome <- str_to_title(df$segundo_nome)
+
+df <- df %>% tidyr::unite(nomes, primeiro_nome, segundo_nome, sep = " ")
+df[ str_order(df$nomes), ]
+```
+
+8. Transforme a string `c("Seu nome", "Seu sobrenome da mãe", "Seu sobrenome do pai")` na string `"SEU SOBRENOME DO PAI, sua inicial do nome. sua inicial da mãe."`, como numa citação. Veja o exemplo abaixo:
+
+```{r}
+# Transforme
+c("Vinícius", "de Souza", "Maia")
+
+# Resultado
+"MAIA, V. S."
+```
+
+```{r, include=FALSE}
+x <- c("Vinícius", "de Souza", "Maia")
+x[1] <- str_sub(x[1], 1, 1) %>% str_c(".")
+x[2] <- str_sub(x[2], 4, 4) %>% str_c(".")
+x[3] <- str_to_upper(x[3])
+str_c(c(x[3], x[1], x[2]), collapse = " ")
+```
+
+
+9. DESAFIO: Nos microdados da área de saúde, é comum que a variável idade esteja registrada da seguinte forma: "150", "219", "312", "471". Esses códigos indicam primeiro qual a unidade de medida da idade e segundo o valor desta unidade, 1 = horas, 2 = dias, 3 = meses, 4 = anos. Proponha um código usando `stringr` para transformar o vetor abaixo em um valor numérico.
+
+```{r}
+# Não precisa se preocupar com essa parte
+x <- as.character(round(c(
+  runif(25, 100, 124),
+  runif(25, 201, 230),
+  runif(25, 301, 312),
+  runif(25, 401, 499)
+)))
+
+# Como você transformaria esse vetor em número?
+x
+```
+
+```{r, include=FALSE}
+x %>% str_extract("\\d")
+
+tibble(
+  tipo_idade = str_sub(x, 1, 1),
+  idade = str_sub(x, 2, 3),
+  idade_anos =
+    if_else(
+      str_detect(tipo_idade, "1"),
+      as.numeric(idade) / (24 * 30 * 12),
+      if_else(
+        str_detect(tipo_idade, "2"),
+        as.numeric(idade) / (30 * 12),
+        if_else(
+          str_detect(tipo_idade, "3"),
+          as.numeric(idade) / 12,
+          as.numeric(idade)
+        )
+      )
+    )
+) %>% 
+  print(n = Inf)
+```
+
+10. Explore as contagens da variável `rincome` em `gss_cat`, ela ficaria bem representada num gráfico? De qual tipo?
+
+11. Qual a religião mais comum em `gss_cat`? Qual o partido (`partyid`) mais popular?
+
+12. A que religião se refere a variável `denom`? Você pode descobrir isso fazendo uma tabela de contagens?
+
+13. Como você poderia diminuir o número de categorias da variável `rincome` do banco `gss_cat`?

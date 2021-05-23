@@ -5,55 +5,36 @@
 
 # Appearance
 
-theme: minimal
+theme: rose
 day_night: true
 font: ''
 font_size: L
 
 # SEO
 
-site_type: Person
+site_type: Laboratory
 local_business_type: ''
-org_name: ''
-description: ''
+org_name: 'LADDEM'
+description: 'Laboratório de Análise de Dados em Demografia'
 twitter: ''
 
 # Contact (edit or remove options as required)
 
-email: test@example.org
-phone: 888 888 88 88
+email: laddem.unicamp@gmail.com
+phone: 19 3521 5893
 address:
-  street: 450 Serra Mall
-  city: Stanford
-  region: CA
-  postcode: '94305'
-  country: United States
-  country_code: US
+  street: Avenida Albert Einstein, 1300
+  city: Campinas
+  region: SP
+  postcode: '13083-852'
+  country: Brasil
+  country_code: BR
 coordinates:
-  latitude: '37.4275'
-  longitude: '-122.1697'
-directions: Enter Building 1 and take the stairs to Office 200 on Floor 2
+  latitude: '-22.814825'
+  longitude: '-47.063826'
 office_hours:
-  - 'Monday 10:00 to 13:00'
-  - 'Wednesday 09:00 to 10:00'
-appointment_url: 'https://calendly.com'
-contact_links:
-  - icon: twitter
-    icon_pack: fab
-    name: DM Me
-    link: 'https://twitter.com/Twitter'
-  - icon: skype
-    icon_pack: fab
-    name: Skype Me
-    link: 'skype:echo123?call'
-  - icon: keybase
-    icon_pack: fab
-    name: Chat on Keybase
-    link: 'https://keybase.io/'
-  - icon: comments
-    icon_pack: fas
-    name: Discuss on Forum
-    link: 'https://discourse.gohugo.io'
+  - 'Segunda a sexta, 9h-17h'
+  - 'Temporariamente fechado devido a pandemia COVID-19'
 
 # Site header
 
@@ -68,9 +49,9 @@ main_menu:
 
 # Localization
 
-date_format: 'Jan 2, 2006'
-time_format: '3:04 PM'
-address_format: en-us
+date_format: '2 Jan 2006'
+time_format: '15:04'
+address_format: pt-br
 
 # Site features
 
@@ -79,6 +60,7 @@ highlight_languages:
   - r
   - python
   - latex
+highlight_style: foundation
 math: false
 diagram: false
 privacy_pack: false
