@@ -1437,9 +1437,9 @@ acoes %>%
 ## 6     4 2016   2.66
 ```
 
-Que faz os valores missing desaparecem.
+Que faz os valores missing desaparecerem do resultado.
 
-`complete` pode ser usada pra tornar valores implícitos, explícitos! A função toma todas as colunas pedidas e verifica todas as combinações possíveis de valores, preenchendo as lacunas com `NA`. Cuidado ao utilizar complete com valores numéricos ou bancos de dados muito grandes, pois o número de combinações pode ser infinitamente grande e travar sua sessão.
+`complete` pode ser usada pra tornar valores implícitos, explícitos! A função toma todas as colunas pedidas e verifica todas as combinações possíveis de valores, preenchendo as lacunas com `NA`. Cuidado ao utilizar complete com valores numéricos ou conjuntos de colunas com muitas combinações possíveis, pois o número de combinações pode ser infinitamente grande e travar sua sessão!
 
 
 ```r

@@ -743,16 +743,16 @@ flights %>%
     ## # A tibble: 10 x 2
     ##    dep_delay desabafo                             
     ##        <dbl> <chr>                                
-    ##  1         0 Atraso de menos de 1 hora é tolerável
-    ##  2        -3 Opa, vou chegar cedo!                
-    ##  3        88 Atraso de mais de 1 horas é f***.    
-    ##  4        -3 Opa, vou chegar cedo!                
-    ##  5         3 Atraso de menos de 1 hora é tolerável
-    ##  6        15 Atraso de menos de 1 hora é tolerável
-    ##  7        -3 Opa, vou chegar cedo!                
-    ##  8        -9 Opa, vou chegar cedo!                
-    ##  9         5 Atraso de menos de 1 hora é tolerável
-    ## 10         2 Atraso de menos de 1 hora é tolerável
+    ##  1        94 Atraso de mais de 1 horas é f***.    
+    ##  2         5 Atraso de menos de 1 hora é tolerável
+    ##  3        57 Atraso de menos de 1 hora é tolerável
+    ##  4        71 Atraso de mais de 1 horas é f***.    
+    ##  5        -8 Opa, vou chegar cedo!                
+    ##  6        -1 Opa, vou chegar cedo!                
+    ##  7         1 Atraso de menos de 1 hora é tolerável
+    ##  8        -5 Opa, vou chegar cedo!                
+    ##  9        -8 Opa, vou chegar cedo!                
+    ## 10         0 Atraso de menos de 1 hora é tolerável
 
 Utilizando `summarize` você tira medidas resumo das suas colunas de interesse:
 
@@ -2553,15 +2553,15 @@ x <- as.character(round(c(
 x
 ```
 
-    ##   [1] "116" "117" "119" "124" "116" "123" "109" "104" "114" "107" "115" "118"
-    ##  [13] "103" "120" "107" "106" "119" "102" "122" "109" "105" "112" "120" "105"
-    ##  [25] "110" "217" "217" "205" "223" "221" "202" "226" "211" "226" "227" "225"
-    ##  [37] "219" "227" "205" "228" "230" "204" "202" "216" "229" "211" "214" "230"
-    ##  [49] "213" "219" "309" "311" "309" "307" "308" "309" "309" "306" "306" "308"
-    ##  [61] "307" "312" "311" "302" "305" "301" "303" "306" "309" "309" "302" "306"
-    ##  [73] "308" "304" "311" "482" "443" "403" "416" "499" "454" "409" "425" "406"
-    ##  [85] "498" "426" "465" "418" "485" "428" "464" "419" "422" "472" "434" "493"
-    ##  [97] "411" "405" "459" "478"
+    ##   [1] "116" "119" "123" "117" "122" "120" "105" "104" "115" "119" "114" "107"
+    ##  [13] "100" "114" "106" "107" "103" "116" "121" "110" "105" "119" "119" "121"
+    ##  [25] "123" "223" "221" "217" "214" "226" "212" "230" "220" "228" "202" "216"
+    ##  [37] "224" "205" "206" "220" "211" "220" "228" "221" "225" "229" "205" "203"
+    ##  [49] "222" "224" "312" "301" "301" "304" "302" "308" "309" "311" "302" "304"
+    ##  [61] "303" "310" "305" "303" "303" "305" "305" "309" "305" "311" "305" "304"
+    ##  [73] "303" "308" "310" "418" "405" "484" "463" "432" "497" "444" "442" "437"
+    ##  [85] "481" "441" "430" "486" "467" "469" "430" "416" "414" "421" "483" "443"
+    ##  [97] "428" "437" "458" "450"
 
 10. Explore as contagens da variável `rincome` em `gss_cat`, ela ficaria bem representada num gráfico? De qual tipo?
 
