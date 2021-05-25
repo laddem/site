@@ -1,0 +1,380 @@
+---
+title: "Soluções"
+# subtitle: ""
+# summary: ""
+# authors: []
+# tags: []
+# categories: []
+date: 2021-05-25T11:30:29-03:00
+lastmod: 2021-05-25T11:30:29-03:00
+featured: false
+draft: false
+
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
+# image:
+#   caption: ""
+#   focal_point: ""
+#   preview_only: false
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+# projects: []
+---
+
+## Soluções dos exercícios
+
+### `readr`, `tibble`, `tidyr`
+
+```{r}
+# Não esqueça dos pacotes!
+library(tidyverse)
+```
+
+
+1. Como você importaria o banco "epa78.csv"
+
+```{r}
+file <- readr_example("epa78.txt")
+```
+
+Primeiro, é bom verificar como estão dispostas as informações no arquivo texto
+
+```{r}
+read_lines(file, n_max = 10)
+
+```
+
+Ao identificar que se trata de um arquivo colunado, mas que as colunas são separadas por espaços, escolho o read_fwf com o fwf_empty.
+
+```{r}
+dic <- fwf_empty(file)
+
+df <- read_fwf(file, col_positions = dic)
+df
+```
+
+2. Importe o banco "challenge.csv" e resolva os problemas com o tipo da coluna.
+
+Ao verificar as primeiras 10 linhas do banco, podemos notar algo estranho
+
+```{r}
+file <- readr_example("challenge.csv")
+
+read_lines(file, n_max = 10)
+```
+
+Parece ser um arquivo csv comum, com duas colunas, mas uma delas parece ter apenas NAs. Se a gente proceder com a importação padrão, chegaremos em
+
+```{r}
+df <- read_csv(file)
+df
+```
+
+
+No console de vocês, deve aparecer que foram importadas as colunas x como double e y como logical. Mas uma chuva de "parsing failures", indicando que expected = 1/0/T/F/TRUE/FALSE, actual = 2015-01-16.
+
+Na verdade, ao tentar adivinhar o tipo de colunas, o readr lê as primeiras 1000 observações em busca de um padrão. Você pode resolver esse problema:
+
+```{r}
+# 1. Aumentando o número de observações utilizadas para adivinhar as colunas
+df <- read_csv(file, guess_max = 1001)
+
+# A específicação da coluna Y agora é <date>
+df
+
+# 2. escolhendo diretamente o tipo de coluna antes da importação
+tipos <- cols(
+  y = col_date()
+)
+
+df <- read_csv(file, col_types = tipos)
+
+# Mesmo resultado
+df
+```
+
+3. Com o banco sala_aula dado a seguir, transforme-o para que ele contenha as variáveis nome, avaliação e nota.
+
+```{r}
+sala_aula <- tribble(
+ ~name,    ~teste1,  ~teste2,  ~prova1,
+ "Billy",  "<NA>",   "D"   ,   "C",
+ "Suzy",   "F",      "<NA>",   "<NA>",
+ "Lionel", "B",      "C"   ,   "B",
+ "Jenny",  "A",      "A"   ,   "B"
+)
+
+```
+
+É sempre bom começar planejando o banco que queremos construir. Queremos um banco que tenha 3 variáveis: o nome, o tipo de prova aplicada e a nota de cada aluno. Para isso, precisamos colocar os nomes das colunas teste1, teste2 e prova1 numa variável e os valores das células em outra. Vamos chamar essas colunas de "avaliação" e "nota", elas formam um par. 
+
+Agora vamos chamar `pivot_wider` e especificar esses argumentos.
+
+```{r}
+sala_aula %>% pivot_longer(
+  # Primeiro, identificamos as colunas que serão modificadas
+  cols = c(teste1, teste2, prova1),
+  # Agora, indicamos os nomes das colunas que receberão
+  # os nomes das colunas transformadas
+  names_to = "avaliacao",
+  # os valores das células
+  values_to = "nota"
+)
+```
+
+4. Transforme o banco `relig_income` para que ele contenha as colunas religião, renda e frequência.
+
+```{r}
+relig_income
+```
+
+O banco relig_income parece ter uma organização em que temos 2 variáveis, mas uma delas está numa coluna "religion" e a outra está em 10 colunas, "income". Queremos um banco que tenha 3 colunas: a religião, o nível de renda, e o número de pessoas em cada combinação das duas primeiras.
+
+Como no exerício anterior, vamos chamar pivot_longer e especificar
+
+```{r}
+relig_income %>% pivot_longer(
+  
+  # As colunas a serem modificadas, notem o uso de ':' para selecionar várias
+  # colunas em sequência
+  cols = `<$10k`:`Don't know/refused`,
+  
+  # Variável recebe os nomes da antiga coluna
+  names_to = "nivel_renda",
+  
+  # Variável recebe os valores das células
+  values_to = "contagem"
+  
+)
+```
+
+5. Transforme o banco `billboard` para que ele contenha apenas uma coluna "semana" e uma coluna com a posição da música no ranking.
+
+> Dica, você pode selecionar várias colunas usando o atalho wk1:wk76
+
+```{r}
+billboard
+```
+
+Da mesma forma como fizemos nos anteriores, queremos transformar as várias wk1:wk76 em um par de colunas, uma que me diga a semana e a outra que me diga em que posição no ranking a música estava.
+
+```{r}
+billboard %>% pivot_longer(
+  # Colunas que serão transformadas
+  cols = wk1:wk76,
+  # Nome da variável que receberá os nomes das colunas
+  names_to = "semana",
+  # Nome da variável que receberá os valores das células
+  values_to = "posicao_rank",
+  # Nesse caso, uso o argumento opcional para eliminar os NAs
+  values_drop_na = TRUE
+  # Experimente mudar este argumento para FALSE e veja o resultado
+  # Quando uma música não está mais nas paradas, ela recebe NA. Acho
+  # justificado excluir os NAs nesse caso.
+)
+```
+
+6. Experimente fazer o caminho inverso dos exercícios 3 a 5, devolvendo os datasets ao seu formato original. O que você observou?
+
+Vou começar enxugando os códigos anteriores para criar os resultados que produzimos e salvá-los em objetos.
+
+```{r}
+sala_aula_long <- 
+  sala_aula %>% pivot_longer(
+    cols = c(teste1, teste2, prova1),
+    names_to = "avaliacao",
+    values_to = "nota"
+  )
+
+relig_income_long <- 
+  relig_income %>% pivot_longer(
+    cols = `<$10k`:`Don't know/refused`,
+    names_to = "nivel_renda",
+    values_to = "contagem"
+  )
+
+billboard_long <- 
+  billboard %>% pivot_longer(
+    cols = wk1:wk76,
+    names_to = "semana",
+    values_to = "posicao_rank",
+    values_drop_na = TRUE
+  )
+
+sala_aula_long
+relig_income_long
+billboard_long
+```
+
+O caminho inverso desses bancos de dados, é utilizar `pivot_wider`. Aqui, vamos escolher um par de colunas que contém:
+
+1. O nome das colunas que queremos criar
+2. O valor que queremos passar para as células dessas novas colunas
+
+Vamos ver exemplos comentados como no anterior
+
+```{r}
+sala_aula_long %>% pivot_wider(
+  
+  # Aqui, identificamos colunas que NÃO SERÃO MODIFICADAS
+  # É o contrário de pivot_longer. Por padrão, são todas as que não são
+  # mencionadas na transformação, mas para deixar bem claro, 
+  # vou deixar explícito.
+  id_cols = name,
+  
+  # Variável com os nomes para as novas colunas
+  names_from = avaliacao,
+  
+  # Variável com os valores para as células
+  values_from = nota
+)
+
+relig_income_long %>% pivot_wider(
+  # Colunas não modificadas
+  id_cols = religion,
+  
+  # Variável com os nomes para as novas colunas
+  names_from = nivel_renda,
+  
+  # Variável com os valores para as células
+  values_from = contagem
+)
+
+billboard_long %>% pivot_wider(
+  # Colunas não modificadas
+  id_cols = c(artist, track, date.entered),
+  
+  # Variável com os nomes para as novas colunas
+  names_from = semana,
+  
+  # Variável com os valores para as células
+  values_from = posicao_rank
+)
+
+```
+
+Tanto `pivot_longer` quanto `pivot_wider` tem mais argumentos para lidar com situações complexas, como quando você precisa aplicar transformações em variáveis antes de reformatar o banco ou precisa utilizar múltiplas colunas, mas eu deixo isso para vocês descobrirem por conta própria quando estiverem confortáveis com a sintaxe básica.
+
+7. O que os argumentos `extra` e `fill` em separate fazem? Utilize o exemplo a seguir como guia.
+
+```{r}
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("um", "dois", "tres"))
+
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("um", "dois", "tres"))
+```
+
+Por padrão, `separate` espera que todas as colunas sendo separadas tenham o mesmo comprimento. Por exemplo, no primeiro caso, indicamos que vamos criar três novas colunas, chamadas de "um", "dois" e "tres". Mas os vetores tem tamanhos diferentes. Um deles tem 4 letras ao invés de 3. No segundo exemplo, um deles tem duas letras ao invés de três. Esse tipo de situação é bastante comum quando lidamos com erros de digitação. Então, o que fazer com o elemento que está sobrando ou faltando?
+
+```{r}
+# Sobrando
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("um", "dois", "tres"), extra = "warn") # avise que ocorreu (padrão)
+
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("um", "dois", "tres"), extra = "drop") # descarte o que sobrou
+
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("um", "dois", "tres"), extra = "merge") # junte com o último
+
+# Note especialmente no último caso o que ocorreu com as colunas.
+
+# Faltando
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("um", "dois", "tres"), fill = "warn") # avise e preencha a direita
+
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("um", "dois", "tres"), fill = "left") # preencha a esquerda
+
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("um", "dois", "tres"), fill = "right") # preencha a direta
+
+# Note na sua saída do R como ficou a tibble e onde foram colocados NAs
+# em cada caso
+```
+
+8. Tanto `unite` como `separate` possuem um argumento `remove`. Pra que ele serve e quando você o utilizaria no valor `FALSE`?
+
+Acho que a melhor forma de compreender isso é utilizar um banco de dados. Vamos pegar aquele da população retirado da Wikipédia.
+
+```{r}
+populacao <- tribble(
+  ~Rank, ~Country, ~Population,	~'% of world', ~Day, ~Month, ~Year, ~Source,
+  1L,         "China",    1411778724, "17.9%",  "1", "Nov", "2020",       "Seventh Census on 2020",
+  2L,         "India",    1377123716, "17.5%", "19", "May", "2021", "National population clock[3]",
+  3L, "United States",     331695937, "4.22%", "19", "May", "2021", "National population clock[4]",
+  4L,     "Indonesia",     271350000, "3.45%", "31", "Dec", "2020",  "National annual estimate[5]",
+  5L,      "Pakistan",     225200000, "2.86%",  "1", "Jul", "2021",             "UN projection[2]",
+  6L,        "Brazil",     213154869, "2.71%", "19", "May", "2021", "National population clock[6]",
+  7L,       "Nigeria",     211401000, "2.69%",  "1", "Jul", "2021",             "UN projection[2]",
+  8L,    "Bangladesh",     170689832, "2.17%", "19", "May", "2021", "National population clock[7]",
+  9L,        "Russia",     146171015, "1.86%",  "1", "Jan", "2021",  "National annual estimate[8]",
+  10L,       "Mexico",     126014024, "1.60%",  "2", "Mar", "2020",        "2020 census result[9]"
+)
+populacao
+```
+
+Vamos ver dois exemplos, um com `unite` e outro com `separate` para exemplificar o que `remove` faz.
+
+```{r}
+# Unir as colunas Day, Month, Year, remove = TRUE
+populacao %>% unite(Data, Day, Month, Year, remove = TRUE) # padrão
+# Unir as colunas Day, Month, Year, remove = FALSE
+populacao %>% unite(Data, Day, Month, Year, remove = FALSE)
+
+# Vejam o que aconteceu com as colunas nos dois bancos.
+```
+
+Agora com `separate`: Separar a coluna `year` em século e ano, apenas como exemplo
+
+```{r}
+# remove = TRUE, padrão
+populacao %>% separate(Year, c("seculo", "ano"), sep = 2, remove = TRUE)
+
+# remove = FALSE
+populacao %>% separate(Year, c("seculo", "ano"), sep = 2, remove = FALSE)
+
+# Vejam o que aconteceu com as colunas nos dois bancos.
+```
+
+Eu gosto de utilizar esse argumento quando eu tenho dúvida sobre o resultado e quero fazer inspeção visual para detectar eventuais problemas na separação ou junção. Uma vez que estou satisfeito com o resultado, em geral eu uso o `remove=TRUE`. Vocês tem que decidir se precisam manter as colunas originais ou se a coluna transformada é o suficiente.
+
+9. Compare o argumento `values_fill` em `pivot_wider` e `fill` em `complete`. Qual é a diferença?
+
+A resposta curta é simples: em `pivot_wider`, podemos ter aqueles missings "implícitos" que não apareciam no nosso banco longo e, durante a transformação, eles viram `NA`s nas colunas. Ó argumento `values_fill` indica um valor para ser preenchido no lugar de `NA`. 
+
+Em `complete`, temos uma situação similar. O que fazer quando for encontrada uma combinação de valores no banco longo que é um "missing implícito"? Você pode especificar um valor padrão para preenchê-lo.
+
+São funções similares, mas uma funciona sem reformatar o banco e a outra durante o processo de reformatação. Veja um exemplo abaixo com aquela `tibble` das ações.
+
+```{r}
+acoes <- tibble(
+  ano   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+  qdr   = c(   1,    2,    3,    4,    2,    3,    4),
+  lucro = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
+)
+
+acoes
+
+# Vamos supor que o NA implícito significa que a empresa teve 
+# lucro = 0 naquele quadrimestre.
+
+# pivot_wider, values_fill
+acoes %>% pivot_wider(
+  id_cols = ano,
+  names_from = qdr,
+  values_from = lucro,
+  values_fill = 0
+)
+
+# complete, fill
+acoes %>% complete(ano, qdr, fill = list(lucro = 0))
+```
+
+Note o resultado. E note também que `values_fill` em `pivot_wider` é um pouco mais criterioso na hora de fazer as transformações.
