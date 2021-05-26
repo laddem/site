@@ -312,7 +312,7 @@ Nesta seção, o nosso problema não é mais a análise de dados presentes em um
 
 O banco `nycflights13` contém várias tabelas que se relacionam, e elas funcionam como um excelente exemplo de banco de dados relacionais.
 
-![Banco de dados relacional de vôos](/courses/tidyverse/dia2_files/relational-nycflights.png)
+![Banco de dados relacional](/courses/tidyverse/dia2_files/relational-nycflights.png)
 
 Note que além do banco de dados dos vôos, temos informações sobre clima, aviões e companhias aéreas. Para nós, pode ser relevante reunir informações de diferentes fontes em um mesmo banco de dados, algo que é possível através de `joins`. Por uma questão de tempo, não vamos entrar muito a fundo no assunto, mas vamos introduzir dois conceitos chave e partir pros exemplos.
 
@@ -320,9 +320,9 @@ Note que além do banco de dados dos vôos, temos informações sobre clima, avi
 
 - `joins` são tipos de operação no qual se opta por priorizar um grupo de observações em detrimento de outras. Podemos vê-los didaticamente a partir de duas figuras:
 
-![Joins como diagramas de Venn](/courses/tidyverse/dia2_files/join-venn.png)
+![Joins como diagrama de Venn](/courses/tidyverse/dia2_files/join-venn.png)
 
-![Joins como "pontos"](/courses/tidyverse/dia2_files/join-outer.png)
+![Join como "pontos"](/courses/tidyverse/dia2_files/join-outer.png)
 
 A primeira figura é interessante porque nos dá uma ideia de quais observações serão mantidas e quais serão descartadas, podemos imaginá-la como uma abstração da nossa escolha. 
 

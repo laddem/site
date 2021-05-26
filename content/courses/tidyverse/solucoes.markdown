@@ -1,29 +1,8 @@
 ---
 title: "Soluções"
-# subtitle: ""
-# summary: ""
-# authors: []
-# tags: []
-# categories: []
-date: 2021-05-25T11:30:29-03:00
-lastmod: 2021-05-25T11:30:29-03:00
-featured: false
+date: 2021-05-25
+type: book
 draft: false
-
-# Featured image
-# To use, add an image named `featured.jpg/png` to your page's folder.
-# Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
-# image:
-#   caption: ""
-#   focal_point: ""
-#   preview_only: false
-
-# Projects (optional).
-#   Associate this post with one or more of your projects.
-#   Simply enter your project's folder or file name without extension.
-#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
-#   Otherwise, set `projects = []`.
-# projects: []
 ---
 
 ## Soluções dos exercícios
@@ -1028,3 +1007,964 @@ acoes %>% complete(ano, qdr, fill = list(lucro = 0))
 ```
 
 Note o resultado. E note também que `values_fill` em `pivot_wider` é um pouco mais criterioso na hora de fazer as transformações.
+
+### `stringr`, `forcats` e `dplyr`
+
+
+```r
+library(nycflights13)
+```
+
+
+1. Encontre os vôos que:
+
+  1. Atrasaram mais de duas horas
+    
+
+```r
+flights %>% filter(dep_delay > 120)
+```
+
+```
+## # A tibble: 9,723 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+##  1  2013     1     1      848           1835       853     1001           1950
+##  2  2013     1     1      957            733       144     1056            853
+##  3  2013     1     1     1114            900       134     1447           1222
+##  4  2013     1     1     1540           1338       122     2020           1825
+##  5  2013     1     1     1815           1325       290     2120           1542
+##  6  2013     1     1     1842           1422       260     1958           1535
+##  7  2013     1     1     1856           1645       131     2212           2005
+##  8  2013     1     1     1934           1725       129     2126           1855
+##  9  2013     1     1     1938           1703       155     2109           1823
+## 10  2013     1     1     1942           1705       157     2124           1830
+## # ... with 9,713 more rows, and 11 more variables: arr_delay <dbl>,
+## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+    
+    
+  2. Com destino a Houston (`IAH` ou `HOU`)
+    
+
+```r
+flights %>% filter(dest %in% c("IAH", "HOU"))
+```
+
+```
+## # A tibble: 9,313 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      623            627        -4      933            932
+##  4  2013     1     1      728            732        -4     1041           1038
+##  5  2013     1     1      739            739         0     1104           1038
+##  6  2013     1     1      908            908         0     1228           1219
+##  7  2013     1     1     1028           1026         2     1350           1339
+##  8  2013     1     1     1044           1045        -1     1352           1351
+##  9  2013     1     1     1114            900       134     1447           1222
+## 10  2013     1     1     1205           1200         5     1503           1505
+## # ... with 9,303 more rows, and 11 more variables: arr_delay <dbl>,
+## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+  
+  3. Operados pela United, American ou Delta
+
+
+```r
+unique(flights$carrier)
+```
+
+```
+##  [1] "UA" "AA" "B6" "DL" "EV" "MQ" "US" "WN" "VX" "FL" "AS" "9E" "F9" "HA" "YV"
+## [16] "OO"
+```
+
+```r
+flights %>% filter(carrier %in% c("UA", "AA", "DL"))
+```
+
+```
+## # A tibble: 139,504 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      542            540         2      923            850
+##  4  2013     1     1      554            600        -6      812            837
+##  5  2013     1     1      554            558        -4      740            728
+##  6  2013     1     1      558            600        -2      753            745
+##  7  2013     1     1      558            600        -2      924            917
+##  8  2013     1     1      558            600        -2      923            937
+##  9  2013     1     1      559            600        -1      941            910
+## 10  2013     1     1      559            600        -1      854            902
+## # ... with 139,494 more rows, and 11 more variables: arr_delay <dbl>,
+## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+    
+  4. Decolaram entre julho e setembro
+    
+
+```r
+flights %>% filter(between(month, 7, 9))
+```
+
+```
+## # A tibble: 86,326 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+##  1  2013     7     1        1           2029       212      236           2359
+##  2  2013     7     1        2           2359         3      344            344
+##  3  2013     7     1       29           2245       104      151              1
+##  4  2013     7     1       43           2130       193      322             14
+##  5  2013     7     1       44           2150       174      300            100
+##  6  2013     7     1       46           2051       235      304           2358
+##  7  2013     7     1       48           2001       287      308           2305
+##  8  2013     7     1       58           2155       183      335             43
+##  9  2013     7     1      100           2146       194      327             30
+## 10  2013     7     1      100           2245       135      337            135
+## # ... with 86,316 more rows, and 11 more variables: arr_delay <dbl>,
+## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+    
+  5. Chegaram com mais de duas horas de atraso, mas não decolaram com atraso
+    
+
+```r
+flights %>% filter(arr_delay > 120, dep_delay <= 0)
+```
+
+```
+## # A tibble: 29 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+##  1  2013     1    27     1419           1420        -1     1754           1550
+##  2  2013    10     7     1350           1350         0     1736           1526
+##  3  2013    10     7     1357           1359        -2     1858           1654
+##  4  2013    10    16      657            700        -3     1258           1056
+##  5  2013    11     1      658            700        -2     1329           1015
+##  6  2013     3    18     1844           1847        -3       39           2219
+##  7  2013     4    17     1635           1640        -5     2049           1845
+##  8  2013     4    18      558            600        -2     1149            850
+##  9  2013     4    18      655            700        -5     1213            950
+## 10  2013     5    22     1827           1830        -3     2217           2010
+## # ... with 19 more rows, and 11 more variables: arr_delay <dbl>, carrier <chr>,
+## #   flight <int>, tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>,
+## #   distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+    
+  6. Atrasaram mais de uma hora para decolar, mas recuperaram mais de 30 minutos durante o voo
+    
+
+```r
+flights %>% filter(dep_delay > 60, dep_delay - arr_delay >= 30)
+```
+
+```
+## # A tibble: 2,046 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+##  1  2013     1     1     1716           1545        91     2140           2039
+##  2  2013     1     1     2205           1720       285       46           2040
+##  3  2013     1     1     2326           2130       116      131             18
+##  4  2013     1     3     1503           1221       162     1803           1555
+##  5  2013     1     3     1821           1530       171     2131           1910
+##  6  2013     1     3     1839           1700        99     2056           1950
+##  7  2013     1     3     1850           1745        65     2148           2120
+##  8  2013     1     3     1923           1815        68     2036           1958
+##  9  2013     1     3     1941           1759       102     2246           2139
+## 10  2013     1     3     1950           1845        65     2228           2227
+## # ... with 2,036 more rows, and 11 more variables: arr_delay <dbl>,
+## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+    
+  7. Decolaram entre a meia-noite e 6 da manhã (inclusive)
+    
+
+```r
+flights %>% filter(between(hour, 0, 5) | (hour == 6 & minute == 0))
+```
+
+```
+## # A tibble: 8,970 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      542            540         2      923            850
+##  4  2013     1     1      544            545        -1     1004           1022
+##  5  2013     1     1      554            600        -6      812            837
+##  6  2013     1     1      554            558        -4      740            728
+##  7  2013     1     1      555            600        -5      913            854
+##  8  2013     1     1      557            600        -3      709            723
+##  9  2013     1     1      557            600        -3      838            846
+## 10  2013     1     1      558            600        -2      753            745
+## # ... with 8,960 more rows, and 11 more variables: arr_delay <dbl>,
+## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+    
+2. Reordene suas colunas para encontrar os voos mais rápidos (maior velocidade de voo).
+
+
+```r
+flights %>% 
+  select(air_time, distance) %>% 
+  mutate(speed = distance/air_time) %>% 
+  arrange(desc(speed))
+```
+
+```
+## # A tibble: 336,776 x 3
+##    air_time distance speed
+##       <dbl>    <dbl> <dbl>
+##  1       65      762 11.7 
+##  2       93     1008 10.8 
+##  3       55      594 10.8 
+##  4       70      748 10.7 
+##  5      105     1035  9.86
+##  6      170     1598  9.4 
+##  7      172     1598  9.29
+##  8      175     1623  9.27
+##  9      173     1598  9.24
+## 10      173     1598  9.24
+## # ... with 336,766 more rows
+```
+
+3. Teste várias maneiras diferentes de selecionar as variáveis `dep_time`, `dep_delay`, `arr_time` e `arr_delay` usando as várias helper functions de `select`.
+
+
+```r
+flights %>% select(dep_time, dep_delay, arr_time, arr_delay)
+```
+
+```
+## # A tibble: 336,776 x 4
+##    dep_time dep_delay arr_time arr_delay
+##       <int>     <dbl>    <int>     <dbl>
+##  1      517         2      830        11
+##  2      533         4      850        20
+##  3      542         2      923        33
+##  4      544        -1     1004       -18
+##  5      554        -6      812       -25
+##  6      554        -4      740        12
+##  7      555        -5      913        19
+##  8      557        -3      709       -14
+##  9      557        -3      838        -8
+## 10      558        -2      753         8
+## # ... with 336,766 more rows
+```
+
+```r
+flights %>% select(starts_with("dep"), starts_with("arr"))
+```
+
+```
+## # A tibble: 336,776 x 4
+##    dep_time dep_delay arr_time arr_delay
+##       <int>     <dbl>    <int>     <dbl>
+##  1      517         2      830        11
+##  2      533         4      850        20
+##  3      542         2      923        33
+##  4      544        -1     1004       -18
+##  5      554        -6      812       -25
+##  6      554        -4      740        12
+##  7      555        -5      913        19
+##  8      557        -3      709       -14
+##  9      557        -3      838        -8
+## 10      558        -2      753         8
+## # ... with 336,766 more rows
+```
+
+```r
+flights %>% select(starts_with(c("dep", "arr")))
+```
+
+```
+## # A tibble: 336,776 x 4
+##    dep_time dep_delay arr_time arr_delay
+##       <int>     <dbl>    <int>     <dbl>
+##  1      517         2      830        11
+##  2      533         4      850        20
+##  3      542         2      923        33
+##  4      544        -1     1004       -18
+##  5      554        -6      812       -25
+##  6      554        -4      740        12
+##  7      555        -5      913        19
+##  8      557        -3      709       -14
+##  9      557        -3      838        -8
+## 10      558        -2      753         8
+## # ... with 336,766 more rows
+```
+
+```r
+flights %>% select(matches("^arr|^dep"))
+```
+
+```
+## # A tibble: 336,776 x 4
+##    dep_time dep_delay arr_time arr_delay
+##       <int>     <dbl>    <int>     <dbl>
+##  1      517         2      830        11
+##  2      533         4      850        20
+##  3      542         2      923        33
+##  4      544        -1     1004       -18
+##  5      554        -6      812       -25
+##  6      554        -4      740        12
+##  7      555        -5      913        19
+##  8      557        -3      709       -14
+##  9      557        -3      838        -8
+## 10      558        -2      753         8
+## # ... with 336,766 more rows
+```
+
+```r
+flights %>% select(!starts_with(c("sched", "car")) & contains(c("dep", "arr")))
+```
+
+```
+## # A tibble: 336,776 x 4
+##    dep_time dep_delay arr_time arr_delay
+##       <int>     <dbl>    <int>     <dbl>
+##  1      517         2      830        11
+##  2      533         4      850        20
+##  3      542         2      923        33
+##  4      544        -1     1004       -18
+##  5      554        -6      812       -25
+##  6      554        -4      740        12
+##  7      555        -5      913        19
+##  8      557        -3      709       -14
+##  9      557        -3      838        -8
+## 10      558        -2      753         8
+## # ... with 336,766 more rows
+```
+
+```r
+flights %>% select(ends_with(c("time", "delay")) & !starts_with(c("sched", "air")))
+```
+
+```
+## # A tibble: 336,776 x 4
+##    dep_time arr_time dep_delay arr_delay
+##       <int>    <int>     <dbl>     <dbl>
+##  1      517      830         2        11
+##  2      533      850         4        20
+##  3      542      923         2        33
+##  4      544     1004        -1       -18
+##  5      554      812        -6       -25
+##  6      554      740        -4        12
+##  7      555      913        -5        19
+##  8      557      709        -3       -14
+##  9      557      838        -3        -8
+## 10      558      753        -2         8
+## # ... with 336,766 more rows
+```
+
+
+4. As variáveis `dep_time` e `sched_dep_time` estão num formato incorreto (veja `?flights`). Converta-as com `mutate` para um valor em minutos passados desde a meia-noite. Dica: utilize `%/%` e `%%`.
+
+
+```r
+flights %>% mutate(
+  dep_hour         = dep_time %/% 100,
+  dep_minute       = dep_time %% 100,
+  sched_dep_hour   = sched_dep_time %/% 100,
+  sched_arr_minute = sched_arr_time %% 100
+)
+```
+
+```
+## # A tibble: 336,776 x 23
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      542            540         2      923            850
+##  4  2013     1     1      544            545        -1     1004           1022
+##  5  2013     1     1      554            600        -6      812            837
+##  6  2013     1     1      554            558        -4      740            728
+##  7  2013     1     1      555            600        -5      913            854
+##  8  2013     1     1      557            600        -3      709            723
+##  9  2013     1     1      557            600        -3      838            846
+## 10  2013     1     1      558            600        -2      753            745
+## # ... with 336,766 more rows, and 15 more variables: arr_delay <dbl>,
+## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>,
+## #   dep_hour <dbl>, dep_minute <dbl>, sched_dep_hour <dbl>,
+## #   sched_arr_minute <dbl>
+```
+
+```r
+# Há uma outra solução com separate!
+flights %>% 
+  separate(
+    col = dep_time,
+    into = c("dep_hour", "dep_minute"),
+    sep = 1,
+    # Esse argumento é importante! Teste com FALSE para ver a diferença
+    convert = TRUE) %>% 
+  separate(
+    col = sched_dep_time,
+    into = c("sched_dep_hour", "sched_dep_minute"),
+    sep = 1,
+    convert = TRUE)
+```
+
+```
+## # A tibble: 336,776 x 21
+##     year month   day dep_hour dep_minute sched_dep_hour sched_dep_minute
+##    <int> <int> <int>    <int>      <int>          <int>            <int>
+##  1  2013     1     1        5         17              5               15
+##  2  2013     1     1        5         33              5               29
+##  3  2013     1     1        5         42              5               40
+##  4  2013     1     1        5         44              5               45
+##  5  2013     1     1        5         54              6                0
+##  6  2013     1     1        5         54              5               58
+##  7  2013     1     1        5         55              6                0
+##  8  2013     1     1        5         57              6                0
+##  9  2013     1     1        5         57              6                0
+## 10  2013     1     1        5         58              6                0
+## # ... with 336,766 more rows, and 14 more variables: dep_delay <dbl>,
+## #   arr_time <int>, sched_arr_time <int>, arr_delay <dbl>, carrier <chr>,
+## #   flight <int>, tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>,
+## #   distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
+```
+
+Existe uma outra solução possível para essa questão usando manipulação de strings, com `str_sub` também. Fica como desafio!
+
+Pensando na legibilidade do código e na flexibilidade da abordagem, qual das duas soluções acima você implementaria? `mutate` ou duas `separate`? Reflita.
+
+5. O que o código abaixo está fazendo? Porque mesmo após o código abaixo continuam existindo diferenças entre os valores das variáveis `air_time` e `travel_time`?
+
+
+```r
+flights %>% 
+  select(air_time, dep_time, arr_time, dep_delay, arr_delay) %>% 
+  mutate(dep_hour = dep_time %/% 100,
+         dep_min = dep_time %% 100,
+         dep_time2 = dep_hour * 60 + dep_min,
+         arr_hour = arr_time %/% 100,
+         arr_min = arr_time %% 100,
+         arr_time2 = arr_hour * 60 + arr_min,
+         travel_time = arr_time2 - dep_time2) %>% 
+  select(-dep_hour, -dep_min, -arr_hour, -arr_min)
+```
+
+```
+## # A tibble: 336,776 x 8
+##    air_time dep_time arr_time dep_delay arr_delay dep_time2 arr_time2
+##       <dbl>    <int>    <int>     <dbl>     <dbl>     <dbl>     <dbl>
+##  1      227      517      830         2        11       317       510
+##  2      227      533      850         4        20       333       530
+##  3      160      542      923         2        33       342       563
+##  4      183      544     1004        -1       -18       344       604
+##  5      116      554      812        -6       -25       354       492
+##  6      150      554      740        -4        12       354       460
+##  7      158      555      913        -5        19       355       553
+##  8       53      557      709        -3       -14       357       429
+##  9      140      557      838        -3        -8       357       518
+## 10      138      558      753        -2         8       358       473
+## # ... with 336,766 more rows, and 1 more variable: travel_time <dbl>
+```
+
+Essa tem uma resposta mais qualitativa. A primeira parte é parecida com a questão anterior, mas estamos manualmente tentando calcular os tempos de viagem. Acontece que os valores não batem com os tempos de vôo identificados no banco. Isso se deve a pelo menos três questões distintas. 
+
+- Uma delas diz respeito ao registro dos tempos, a definição de `air_time` pode não estar considerando tempos em que o avião está manobrando ou em solo ou mesmo podem existir erros de preenchimento. 
+- A segunda diz respeito ao fuso horário distinto entre aeroportos de saída e chegada, que complica o cálculo dos tempos reais, então nosso cálculo está muito cru para identificar isso.
+- A última questão são os vôos longos, que começam em um dia e terminam no dia seguinte, que podem prejudicar nosso método de cálculo. Para corrigir alguns desses problemas, você precisaria escrever um código que minimamente levasse essas questões em consideração. Como esse não é o objetivo do curso, eu deixo para quem quiser tentar. [Há uma solução postada aqui](https://jrnold.github.io/r4ds-exercise-solutions/transform.html#exercise-5.5.2).
+
+6. Use o stringr para concatenar as seguintes strings em uma frase
+
+
+```r
+x <- "."
+y <- "feliz"
+w <- "acordei"
+z <- "hoje"
+
+str_c(z, w, y, sep = " ") %>% 
+  str_c(x, sep = "") %>% 
+  str_to_sentence()
+```
+
+```
+## [1] "Hoje acordei feliz."
+```
+
+7. Corrija as inconsistências nas colunas país, primeiro_nome, segundo_nome e crie uma nova coluna nomes contendo as duas anteriores. No final, ordene o banco em ordem alfabética.
+
+
+```r
+df <- 
+  tibble::tribble(
+    ~pais,    ~primeiro_nome, ~segundo_nome,
+    # -------|----------------|-------------|
+    "BRASIL", "ISABELA",       "MARTINS",
+    "Brasil", "Eduardo",       "cabellos",
+    "brasil", "márcia",         "pinto",
+    "bRaSiL", "rogério",        "Marinho",
+  )
+
+# Sem dplyr
+df$pais <- str_to_title(df$pais)
+df$primeiro_nome <-  str_to_title(df$primeiro_nome)
+df$segundo_nome <- str_to_title(df$segundo_nome)
+
+df <- df %>% tidyr::unite(nomes, primeiro_nome, segundo_nome, sep = " ")
+df[ str_order(df$nomes), ]
+```
+
+```
+## # A tibble: 4 x 2
+##   pais   nomes           
+##   <chr>  <chr>           
+## 1 Brasil Eduardo Cabellos
+## 2 Brasil Isabela Martins 
+## 3 Brasil Márcia Pinto    
+## 4 Brasil Rogério Marinho
+```
+
+```r
+# Com dplyr
+df <- 
+  tibble::tribble(
+    ~pais,    ~primeiro_nome, ~segundo_nome,
+    # -------|----------------|-------------|
+    "BRASIL", "ISABELA",       "MARTINS",
+    "Brasil", "Eduardo",       "cabellos",
+    "brasil", "márcia",         "pinto",
+    "bRaSiL", "rogério",        "Marinho",
+  )
+
+df %>% 
+  mutate(pais = str_to_title(pais),
+         primeiro_nome = str_to_title(primeiro_nome),
+         segundo_nome = str_to_title(segundo_nome)) %>% 
+  unite(nomes, primeiro_nome, segundo_nome, sep = " ") %>% 
+  arrange(str_order(nomes))
+```
+
+```
+## # A tibble: 4 x 2
+##   pais   nomes           
+##   <chr>  <chr>           
+## 1 Brasil Eduardo Cabellos
+## 2 Brasil Isabela Martins 
+## 3 Brasil Márcia Pinto    
+## 4 Brasil Rogério Marinho
+```
+
+8. Transforme a string `c("Seu nome", "Seu sobrenome da mãe", "Seu sobrenome do pai")` na string `"SEU SOBRENOME DO PAI, sua inicial do nome. sua inicial da mãe."`, como numa citação. Veja o exemplo abaixo:
+
+
+```r
+# Transforme
+c("Vinícius", "de Souza", "Maia")
+```
+
+```
+## [1] "Vinícius" "de Souza" "Maia"
+```
+
+```r
+# Resultado
+"MAIA, V. S."
+```
+
+```
+## [1] "MAIA, V. S."
+```
+
+```r
+x <- c("Vinícius", "de Souza", "Maia")
+x[1] <- str_sub(x[1], 1, 1) %>% str_c(".")
+x[2] <- str_sub(x[2], 4, 4) %>% str_c(".")
+x[3] <- str_to_upper(x[3])
+str_c(c(x[3], x[1], x[2]), collapse = " ")
+```
+
+```
+## [1] "MAIA V. S."
+```
+
+
+9. DESAFIO: Nos microdados da área de saúde, é comum que a variável idade esteja registrada da seguinte forma: "150", "219", "312", "471". Esses códigos indicam primeiro qual a unidade de medida da idade e segundo o valor desta unidade, 1 = horas, 2 = dias, 3 = meses, 4 = anos. Proponha um código usando `stringr` para transformar o vetor abaixo em um valor numérico.
+
+
+```r
+# Não precisa se preocupar com essa parte
+x <- as.character(round(c(
+  runif(25, 100, 124),
+  runif(25, 201, 230),
+  runif(25, 301, 312),
+  runif(25, 401, 499)
+)))
+
+# Como você transformaria esse vetor em número?
+x
+```
+
+```
+##   [1] "105" "101" "108" "107" "112" "122" "112" "102" "100" "100" "110" "102"
+##  [13] "116" "124" "102" "110" "122" "102" "102" "120" "101" "104" "105" "118"
+##  [25] "106" "202" "229" "202" "202" "219" "224" "205" "221" "223" "228" "206"
+##  [37] "220" "212" "226" "212" "202" "215" "204" "219" "221" "225" "208" "214"
+##  [49] "207" "220" "301" "311" "311" "303" "302" "308" "304" "309" "309" "309"
+##  [61] "306" "304" "310" "309" "305" "305" "310" "306" "301" "310" "305" "307"
+##  [73] "311" "306" "302" "498" "405" "418" "471" "453" "455" "481" "435" "419"
+##  [85] "447" "420" "431" "439" "484" "425" "445" "438" "452" "445" "409" "452"
+##  [97] "468" "447" "414" "498"
+```
+
+```r
+# Esse exercício é um pouco mais difícil mesmo!
+x %>% str_extract("\\d")
+```
+
+```
+##   [1] "1" "1" "1" "1" "1" "1" "1" "1" "1" "1" "1" "1" "1" "1" "1" "1" "1" "1"
+##  [19] "1" "1" "1" "1" "1" "1" "1" "2" "2" "2" "2" "2" "2" "2" "2" "2" "2" "2"
+##  [37] "2" "2" "2" "2" "2" "2" "2" "2" "2" "2" "2" "2" "2" "2" "3" "3" "3" "3"
+##  [55] "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3"
+##  [73] "3" "3" "3" "4" "4" "4" "4" "4" "4" "4" "4" "4" "4" "4" "4" "4" "4" "4"
+##  [91] "4" "4" "4" "4" "4" "4" "4" "4" "4" "4"
+```
+
+```r
+tibble(
+  tipo_idade = str_sub(x, 1, 1),
+  idade = str_sub(x, 2, 3),
+  idade_anos =
+    if_else(
+      str_detect(tipo_idade, "1"),
+      as.numeric(idade) / (24 * 30 * 12),
+      if_else(
+        str_detect(tipo_idade, "2"),
+        as.numeric(idade) / (30 * 12),
+        if_else(
+          str_detect(tipo_idade, "3"),
+          as.numeric(idade) / 12,
+          as.numeric(idade)
+        )
+      )
+    )
+) %>% 
+  print(n = Inf)
+```
+
+```
+## # A tibble: 100 x 3
+##     tipo_idade idade idade_anos
+##     <chr>      <chr>      <dbl>
+##   1 1          05      0.000579
+##   2 1          01      0.000116
+##   3 1          08      0.000926
+##   4 1          07      0.000810
+##   5 1          12      0.00139 
+##   6 1          22      0.00255 
+##   7 1          12      0.00139 
+##   8 1          02      0.000231
+##   9 1          00      0       
+##  10 1          00      0       
+##  11 1          10      0.00116 
+##  12 1          02      0.000231
+##  13 1          16      0.00185 
+##  14 1          24      0.00278 
+##  15 1          02      0.000231
+##  16 1          10      0.00116 
+##  17 1          22      0.00255 
+##  18 1          02      0.000231
+##  19 1          02      0.000231
+##  20 1          20      0.00231 
+##  21 1          01      0.000116
+##  22 1          04      0.000463
+##  23 1          05      0.000579
+##  24 1          18      0.00208 
+##  25 1          06      0.000694
+##  26 2          02      0.00556 
+##  27 2          29      0.0806  
+##  28 2          02      0.00556 
+##  29 2          02      0.00556 
+##  30 2          19      0.0528  
+##  31 2          24      0.0667  
+##  32 2          05      0.0139  
+##  33 2          21      0.0583  
+##  34 2          23      0.0639  
+##  35 2          28      0.0778  
+##  36 2          06      0.0167  
+##  37 2          20      0.0556  
+##  38 2          12      0.0333  
+##  39 2          26      0.0722  
+##  40 2          12      0.0333  
+##  41 2          02      0.00556 
+##  42 2          15      0.0417  
+##  43 2          04      0.0111  
+##  44 2          19      0.0528  
+##  45 2          21      0.0583  
+##  46 2          25      0.0694  
+##  47 2          08      0.0222  
+##  48 2          14      0.0389  
+##  49 2          07      0.0194  
+##  50 2          20      0.0556  
+##  51 3          01      0.0833  
+##  52 3          11      0.917   
+##  53 3          11      0.917   
+##  54 3          03      0.25    
+##  55 3          02      0.167   
+##  56 3          08      0.667   
+##  57 3          04      0.333   
+##  58 3          09      0.75    
+##  59 3          09      0.75    
+##  60 3          09      0.75    
+##  61 3          06      0.5     
+##  62 3          04      0.333   
+##  63 3          10      0.833   
+##  64 3          09      0.75    
+##  65 3          05      0.417   
+##  66 3          05      0.417   
+##  67 3          10      0.833   
+##  68 3          06      0.5     
+##  69 3          01      0.0833  
+##  70 3          10      0.833   
+##  71 3          05      0.417   
+##  72 3          07      0.583   
+##  73 3          11      0.917   
+##  74 3          06      0.5     
+##  75 3          02      0.167   
+##  76 4          98     98       
+##  77 4          05      5       
+##  78 4          18     18       
+##  79 4          71     71       
+##  80 4          53     53       
+##  81 4          55     55       
+##  82 4          81     81       
+##  83 4          35     35       
+##  84 4          19     19       
+##  85 4          47     47       
+##  86 4          20     20       
+##  87 4          31     31       
+##  88 4          39     39       
+##  89 4          84     84       
+##  90 4          25     25       
+##  91 4          45     45       
+##  92 4          38     38       
+##  93 4          52     52       
+##  94 4          45     45       
+##  95 4          09      9       
+##  96 4          52     52       
+##  97 4          68     68       
+##  98 4          47     47       
+##  99 4          14     14       
+## 100 4          98     98
+```
+
+Ao invés de utilizar essas chamadas recursivas de `if_else`, que são muito ruins de ler, como você poderia reescrever a condição usando `case_when`?
+
+10. Explore as contagens da variável `rincome` em `gss_cat`, ela ficaria bem representada num gráfico? De qual tipo?
+
+
+```r
+gss_cat %>% count(rincome)
+```
+
+```
+## # A tibble: 16 x 2
+##    rincome            n
+##    <fct>          <int>
+##  1 No answer        183
+##  2 Don't know       267
+##  3 Refused          975
+##  4 $25000 or more  7363
+##  5 $20000 - 24999  1283
+##  6 $15000 - 19999  1048
+##  7 $10000 - 14999  1168
+##  8 $8000 to 9999    340
+##  9 $7000 to 7999    188
+## 10 $6000 to 6999    215
+## 11 $5000 to 5999    227
+## 12 $4000 to 4999    226
+## 13 $3000 to 3999    276
+## 14 $1000 to 2999    395
+## 15 Lt $1000         286
+## 16 Not applicable  7043
+```
+
+Em geral, contagens de variáveis ficam bem em gráficos de barras ou visualizações equivalentes, em que é possível comparar visualmente as contagens das diversas categorias. Mais sobre isso na aula do `ggplot2`.
+
+11. Qual a religião mais comum em `gss_cat`? Qual o partido (`partyid`) mais popular?
+
+
+```r
+# Religião
+gss_cat %>% count(relig) %>% arrange(desc(n))
+```
+
+```
+## # A tibble: 15 x 2
+##    relig                       n
+##    <fct>                   <int>
+##  1 Protestant              10846
+##  2 Catholic                 5124
+##  3 None                     3523
+##  4 Christian                 689
+##  5 Jewish                    388
+##  6 Other                     224
+##  7 Buddhism                  147
+##  8 Inter-nondenominational   109
+##  9 Moslem/islam              104
+## 10 Orthodox-christian         95
+## 11 No answer                  93
+## 12 Hinduism                   71
+## 13 Other eastern              32
+## 14 Native american            23
+## 15 Don't know                 15
+```
+
+```r
+# Partido
+gss_cat %>% count(partyid) %>% arrange(desc(n))
+```
+
+```
+## # A tibble: 10 x 2
+##    partyid                n
+##    <fct>              <int>
+##  1 Independent         4119
+##  2 Not str democrat    3690
+##  3 Strong democrat     3490
+##  4 Not str republican  3032
+##  5 Ind,near dem        2499
+##  6 Strong republican   2314
+##  7 Ind,near rep        1791
+##  8 Other party          393
+##  9 No answer            154
+## 10 Don't know             1
+```
+
+12. A que religião se refere a variável `denom`? Você pode descobrir isso fazendo uma tabela de contagens?
+
+Você pode chamar count com várias variáveis para fazer uma tabulação cruzada.
+
+
+```r
+gss_cat %>% count(relig, denom) %>% print(n = Inf)
+```
+
+```
+## # A tibble: 47 x 3
+##    relig                   denom                    n
+##    <fct>                   <fct>                <int>
+##  1 No answer               No answer               93
+##  2 Don't know              Not applicable          15
+##  3 Inter-nondenominational Not applicable         109
+##  4 Native american         Not applicable          23
+##  5 Christian               No answer                2
+##  6 Christian               Don't know              11
+##  7 Christian               No denomination        452
+##  8 Christian               Not applicable         224
+##  9 Orthodox-christian      Not applicable          95
+## 10 Moslem/islam            Not applicable         104
+## 11 Other eastern           Not applicable          32
+## 12 Hinduism                Not applicable          71
+## 13 Buddhism                Not applicable         147
+## 14 Other                   No denomination          7
+## 15 Other                   Not applicable         217
+## 16 None                    Not applicable        3523
+## 17 Jewish                  Not applicable         388
+## 18 Catholic                Not applicable        5124
+## 19 Protestant              No answer               22
+## 20 Protestant              Don't know              41
+## 21 Protestant              No denomination       1224
+## 22 Protestant              Other                 2534
+## 23 Protestant              Episcopal              397
+## 24 Protestant              Presbyterian-dk wh     244
+## 25 Protestant              Presbyterian, merged    67
+## 26 Protestant              Other presbyterian      47
+## 27 Protestant              United pres ch in us   110
+## 28 Protestant              Presbyterian c in us   104
+## 29 Protestant              Lutheran-dk which      267
+## 30 Protestant              Evangelical luth       122
+## 31 Protestant              Other lutheran          30
+## 32 Protestant              Wi evan luth synod      71
+## 33 Protestant              Lutheran-mo synod      212
+## 34 Protestant              Luth ch in america      71
+## 35 Protestant              Am lutheran            146
+## 36 Protestant              Methodist-dk which     239
+## 37 Protestant              Other methodist         33
+## 38 Protestant              United methodist      1067
+## 39 Protestant              Afr meth ep zion        32
+## 40 Protestant              Afr meth episcopal      77
+## 41 Protestant              Baptist-dk which      1457
+## 42 Protestant              Other baptists         213
+## 43 Protestant              Southern baptist      1536
+## 44 Protestant              Nat bapt conv usa       40
+## 45 Protestant              Nat bapt conv of am     76
+## 46 Protestant              Am bapt ch in usa      130
+## 47 Protestant              Am baptist asso        237
+```
+
+13. Como você poderia diminuir o número de categorias da variável `rincome` do banco `gss_cat`?
+
+A melhor função para redução de fatores é `fct_collapse`. Veja como ficam a coluna original e a transformada.
+
+
+```r
+gss_cat2 <- 
+  gss_cat %>% 
+  # Aqui vou salvar em "rincome2" para a gente poder ver as duas
+  mutate(rincome2 = fct_collapse(
+    rincome,
+    "Non-response" = c("No answer", "Don't know", "Refused", "Not applicable"),
+    "Até 5k"       = c("$4000 to 4999", "$3000 to 3999", "$1000 to 2999", "Lt $1000"),
+    "5k-10k"       = c( "$8000 to 9999", "$7000 to 7999", "$6000 to 6999", "$5000 to 5999"),
+    "10k-20k"      = c("$15000 - 19999", "$10000 - 14999"),
+    "20k+"         = c("$25000 or more", "$20000 - 24999"))) %>% 
+  select(rincome, rincome2)
+
+# E veja as contagens
+gss_cat2 %>% count(rincome)
+```
+
+```
+## # A tibble: 16 x 2
+##    rincome            n
+##    <fct>          <int>
+##  1 No answer        183
+##  2 Don't know       267
+##  3 Refused          975
+##  4 $25000 or more  7363
+##  5 $20000 - 24999  1283
+##  6 $15000 - 19999  1048
+##  7 $10000 - 14999  1168
+##  8 $8000 to 9999    340
+##  9 $7000 to 7999    188
+## 10 $6000 to 6999    215
+## 11 $5000 to 5999    227
+## 12 $4000 to 4999    226
+## 13 $3000 to 3999    276
+## 14 $1000 to 2999    395
+## 15 Lt $1000         286
+## 16 Not applicable  7043
+```
+
+```r
+gss_cat2 %>% count(rincome2)
+```
+
+```
+## # A tibble: 5 x 2
+##   rincome2         n
+##   <fct>        <int>
+## 1 Non-response  8468
+## 2 20k+          8646
+## 3 10k-20k       2216
+## 4 5k-10k         970
+## 5 Até 5k        1183
+```
+

@@ -1,29 +1,8 @@
 ---
 title: "Soluções"
-# subtitle: ""
-# summary: ""
-# authors: []
-# tags: []
-# categories: []
-date: 2021-05-25T11:30:29-03:00
-lastmod: 2021-05-25T11:30:29-03:00
-featured: false
+date: 2021-05-25
+type: book
 draft: false
-
-# Featured image
-# To use, add an image named `featured.jpg/png` to your page's folder.
-# Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
-# image:
-#   caption: ""
-#   focal_point: ""
-#   preview_only: false
-
-# Projects (optional).
-#   Associate this post with one or more of your projects.
-#   Simply enter your project's folder or file name without extension.
-#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
-#   Otherwise, set `projects = []`.
-# projects: []
 ---
 
 ## Soluções dos exercícios
@@ -378,3 +357,292 @@ acoes %>% complete(ano, qdr, fill = list(lucro = 0))
 ```
 
 Note o resultado. E note também que `values_fill` em `pivot_wider` é um pouco mais criterioso na hora de fazer as transformações.
+
+### `stringr`, `forcats` e `dplyr`
+
+```{r}
+library(nycflights13)
+```
+
+
+1. Encontre os vôos que:
+
+  1. Atrasaram mais de duas horas
+    
+```{r}
+flights %>% filter(dep_delay > 120)
+```
+    
+    
+  2. Com destino a Houston (`IAH` ou `HOU`)
+    
+```{r}
+flights %>% filter(dest %in% c("IAH", "HOU"))
+```
+  
+  3. Operados pela United, American ou Delta
+
+```{r}
+unique(flights$carrier)
+flights %>% filter(carrier %in% c("UA", "AA", "DL"))
+```
+    
+  4. Decolaram entre julho e setembro
+    
+```{r}
+flights %>% filter(between(month, 7, 9))
+```
+    
+  5. Chegaram com mais de duas horas de atraso, mas não decolaram com atraso
+    
+```{r}
+flights %>% filter(arr_delay > 120, dep_delay <= 0)
+```
+    
+  6. Atrasaram mais de uma hora para decolar, mas recuperaram mais de 30 minutos durante o voo
+    
+```{r}
+flights %>% filter(dep_delay > 60, dep_delay - arr_delay >= 30)
+```
+    
+  7. Decolaram entre a meia-noite e 6 da manhã (inclusive)
+    
+```{r}
+flights %>% filter(between(hour, 0, 5) | (hour == 6 & minute == 0))
+```
+    
+2. Reordene suas colunas para encontrar os voos mais rápidos (maior velocidade de voo).
+
+```{r}
+flights %>% 
+  select(air_time, distance) %>% 
+  mutate(speed = distance/air_time) %>% 
+  arrange(desc(speed))
+```
+
+3. Teste várias maneiras diferentes de selecionar as variáveis `dep_time`, `dep_delay`, `arr_time` e `arr_delay` usando as várias helper functions de `select`.
+
+```{r}
+flights %>% select(dep_time, dep_delay, arr_time, arr_delay)
+
+flights %>% select(starts_with("dep"), starts_with("arr"))
+
+flights %>% select(starts_with(c("dep", "arr")))
+
+flights %>% select(matches("^arr|^dep"))
+
+flights %>% select(!starts_with(c("sched", "car")) & contains(c("dep", "arr")))
+
+flights %>% select(ends_with(c("time", "delay")) & !starts_with(c("sched", "air")))
+```
+
+
+4. As variáveis `dep_time` e `sched_dep_time` estão num formato incorreto (veja `?flights`). Converta-as com `mutate` para um valor em minutos passados desde a meia-noite. Dica: utilize `%/%` e `%%`.
+
+```{r}
+flights %>% mutate(
+  dep_hour         = dep_time %/% 100,
+  dep_minute       = dep_time %% 100,
+  sched_dep_hour   = sched_dep_time %/% 100,
+  sched_arr_minute = sched_arr_time %% 100
+)
+
+# Há uma outra solução com separate!
+flights %>% 
+  separate(
+    col = dep_time,
+    into = c("dep_hour", "dep_minute"),
+    sep = 1,
+    # Esse argumento é importante! Teste com FALSE para ver a diferença
+    convert = TRUE) %>% 
+  separate(
+    col = sched_dep_time,
+    into = c("sched_dep_hour", "sched_dep_minute"),
+    sep = 1,
+    convert = TRUE)
+```
+
+Existe uma outra solução possível para essa questão usando manipulação de strings, com `str_sub` também. Fica como desafio!
+
+Pensando na legibilidade do código e na flexibilidade da abordagem, qual das duas soluções acima você implementaria? `mutate` ou duas `separate`? Reflita.
+
+5. O que o código abaixo está fazendo? Porque mesmo após o código abaixo continuam existindo diferenças entre os valores das variáveis `air_time` e `travel_time`?
+
+```{r}
+flights %>% 
+  select(air_time, dep_time, arr_time, dep_delay, arr_delay) %>% 
+  mutate(dep_hour = dep_time %/% 100,
+         dep_min = dep_time %% 100,
+         dep_time2 = dep_hour * 60 + dep_min,
+         arr_hour = arr_time %/% 100,
+         arr_min = arr_time %% 100,
+         arr_time2 = arr_hour * 60 + arr_min,
+         travel_time = arr_time2 - dep_time2) %>% 
+  select(-dep_hour, -dep_min, -arr_hour, -arr_min)
+```
+
+Essa tem uma resposta mais qualitativa. A primeira parte é parecida com a questão anterior, mas estamos manualmente tentando calcular os tempos de viagem. Acontece que os valores não batem com os tempos de vôo identificados no banco. Isso se deve a pelo menos três questões distintas. 
+
+- Uma delas diz respeito ao registro dos tempos, a definição de `air_time` pode não estar considerando tempos em que o avião está manobrando ou em solo ou mesmo podem existir erros de preenchimento. 
+- A segunda diz respeito ao fuso horário distinto entre aeroportos de saída e chegada, que complica o cálculo dos tempos reais, então nosso cálculo está muito cru para identificar isso.
+- A última questão são os vôos longos, que começam em um dia e terminam no dia seguinte, que podem prejudicar nosso método de cálculo. Para corrigir alguns desses problemas, você precisaria escrever um código que minimamente levasse essas questões em consideração. Como esse não é o objetivo do curso, eu deixo para quem quiser tentar. [Há uma solução postada aqui](https://jrnold.github.io/r4ds-exercise-solutions/transform.html#exercise-5.5.2).
+
+6. Use o stringr para concatenar as seguintes strings em uma frase
+
+```{r}
+x <- "."
+y <- "feliz"
+w <- "acordei"
+z <- "hoje"
+
+str_c(z, w, y, sep = " ") %>% 
+  str_c(x, sep = "") %>% 
+  str_to_sentence()
+```
+
+7. Corrija as inconsistências nas colunas país, primeiro_nome, segundo_nome e crie uma nova coluna nomes contendo as duas anteriores. No final, ordene o banco em ordem alfabética.
+
+```{r}
+df <- 
+  tibble::tribble(
+    ~pais,    ~primeiro_nome, ~segundo_nome,
+    # -------|----------------|-------------|
+    "BRASIL", "ISABELA",       "MARTINS",
+    "Brasil", "Eduardo",       "cabellos",
+    "brasil", "márcia",         "pinto",
+    "bRaSiL", "rogério",        "Marinho",
+  )
+
+# Sem dplyr
+df$pais <- str_to_title(df$pais)
+df$primeiro_nome <-  str_to_title(df$primeiro_nome)
+df$segundo_nome <- str_to_title(df$segundo_nome)
+
+df <- df %>% tidyr::unite(nomes, primeiro_nome, segundo_nome, sep = " ")
+df[ str_order(df$nomes), ]
+
+# Com dplyr
+df <- 
+  tibble::tribble(
+    ~pais,    ~primeiro_nome, ~segundo_nome,
+    # -------|----------------|-------------|
+    "BRASIL", "ISABELA",       "MARTINS",
+    "Brasil", "Eduardo",       "cabellos",
+    "brasil", "márcia",         "pinto",
+    "bRaSiL", "rogério",        "Marinho",
+  )
+
+df %>% 
+  mutate(pais = str_to_title(pais),
+         primeiro_nome = str_to_title(primeiro_nome),
+         segundo_nome = str_to_title(segundo_nome)) %>% 
+  unite(nomes, primeiro_nome, segundo_nome, sep = " ") %>% 
+  arrange(str_order(nomes))
+```
+
+8. Transforme a string `c("Seu nome", "Seu sobrenome da mãe", "Seu sobrenome do pai")` na string `"SEU SOBRENOME DO PAI, sua inicial do nome. sua inicial da mãe."`, como numa citação. Veja o exemplo abaixo:
+
+```{r}
+# Transforme
+c("Vinícius", "de Souza", "Maia")
+
+# Resultado
+"MAIA, V. S."
+
+
+x <- c("Vinícius", "de Souza", "Maia")
+x[1] <- str_sub(x[1], 1, 1) %>% str_c(".")
+x[2] <- str_sub(x[2], 4, 4) %>% str_c(".")
+x[3] <- str_to_upper(x[3])
+str_c(c(x[3], x[1], x[2]), collapse = " ")
+```
+
+
+9. DESAFIO: Nos microdados da área de saúde, é comum que a variável idade esteja registrada da seguinte forma: "150", "219", "312", "471". Esses códigos indicam primeiro qual a unidade de medida da idade e segundo o valor desta unidade, 1 = horas, 2 = dias, 3 = meses, 4 = anos. Proponha um código usando `stringr` para transformar o vetor abaixo em um valor numérico.
+
+```{r}
+# Não precisa se preocupar com essa parte
+x <- as.character(round(c(
+  runif(25, 100, 124),
+  runif(25, 201, 230),
+  runif(25, 301, 312),
+  runif(25, 401, 499)
+)))
+
+# Como você transformaria esse vetor em número?
+x
+
+# Esse exercício é um pouco mais difícil mesmo!
+x %>% str_extract("\\d")
+
+tibble(
+  tipo_idade = str_sub(x, 1, 1),
+  idade = str_sub(x, 2, 3),
+  idade_anos =
+    if_else(
+      str_detect(tipo_idade, "1"),
+      as.numeric(idade) / (24 * 30 * 12),
+      if_else(
+        str_detect(tipo_idade, "2"),
+        as.numeric(idade) / (30 * 12),
+        if_else(
+          str_detect(tipo_idade, "3"),
+          as.numeric(idade) / 12,
+          as.numeric(idade)
+        )
+      )
+    )
+) %>% 
+  print(n = Inf)
+```
+
+Ao invés de utilizar essas chamadas recursivas de `if_else`, que são muito ruins de ler, como você poderia reescrever a condição usando `case_when`?
+
+10. Explore as contagens da variável `rincome` em `gss_cat`, ela ficaria bem representada num gráfico? De qual tipo?
+
+```{r}
+gss_cat %>% count(rincome)
+```
+
+Em geral, contagens de variáveis ficam bem em gráficos de barras ou visualizações equivalentes, em que é possível comparar visualmente as contagens das diversas categorias. Mais sobre isso na aula do `ggplot2`.
+
+11. Qual a religião mais comum em `gss_cat`? Qual o partido (`partyid`) mais popular?
+
+```{r}
+# Religião
+gss_cat %>% count(relig) %>% arrange(desc(n))
+
+# Partido
+gss_cat %>% count(partyid) %>% arrange(desc(n))
+```
+
+12. A que religião se refere a variável `denom`? Você pode descobrir isso fazendo uma tabela de contagens?
+
+Você pode chamar count com várias variáveis para fazer uma tabulação cruzada.
+
+```{r}
+gss_cat %>% count(relig, denom) %>% print(n = Inf)
+```
+
+13. Como você poderia diminuir o número de categorias da variável `rincome` do banco `gss_cat`?
+
+A melhor função para redução de fatores é `fct_collapse`. Veja como ficam a coluna original e a transformada.
+
+```{r}
+gss_cat2 <- 
+  gss_cat %>% 
+  # Aqui vou salvar em "rincome2" para a gente poder ver as duas
+  mutate(rincome2 = fct_collapse(
+    rincome,
+    "Non-response" = c("No answer", "Don't know", "Refused", "Not applicable"),
+    "Até 5k"       = c("$4000 to 4999", "$3000 to 3999", "$1000 to 2999", "Lt $1000"),
+    "5k-10k"       = c( "$8000 to 9999", "$7000 to 7999", "$6000 to 6999", "$5000 to 5999"),
+    "10k-20k"      = c("$15000 - 19999", "$10000 - 14999"),
+    "20k+"         = c("$25000 or more", "$20000 - 24999"))) %>% 
+  select(rincome, rincome2)
+
+# E veja as contagens
+gss_cat2 %>% count(rincome)
+gss_cat2 %>% count(rincome2)
+```
+

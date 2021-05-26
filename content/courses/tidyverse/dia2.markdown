@@ -743,16 +743,16 @@ flights %>%
     ## # A tibble: 10 x 2
     ##    dep_delay desabafo                             
     ##        <dbl> <chr>                                
-    ##  1        94 Atraso de mais de 1 horas é f***.    
-    ##  2         5 Atraso de menos de 1 hora é tolerável
-    ##  3        57 Atraso de menos de 1 hora é tolerável
-    ##  4        71 Atraso de mais de 1 horas é f***.    
+    ##  1        -5 Opa, vou chegar cedo!                
+    ##  2        23 Atraso de menos de 1 hora é tolerável
+    ##  3        -4 Opa, vou chegar cedo!                
+    ##  4        -3 Opa, vou chegar cedo!                
     ##  5        -8 Opa, vou chegar cedo!                
-    ##  6        -1 Opa, vou chegar cedo!                
-    ##  7         1 Atraso de menos de 1 hora é tolerável
-    ##  8        -5 Opa, vou chegar cedo!                
-    ##  9        -8 Opa, vou chegar cedo!                
-    ## 10         0 Atraso de menos de 1 hora é tolerável
+    ##  6        -3 Opa, vou chegar cedo!                
+    ##  7        -5 Opa, vou chegar cedo!                
+    ##  8        22 Atraso de menos de 1 hora é tolerável
+    ##  9        23 Atraso de menos de 1 hora é tolerável
+    ## 10        -2 Opa, vou chegar cedo!
 
 Utilizando `summarize` você tira medidas resumo das suas colunas de interesse:
 
@@ -1074,7 +1074,7 @@ Nesta seção, o nosso problema não é mais a análise de dados presentes em um
 
 O banco `nycflights13` contém várias tabelas que se relacionam, e elas funcionam como um excelente exemplo de banco de dados relacionais.
 
-![Banco de dados relacional de vôos](/courses/tidyverse/dia2_files/relational-nycflights.png)
+![Banco de dados relacional](/courses/tidyverse/dia2_files/relational-nycflights.png)
 
 Note que além do banco de dados dos vôos, temos informações sobre clima, aviões e companhias aéreas. Para nós, pode ser relevante reunir informações de diferentes fontes em um mesmo banco de dados, algo que é possível através de `joins`. Por uma questão de tempo, não vamos entrar muito a fundo no assunto, mas vamos introduzir dois conceitos chave e partir pros exemplos.
 
@@ -1082,9 +1082,9 @@ Note que além do banco de dados dos vôos, temos informações sobre clima, avi
 
 -   `joins` são tipos de operação no qual se opta por priorizar um grupo de observações em detrimento de outras. Podemos vê-los didaticamente a partir de duas figuras:
 
-![Joins como diagramas de Venn](/courses/tidyverse/dia2_files/join-venn.png)
+![Joins como diagrama de Venn](/courses/tidyverse/dia2_files/join-venn.png)
 
-![Joins como “pontos”](/courses/tidyverse/dia2_files/join-outer.png)
+![Join como “pontos”](/courses/tidyverse/dia2_files/join-outer.png)
 
 A primeira figura é interessante porque nos dá uma ideia de quais observações serão mantidas e quais serão descartadas, podemos imaginá-la como uma abstração da nossa escolha.
 
@@ -2553,15 +2553,15 @@ x <- as.character(round(c(
 x
 ```
 
-    ##   [1] "116" "119" "123" "117" "122" "120" "105" "104" "115" "119" "114" "107"
-    ##  [13] "100" "114" "106" "107" "103" "116" "121" "110" "105" "119" "119" "121"
-    ##  [25] "123" "223" "221" "217" "214" "226" "212" "230" "220" "228" "202" "216"
-    ##  [37] "224" "205" "206" "220" "211" "220" "228" "221" "225" "229" "205" "203"
-    ##  [49] "222" "224" "312" "301" "301" "304" "302" "308" "309" "311" "302" "304"
-    ##  [61] "303" "310" "305" "303" "303" "305" "305" "309" "305" "311" "305" "304"
-    ##  [73] "303" "308" "310" "418" "405" "484" "463" "432" "497" "444" "442" "437"
-    ##  [85] "481" "441" "430" "486" "467" "469" "430" "416" "414" "421" "483" "443"
-    ##  [97] "428" "437" "458" "450"
+    ##   [1] "115" "113" "119" "121" "118" "116" "100" "108" "113" "119" "121" "103"
+    ##  [13] "116" "111" "111" "115" "114" "102" "116" "103" "120" "115" "123" "103"
+    ##  [25] "119" "230" "228" "225" "214" "225" "206" "207" "208" "202" "210" "229"
+    ##  [37] "204" "207" "215" "218" "223" "221" "205" "214" "220" "227" "202" "224"
+    ##  [49] "214" "201" "305" "310" "309" "310" "305" "305" "309" "303" "312" "310"
+    ##  [61] "303" "302" "305" "303" "304" "306" "309" "304" "303" "309" "306" "311"
+    ##  [73] "306" "307" "310" "417" "477" "470" "493" "414" "446" "402" "423" "476"
+    ##  [85] "432" "490" "499" "429" "414" "455" "409" "462" "447" "483" "458" "471"
+    ##  [97] "402" "423" "464" "483"
 
 10. Explore as contagens da variável `rincome` em `gss_cat`, ela ficaria bem representada num gráfico? De qual tipo?
 

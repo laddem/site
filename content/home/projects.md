@@ -11,8 +11,8 @@ headless: true
 # Order that this section appears on the page.
 weight: 65
 
-title: Projects
-subtitle: ''
+title: Projetos
+subtitle: 'Projetos em andamento no LADDEM'
 
 content:
   # Page type to display. E.g. project.

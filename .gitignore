@@ -38,8 +38,11 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# the public/ folder
+# the /public/ folder
 /public/
+
+# the /resources/ folder
+/resources/
 
 .DS_Store
 Thumbs.db
