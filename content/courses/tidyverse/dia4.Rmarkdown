@@ -3,12 +3,502 @@ date: 2021-05-23
 title: purrr
 type: book
 weight: 50
-draft: true
+draft: false
 ---
 
 O autor dos pacotes do `tidyverse` core é completamente fascinado por gatos, por isso, tantas referências ao bixo nos nomes dos pacotes. "Purr" (em inglês) é o som que os gatos fazem quando sentem prazer. Pra não ficar uma coisa solta no começo da aula, aqui uma foto de gatinho pra vocês:
 
 ![Amy, the cat](/courses/tidyverse/dia4_files/amy-cat.jpg)
 
+<!-- Inciting incident -->
+
+O assunto da aula de hoje é talvez um pouco mais abstrato do que as aulas anteriores. Vamos falar bastante de funções, loops e programação funcional. São termos que fazem parte do jargão da computação, mas que mesmo usuários veteranos do R como software estatístico para análise de dados podem ter pouca familiaridade. Ao invés de começar definindo o que vamos fazer, vou começar definindo o que não vamos.
+
+- Não vamos revisar a fundo o assunto de iterações. Os livros fazem um bom serviço, é um assunto espinhoso e não basta compreender os conceitos, tem que botar a mão na massa pra ter um entendimento não apenas da teoria, mas também para conseguir resolver os muitos problemas que aparecem quando você está construindo iterações com maior nível de complexidade.
+
+- Não vamos cavar fundo em todos os aspectos da programação funcional ou de todas as funções do purrr. São muitas e temos poucas horas.
+
+Agora o que SIM vamos fazer é revisar muito brevemente a sintaxe de um for loop, ver em que situações a gente o utilizaria e como você pode substituir seus vários for loops por funções no purrr, com exemplos de aplicação quando possível. Se der tempo, vamos entrar um pouco na ideia de utilizar programação funcional para resolver problemas mais genéricos em que precisamos generalizar alguma tarefa.
+
+```{r}
+# Primeiro, nossos pacotes!
+library(tidyverse) # o purrr já é carregado automaticamente junto com os outros,
+# Se quiser carregar apenas o purrr, descomente a linha abaixo
+# library(purrr)
+```
+
+
+## Iterações
+
+Do ponto de vista prático, uma iteração é uma repetição uma linha de código de tal forma que apenas uma pequena parte previsível do código muda entre uma repetição e outra. Por exemplo, digamos que você vai calcular uma soma de `x`.
+
+```{r}
+x <- runif(100, 0, 1000)
+x
+```
+
+Esqueça, por um instante, a função `sum`. O cálculo da soma se dá pela soma de todos os elementos do vetor `x`. Então, é necessário repetir a operação de soma através da acumulação dos valores. Veja que é tudo totalmente previsível, cada nova repetição simplesmente adiciona mais um valor ao vetor original e esse valor pode ser encontrado na próxima posição de `x`. Esse é o típico caso de iteração. No R, a melhor prática é inicializar uma variável antes e salvar os resultados da iteração nela.
+
+```{r}
+# Inicialização
+result <- x[[1]]
+
+# Sequência
+for (i in 2:length(x)) {
+  # Corpo
+  result <- result + x[[i]]
+}
+
+# Comparando os dois resultados
+result
+
+sum(x)
+```
+
+Outro exemplo de mesmo tipo é repetição de uma mesma operação em vários vetores/colunas/variáveis comuns. Por exemplo, se eu tenho um `data.frame` com três colunas numéricas e eu gostaria de calcular a soma de cada uma.
+
+```{r}
+# Data.frame
+df <- tibble(x = rnorm(100, 50, 25),
+             y = rnorm(100, 100, 25),
+             z = rnorm(100, 200, 25))
+
+# Inicialização
+result <- vector(mode = "double", length = length(df))
+
+# Sequência
+for (i in seq_along(df)) {
+  result[[i]] <- sum(df[[i]])
+}
+
+# Resultado
+result
+```
+
+Essa é a minha revisão de 5 minutos de iteração em R usando `for` loops. Como já é de costume, tem muito mais. Por exemplo, existe um outro tipo de iterador no R básico chamado `while`, que tem um funcionamento diferente do `for`. Ao invés de você ter um resultado de tamanho previsível, você pode ter um resultado de tamanho desconhecido. Vou deixar o `while` para vocês pesquisarem porque o bom e velho `for` costuma cobrir a maioria dos casos de uso do cientista de dados.
+
 ## Programação funcional
+
+Beleza, agora que já dominamos (ou não) o `for` loop, encontramos várias situações em que a gente gostaria de realizar a mesma operação várias vezes, mas, o `for` loop é como uma feijoada: é gostoso, mas é pesado. `For` loops em geral são "verbosos", você precisa escrever bastante para chegar em um determinado resultado e, depois de escrever alguns, você cansa de ter que repetir todos os pedaços dele. E se você pudesse **abstrair** o loop para uma função? Aí você não precisaria escrever toda aquela parafernalha.
+
+```{r}
+soma <- function(x) {
+  result <- 0
+  for (i in 1:length(x)) {
+    result <- result + x[[i]]
+  }
+  result
+}
+
+soma(x)
+```
+
+Ao fazer isso, eu ganho duas vantagens:
+
+- Manutenção: sempre que eu precisar repetir a operação, eu consigo simplificar muito meu código. Não preciso escrever um for loop para cada soma que eu precisar fazer. Se meus requerimentos mudarem no futuro, eu só preciso mudar um pedaço de código.
+
+- Leitura: o humano que lê um `for` loop vai precisar de um minuto para se familiarizar com a operação e entender o que está sendo iterado, calculado, etc. O humano que lê "soma" sabe que ocorrerá uma soma. Você alinha a **expectativa** com a **execução**.
+
+Outro exemplo.
+
+```{r}
+soma_xyz <- function(x) {
+  soma_xyz <- vector(mode = "double", length = nrow(x))
+  for (i in seq_along(df$soma_xyz)) {
+    soma_xyz[[i]] <- x[[1]][[i]] + x[[2]][[i]] + x[[3]][i]
+  }
+  soma_xyz
+}
+
+df$soma_xyz2 <- soma_xyz(df)
+df
+```
+
+Outra vantagem de ter na mão uma função, é que eu posso me apropriar das ferramentas de programação funcional do R. São as funções da família `apply`, que recebem uma lista de objetos e aplicam uma função em cada um. Basicamente, aquela **abstração** do for loop que estavamos buscando.
+
+Vejam como eu posso recriar o exemplo das somas das colunas do `data.frame` usando a função soma.
+
+```{r}
+sapply(df, soma)
+```
+
+Eu sei, o exemplo é muito simples pra ter uma aplicação real. Até porque já vimos como fazer esse tipo de operação com `summarize` lá atrás. Mas talvez, na hora que você estiver realizando alguma operação de repetição, você se lembre dessa possibilidade e ela lhe seja útil.
+
+### o pacote `purrr`
+
+Até o momento, nos limitamos a utilizar funções presentes no `base`, mas o verdadeiro intuito dessa aula é introduzir as facilidade trazidas pelas funções do `tidyverse`. No pacote `purrr`, são importadas funções com diversas funcionalidades que facilitam o trabalho com objetos mais complexos, como listas (pense saída de modelo), iterações envolvendo mais de um argumento (pense escrever diversos objetos em diversos arquivos distintos) e assim sucessivamente. Abaixo, segue uma lista das funções do pacote com uma descrição curta.
+
+- a família `map_()`: similar a família `apply` do R base. Recebe uma lista de objetos de entrada e uma função e devolve uma lista com os resultados.
+
+- `map2_()`: mesma coisa, só que você pode passar duas listas de objetos e uma função que requer dois argumentos variáveis. `pmap()` é a generalização, em que você passa `p` listas e uma função que pede `p` argumentos.
+
+- `imap()`: aplica uma função tanto ao vetor, como a seu nome/índice. É meio louco, mas é muito útil para alguns casos de uso.
+
+- `modify_()`: permite aplicar alterações no objeto estilo o que você faria com uma pipeline de `filter %>% mutate`
+
+- `safely()`: e suas irmãs `possibly()` e `quietly()` ajudam a obter resultados mesmo quando há ocorre um erro na iteração.
+
+- `transpose()`, `flatten_`: manipulam e reformatam listas.
+
+- `invoke_map()`: aplica uma lista de funções a uma (opcional) segunda lista de parâmetros.
+
+- `reduce()` e `accumulate()``: generalizam as operações de sumarização (pense soma acumulada, média, limite, fatorial)
+
+- `pluck()`: pesca elementos de uma lista com uma sintaxe linear e bonitinha.
+
+- [E muito mais coisas](https://purrr.tidyverse.org/reference/index.html)
+
+No interesse de ir direto ao ponto e não tentar ser exaustivo, vamos ver algumas delas em mais detalhe.
+
+#### A função `map`
+
+Essa função é praticamente uma cópia de `lapply`. 
+
+```{r}
+df %>% lapply(sum)
+
+df %>% map(sum)
+```
+
+Embora existam pequenas diferenças técnicas entre elas, a principal vantagem de `map` é a possibilidade de criar funções anônimas com uma síntaxe enxuta. Pense, por exemplo, em elevar ao quadrado.
+
+```{r}
+df %>% lapply(function(x) x ^ 2)
+df %>% map(~ .x ^ 2)
+```
+
+Através do uso de fórmulas `~` é possível especificar funções anônimas simples economizando caracteres e utilizando o autocompletar.
+
+Que tal esta pipeline?
+
+```{r}
+library(nycflights13)
+
+# Médias de todas as variáveis numéricas usando where()
+flights %>% 
+  select(where(is.numeric)) %>% 
+  map(mean)
+```
+
+Ou esta
+
+```{r}
+# Proporção de missings em todas as variáveis
+flights %>% 
+  map(is.na) %>% 
+  map(mean)
+
+# Contagem de missings em todas as variáveis
+flights %>% 
+  map(is.na) %>% 
+  map(sum)
+```
+
+A outra grande vantagem do map é ter acesso fácil ao controle do tipo de saída.
+
+```{r}
+# Vetor numérico
+flights %>% 
+  map(is.na) %>% 
+  map_dbl(mean)
+
+# Vetor de caracteres
+flights %>% 
+  map(is.na) %>% 
+  map_chr(mean)
+
+```
+
+Um exemplo um pouco mais elaborado: avaliação inicial de variáveis em um modelo. Em geral, é comum rodar um modelo para cada variável numérica para ver como elas se comportam.
+
+```{r}
+respvar <- "hwy"
+predvars <- names(select(mpg, where(is.numeric), -hwy))
+
+tibble(
+  names = predvars,
+  fit = map(names, ~lm(paste0(respvar, "~", .x), data = mpg)),
+  summary = map(fit, summary),
+  r2 = map_dbl(summary, "r.squared"),
+  FStat = map_df(summary, "fstatistic"),
+  coefs = map_df(fit, coef),
+)
+```
+
+Ok, a saída não está muito bonitinha! Mas com um pouco mais de trabalho, programadores melhores que eu fizeram isso:
+
+```{r}
+models <- 
+  tibble(
+    names = predvars,
+    fit = map(names, ~lm(paste0(respvar, "~", .x), data = mpg)),
+    tidied = fit %>% map(broom::tidy),
+    glanced = fit %>% map(broom::glance),
+    augmented = fit %>% map(broom::augment)
+  )
+
+models
+```
+
+Grande coisa, Vinícius, o output é ilegível! Calma! Lembram da primeira aula em que eu comentei que havia mais funções no `tidyr`?
+
+```{r}
+# Coeficientes
+models %>% 
+  select(tidied) %>%
+  tidyr::unnest(tidied) %>% 
+  filter(term != "(Intercept)")
+
+# Estatísticas do modelo
+models %>% 
+  select(names, glanced) %>% 
+  unnest(glanced)
+
+# Bancos "aumentados" com valores ajustados, resíduos, distâncias de cook, etc.
+models %>% 
+  filter(names == "displ") %>% 
+  select(names, augmented) %>% 
+  unnest(augmented)
+```
+
+Isso aqui é só uma palhinha de modelagem com o `tidyverse`, mas acho que é uma demonstração muito convincente da aplicabilidade dos exemplos que vimos usando programação funcional.
+
+Outro exemplo mais simples com `map2`: salvar vários arquivos de uma vez só.
+
+```{r}
+df1 <- tibble(x = rnorm(100), y = rnorm(100), z = rnorm(100))
+df2 <- tibble(x = rnorm(100), y = rnorm(100), z = rnorm(100))
+df3 <- tibble(x = rnorm(100), y = rnorm(100), z = rnorm(100))
+df4 <- tibble(x = rnorm(100), y = rnorm(100), z = rnorm(100))
+
+dfs <- list(df1, df2, df3, df4)
+dfs
+
+paths <- sprintf("arquivo%s.csv", 1:4)
+paths
+
+map2(dfs, paths, ~write_csv(x = .x, file = .y))
+```
+
+E se eu quiser ler um banco de dados que está em vários arquivos diferentes? Vamos usar os que acabamos de criar
+
+```{r}
+# Bum! Uma linha
+paths %>% map_dfr(read_csv, .id = "arquivo")
+```
+
+As possibilidades são inúmeras. A regra é a seguinte: viu uma tarefa que precisa ser repetida muitas vezes? Pense com carinho em usar uma função vetorizada através de `map_`.
+
+#### Predicados
+
+O objetivo de um função predicado é selecionar elementos de uma lista com base em uma função. Em geral, são funções simples que retornam um valor `TRUE` ou `FALSE` com base em alguma característica do objeto, como o tipo.
+
+```{r}
+l <- list(c("a", "b", "c"), c(1, 2, 3))
+l %>% str()
+l %>% keep(is.numeric) %>% str()
+l %>% keep(is.character) %>% str()
+```
+
+O uso mais frequente que vejo de `keep` e `discard` é como uma espécie de atalho para `select`. Como `data.frames` são secretamente listas, você pode rapidamente selecionar todas as variáveis do banco que tenham o mesmo tipo.
+
+```{r}
+flights %>% keep(is.numeric)
+flights %>% discard(is.character)
+```
+
+Como outros aspectos do `purrr`, a grande vantagem aqui é a generalidade. Essas funções funcionam em qualquer lista de objetos e não apenas em `data.frames`.
+
+#### Lidando com a presença de erros
+
+A próxima dica forte é utilizar os advérbios (chique) `safely()` e companhia para lidar com erros.
+
+```{r, error=TRUE}
+x <- list(a = c(1,2,3), b = c("a", "b", "c"), c = c(99, 88, 77))
+
+x %>% map(sum)
+```
+
+Não conseguimos nada! A mensagem de erro nem nos informa onde o problema ocorreu. E agora?
+
+```{r}
+x %>% map(safely(sum)) %>% str()
+
+x %>% map(possibly(sum, otherwise = NA_real_)) %>% str()
+```
+
+Essas funções permitem alterar a saída de uma função quando ocorrer um erro. `quietly` é parecido, mas ela captura mais a saída do R, o texto em si.
+
+```{r}
+x <- list(1, -1)
+x %>% map(quietly(log)) %>% str()
+```
+
+#### Chamando listas de funções
+
+Vamos supor que você tem um vetor de números e você quer aplicar um monte de funções diferentes nele, mas você não quer ter que ficar copiando e colando tudo.
+
+```{r}
+numeros <- rnorm(25, 50, 10)
+numeros
+```
+
+Nessas situações, você gostaria de chamar várias funções no mesmo objeto ou grupo de objetos, mas você não sabe bem como fazer isso... Então, `invoke_map` vem ao resgate.
+
+```{r}
+funcs <- list("mean", "sd", "IQR", "sum", "length", "range", "min", "max")
+args <- list(list(na.rm = T, trim = 0.05),
+             list(na.rm=T), 
+             list(type = 2),
+             list(na.rm = T), 
+             list(),
+             list(na.rm = T), 
+             list(na.rm = T), 
+             list(na.rm = T))
+funcs %>% str()
+args %>% str()
+
+invoke_map(funcs, args, x = numeros) %>% glimpse()
+```
+
+Fica mais bonito se você nomear os argumentos, ai o output fica melhorzinho.
+
+```{r}
+names(funcs) <- unlist(funcs)
+
+invoke_map(funcs, args, x = numeros) %>% glimpse()
+```
+
+Claro que esse exemplo aqui talvez não seja útil para vocês, mas espero que quando vocês encontrarem uma situação em que você gostaria de aplicar uma bateria de funções no mesmo objeto ou grupo de objetos, vocês se lembrem dessa possibilidade.
+
+#### `reduce` e `accumulate`
+
+Essas duas funções são desenhadas para fazer aplicações recursivas de funções que recebem dois argumentos (operadores matemáticos, `_join`s, etc. Recursividade em linhas gerais, é você repetir uma operação com o resultado da repetição anterior. Pense em somas ou produtos acumulados, em que o próximo valor é determinado pela aplicação de uma regra sobre o anterior.
+
+```{r}
+accumulate(1:10, `+`)
+accumulate(1:10, `*`)
+```
+
+A principal diferença entre `accumulate` e `reduce` é que a primeira guarda os resultados intermediários, enquanto a segunda retorna apenas o último.
+
+```{r}
+reduce(1:10, `+`)
+reduce(1:10, `*`)
+```
+
+Uma aplicação bastante prática dessas funções é a produção de um único banco de dados a partir de vários arquivos separados.
+
+```{r}
+# Lembra dos nossos arquivos lá em cima?
+paths
+```
+
+Vamos fingir que não temos acesso a `map_dfr` e precisamos importar esses objetos e todos compõem um único banco. Imaginaem que tratam-se de dados por ano.
+
+```{r}
+dfs <- map(paths, read_csv)
+
+glimpse(dfs)
+
+new_df <- reduce(dfs, bind_rows)
+new_df
+```
+
+O resultado é o mesmo observado em `map_dfr`, mas essa abordagem é **genérica**, ou seja, ela se aplica para qualquer grupo de objetos e para qualquer função que recebe dois argumentos e precisa ser repetida de maneira **recursiva**.
+
+```{r}
+# Apaga os arquivos pra eles não ficarem ai gastando memória a toa
+file.remove(paths)
+```
+
+#### `pluck`
+
+Esta função é um atalho para as tesouras duplas do r `[[`. Seu objeto é facilitar a **leitura** de códigos que pescam elementos profundos de uma lista aninhada.
+
+```{r}
+l <- list(
+  list(-1, x = 1, y = c(2), z = "a"),
+  list(-2, x = 4, y = c(5, 6), z = "b"),
+  list(-3, x = 8, y = c(9, 10, 11))
+)
+
+glimpse(l)
+```
+
+Se você chamar `map_` nessa lista, você pode extrair os elementos delas pelo nome.
+
+```{r}
+map_dbl(l, "x")
+map(l, "y")
+map(l, "z")
+```
+
+Ou pela posição na lista
+
+```{r}
+map_dbl(l, 1)
+map_dbl(l, 2)
+map(l, 3)
+```
+
+Ou os dois
+
+```{r}
+map_dbl(l, list("x", 1))
+map(l, list("z", 1))
+map(l, list("y", 3))
+```
+
+Se um componente não existir, você recebe um erro
+
+```{r, error=TRUE}
+map_chr(l, "z")
+```
+
+Mas você pode resolver isso passando um valor padrão
+
+```{r}
+map_chr(l, "z", .default = NA_character_)
+```
+
+Tudo isso funciona com base na função `pluck`
+
+```{r}
+pluck(l, 1)
+pluck(l, 1, 2)
+pluck(l, 2, 3)
+pluck(l, 1, "x")
+pluck(l, 2, "z")
+pluck(l, 3, "y")
+```
+
+## Exercícios
+
+1. Utilize uma das funções `map_` para:
+    
+  1. Calcular a média de cada coluna em `mtcars`.
+  2. Determinar o tipo de cada coluna em `flights`.
+  3. Computar o número de valores únicos em cada coluna de `iris`.
+  4. Gere 10 distribuições aleatórias (`rnorm`) com médias -10, 0, 10 e 100.
+
+2. Como você pode criar um vetor indicando se cada coluna em um `data.frame` é um fator?
+
+3. Usando as funções predicado `keep` e `discard`:
+  1. Selecione todas as colunas caractere no banco `flights`.
+  2. Descarte os caracteres em `mpg`.
+  3. Selecione os fatores ordenados em `diamonds`.
+  4. Descarte as variáveis não-numéricas em `iris`
+
+4. Imagine que você tem um diretório cheio de arquivos `.csv` que correspondem a um único banco de dados. Você tem os caminhos de todos eles num vetor com a forma `c(arquivo_1.csv, ..., arquivo_n.csv)`. Como você importaria esses arquivos? Tente fazer duas soluções diferentes.
+
+5. Escreva um código sucinto que implemente vários modelos lineares especificados por você. Salve os resultados numa `tibble` com colunas-lista. Depois, extraia os resultados com `unnest()`. Use o exemplo como guia.
+
+```{r}
+mtcars
+modelos <- c("mpg ~ wt",
+             "mpg ~ wt + cyl",
+             "mpg ~ wt + cyl + drat",
+             "mpg ~ wt + cyl + drat + am")
+```
 

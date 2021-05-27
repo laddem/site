@@ -1,13 +1,14 @@
 ---
 title: "Soluções"
 date: 2021-05-25
+summary: Soluções dos exercícios
 type: book
 draft: false
 ---
 
-## Soluções dos exercícios
+Soluções dos exercícios.
 
-### `readr`, `tibble`, `tidyr`
+## `readr`, `tibble`, `tidyr`
 
 ```{r}
 # Não esqueça dos pacotes!
@@ -358,7 +359,7 @@ acoes %>% complete(ano, qdr, fill = list(lucro = 0))
 
 Note o resultado. E note também que `values_fill` em `pivot_wider` é um pouco mais criterioso na hora de fazer as transformações.
 
-### `stringr`, `forcats` e `dplyr`
+## `stringr`, `forcats` e `dplyr`
 
 ```{r}
 library(nycflights13)
@@ -646,3 +647,206 @@ gss_cat2 %>% count(rincome)
 gss_cat2 %>% count(rincome2)
 ```
 
+## `ggplot2`
+
+1. O que tem de errado no código abaixo? Por que os pontos não ficaram azuis?
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+```
+
+Os pontos não ficam azuis porque você não está especificando cores! Dentro da função `aes()` você está especificando variáveis para serem mapeadas a uma escala de cores. Portanto, o `ggplot` interpreta "blue" como uma variável sem nome que tem o valor "blue" e mapeia ela para a escala de cores padrão, que é vermelha. Se você quer controlar apenas a "aparência" dos pontos e não está preocupada em mapear nenhuma variável, você pode passar essa estética fora da função `aes()`.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(
+    mapping = aes(x = displ, y = hwy), # aqui acabam os mapeamentos estéticos
+    color = "blue", # alteração apenas na aparência do geom
+    size = 2, # alteração apenas na aparência do geom
+    shape = 6 # alteração apenas na aparência do geom
+    ) 
+
+```
+
+
+2. Utilizando o banco `mpg`, faça o diagrama de dispersão de `displ` por `hwy` e mapeie a cor para `class`, o tamanho para `cyl` e a forma para `manufacturer`. Como esses atributos estéticos se comportam diferente para variáveis categóricas vs contínuas?
+
+```{r}
+ggplot(mpg, aes(
+  displ, 
+  hwy, 
+  color = class, 
+  size = cyl,
+  shape = manufacturer)) +
+  geom_point()
+```
+
+Ao cumprir as instruções como dadas, logo de cara você recebe um aviso do `ggplot2`. A paleta de "shapes" só recebe por padrão 6 shapes diferentes, porque de acordo com o autor, mais de 6 torna difícil de distinguir. Mas eu sou teimoso.
+
+```{r}
+ggplot(mpg, aes(
+  displ, 
+  hwy, 
+  color = class, 
+  size = cyl,
+  shape = manufacturer)) +
+  geom_point() +
+  scale_shape_manual(values = 1:15, guide = "legend")
+```
+
+Esse gráfico é mais um exemplo para vocês verem como diferentes escalas se comportam. A variável `cyl` é numérica e ordenada, então faz sentido colocá-la num mapeamento como `size`, já que visualmente é possível indicar que a grandeza aumenta com o tamanho. Classe é uma variável categórica, então ela fica melhor em mapeamentos que ressaltam diferenças entre as categorias, como `colors` ou `shapes`. O pacote também impõe algumas restrições sobre o que é possível mapear. Por exemplo, ele retorna erro se você tenta mapear uma variável discreta para uma escala contínua.
+
+```{r, error = TRUE}
+ggplot(mpg, aes(displ, hwy, color = class)) +
+  geom_point() +
+  scale_color_continuous()
+```
+
+Experimentem tentar mapear diferentes variáveis no banco `mpg` para as diferentes escalas e vejam os resultados. Em alguns casos, é possível, mas o gráfico é pouco informativo, em outros, você verá mensagens de erro.
+
+3. Utilizando o `diamonds`, crie um diagrama de dispersão que relacione `carat` com `price`. Explore algumas outras variáveis utilizando escalas de cor para ver se você identifica algum padrão. Aplique transformações nas variáveis que você considerar justificadas.
+
+Esse exercício não tem uma resposta correta. O objetivo era que vocês explorassem as transformações estatísticas e as escalas de cores diferentes presentes no `ggplot`, através do argumento `trans`, ou mesmo fazer outras transformações que interessassem vocês nas variáveis. Abaixo um exemplo de transformação de Yeo-Johnson, um tipo de transformação BoxCox que aceita valores negativos e uma das escalas de cor do pacote `viridis`.
+
+```{r}
+ggplot(diamonds, aes(carat, price, color = clarity)) +
+  geom_point() +
+  scale_x_continuous(trans = scales::yj_trans(p = 2)) +
+  scale_color_viridis_d(option = "magma")
+```
+
+4. Ainda continuando o exemplo anterior, aplique um `geom_smooth` utilizando várias opções de `method` para as variáveis originais ou transformadas.
+
+Segundo a mesma lógica, o objetivo era explorar as opções de visualização de modelos simples através do argumento `method`. Abaixo um exemplo de `gam`. Uma mudança que fiz foi usar a variável `cut` ao invés de `clarity`, porque o gráfico não-transformado de `clarity` estava muito poluído.
+
+```{r}
+ggplot(diamonds, aes(carat, price, color = cut)) +
+  geom_point(alpha = 0.1) + # pontos translúcidos para reduzir a poluição
+  geom_smooth(method = "gam", se = FALSE) +
+  scale_color_viridis_d(option = "plasma")
+```
+
+5. No nosso gráfico de barras usando `stat(prop)` a gente precisou colocar `group = 1`, porque? Qual é a diferença entre esses dois códigos?
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = after_stat(prop)))
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = color, y = after_stat(prop)))
+```
+
+Acabei explicando isso na aula, devido a uma pergunta, mas para quem perdeu, trata-se do comportamento padrão quando há proporções: cada barra terá sua própria proporção e todas somarão a 100%. O uso de `group = 1` indica à função que as proporções que somam a 100% são o total dos níveis do fator e não cada nível individualmente.
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = after_stat(prop), group = 1))
+
+# No caso em que há um "fill", precisamos normalizar as alturas das barras
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(
+    x = cut,
+    y = stat(prop),
+    fill = clarity
+  ))
+
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(
+    x = cut,
+    y = stat(count)/sum(stat(count)),
+    fill = clarity
+  ))
+```
+
+
+6. `stat_smooth` é muito parecido com `geom_smooth`, mas há uma diferença sutil. Compare os códigos abaixo.
+
+`geom_smooth` chama `stat_smooth` quando você utiliza a função para calcular as "médias condicionais" que correspondem a linha de tendência desenhada no gráfico. É assim com todos os `geom`s no pacote. Há uma conexão entre o objeto geométrico e uma transformação estatística. Mesmo que seja a transformação `_identity`, que mantém a variável exatamente como ela estava no dado. A grande vantagem de construir um gráfico com `stat_smooth` ao invés de `geom_smooth` é que você pode especificar outro objeto geométrico que não seja o padrão (`geom_line` + `geom_ribbon`). É isso que os gráficos abaixo demonstram.
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  geom_smooth()
+
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  stat_smooth(geom = "step")
+
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  stat_smooth(geom = "linerange")
+  
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  stat_smooth(geom = "errorbar")
+
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  stat_smooth(geom = "crossbar")
+
+```
+
+7. Usando o `mpg` e `facet_grid`, crie um scatterplot que contenha `displ` no eixo x, `hwy` no eixo y, `class` na cor, `drv` nas facetas-coluna e `cyl` nas facetas linha.
+
+Esse aqui é para demonstrar o uso de `facet_grid`, que permite especificar fatores de classificação diferentes nas linhas e colunas, diferente de `facet_wrap` mostrado na aula, que só permite especificar uma dimensão.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point() +
+  facet_grid(cyl ~ drv)
+```
+
+8. Você acha que os dois gráficos abaixo ficarão diferentes um do outro? Porque? Tente responder antes de rodar o código.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+ggplot() + 
+  geom_point(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_smooth(data = mpg, mapping = aes(x = displ, y = hwy))
+```
+
+Mesmo antes de rodar o código, o observador astuto notará que os mapeamentos locais no segundo gráfico são idênticos entre si e aos mapeamentos globais, então os dois gráficos são iguais.
+
+9. Tente recriar o seguinte gráfico
+
+O objetivo dessa era fazer vocês fuçarem um pouco na ajuda para tentar recriar o mais fielmente possível o gráfico final. Não precisava ter acertado, o objetivo era chegar o mais próximo possível.
+
+```{r}
+ggplot(mpg, aes(displ, hwy, color = drv)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) +
+  labs(x = "Rodovia", y = "Toneladas", color = "Tração") +
+  scale_color_brewer(palette = "Set1")
+```
+
+10. Transforme o gráfico seguir em um gráfico de pizza usando `coord_polar`.
+
+```{r}
+ggplot(diamonds, aes(cut, fill = cut)) +
+  geom_bar()
+```
+
+Depois de simplesmente especificar `coord_polar`, em geral o gráfico fica meio estranho, não tem aquela cara bonita de pizza. É preciso corrigir os seguintes problemas:
+
+- A largura das barras deve ser igual a proporção das contagens, mas a altura deve ser igual a 1! Portanto, eu inverto as coisas e passo as contagens/proporções para "x" e "y" fica com o valor fixo = 1.
+
+```{r}
+ggplot(diamonds, 
+       aes(
+         # calculando as proporções do total,
+         # também funciona com o padrão stat(count)
+         x = stat(count)/sum(stat(count)),
+         y = 1, # altura igual a 1
+         fill = cut)) + # cores
+  geom_bar() +
+  coord_polar() + # coordenadas polares
+  # opcional: remover aspectos do tema para um visual mais clean
+  theme_void()
+```
+
+Como desafio, tentem adicionar elementos textuais das proporções no gráfico. O problema a ser resolvido é como posicionar o texto num sistema de coordenadas polares. Boa sorte!
+
+Gráficos de pizza são polêmicos na análise de dados porque nossos olhos não captam bem diferenças entre formatos curvos e complexos, então a comparação entre as categorias fica prejudicada se houverem mais de 2 ou 3. Eu sempre dou preferência para barras. Há um tipo de gráfico de pizza melhorzinho chamado "donut plot", em que o meio do círculo é oco, mas eu ainda prefiro as barras.

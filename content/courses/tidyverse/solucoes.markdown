@@ -1,13 +1,14 @@
 ---
 title: "Soluções"
 date: 2021-05-25
+summary: Soluções dos exercícios
 type: book
 draft: false
 ---
 
-## Soluções dos exercícios
+Soluções dos exercícios.
 
-### `readr`, `tibble`, `tidyr`
+## `readr`, `tibble`, `tidyr`
 
 
 ```r
@@ -1008,7 +1009,7 @@ acoes %>% complete(ano, qdr, fill = list(lucro = 0))
 
 Note o resultado. E note também que `values_fill` em `pivot_wider` é um pouco mais criterioso na hora de fazer as transformações.
 
-### `stringr`, `forcats` e `dplyr`
+## `stringr`, `forcats` e `dplyr`
 
 
 ```r
@@ -1611,15 +1612,15 @@ x
 ```
 
 ```
-##   [1] "105" "101" "108" "107" "112" "122" "112" "102" "100" "100" "110" "102"
-##  [13] "116" "124" "102" "110" "122" "102" "102" "120" "101" "104" "105" "118"
-##  [25] "106" "202" "229" "202" "202" "219" "224" "205" "221" "223" "228" "206"
-##  [37] "220" "212" "226" "212" "202" "215" "204" "219" "221" "225" "208" "214"
-##  [49] "207" "220" "301" "311" "311" "303" "302" "308" "304" "309" "309" "309"
-##  [61] "306" "304" "310" "309" "305" "305" "310" "306" "301" "310" "305" "307"
-##  [73] "311" "306" "302" "498" "405" "418" "471" "453" "455" "481" "435" "419"
-##  [85] "447" "420" "431" "439" "484" "425" "445" "438" "452" "445" "409" "452"
-##  [97] "468" "447" "414" "498"
+##   [1] "100" "115" "117" "116" "113" "105" "117" "107" "111" "119" "114" "117"
+##  [13] "113" "122" "113" "124" "106" "100" "108" "123" "107" "100" "117" "108"
+##  [25] "122" "202" "218" "211" "209" "209" "212" "208" "221" "212" "219" "219"
+##  [37] "217" "208" "206" "215" "214" "226" "205" "222" "213" "223" "224" "206"
+##  [49] "205" "219" "305" "308" "309" "301" "308" "309" "304" "303" "304" "302"
+##  [61] "307" "301" "311" "310" "310" "308" "301" "308" "309" "310" "311" "305"
+##  [73] "304" "301" "305" "449" "423" "494" "477" "490" "445" "426" "491" "416"
+##  [85] "472" "415" "448" "473" "488" "446" "419" "480" "444" "432" "466" "406"
+##  [97] "406" "421" "491" "417"
 ```
 
 ```r
@@ -1662,106 +1663,106 @@ tibble(
 ## # A tibble: 100 x 3
 ##     tipo_idade idade idade_anos
 ##     <chr>      <chr>      <dbl>
-##   1 1          05      0.000579
-##   2 1          01      0.000116
-##   3 1          08      0.000926
-##   4 1          07      0.000810
-##   5 1          12      0.00139 
-##   6 1          22      0.00255 
-##   7 1          12      0.00139 
-##   8 1          02      0.000231
-##   9 1          00      0       
-##  10 1          00      0       
-##  11 1          10      0.00116 
-##  12 1          02      0.000231
-##  13 1          16      0.00185 
-##  14 1          24      0.00278 
-##  15 1          02      0.000231
-##  16 1          10      0.00116 
-##  17 1          22      0.00255 
-##  18 1          02      0.000231
-##  19 1          02      0.000231
-##  20 1          20      0.00231 
-##  21 1          01      0.000116
-##  22 1          04      0.000463
-##  23 1          05      0.000579
-##  24 1          18      0.00208 
-##  25 1          06      0.000694
+##   1 1          00      0       
+##   2 1          15      0.00174 
+##   3 1          17      0.00197 
+##   4 1          16      0.00185 
+##   5 1          13      0.00150 
+##   6 1          05      0.000579
+##   7 1          17      0.00197 
+##   8 1          07      0.000810
+##   9 1          11      0.00127 
+##  10 1          19      0.00220 
+##  11 1          14      0.00162 
+##  12 1          17      0.00197 
+##  13 1          13      0.00150 
+##  14 1          22      0.00255 
+##  15 1          13      0.00150 
+##  16 1          24      0.00278 
+##  17 1          06      0.000694
+##  18 1          00      0       
+##  19 1          08      0.000926
+##  20 1          23      0.00266 
+##  21 1          07      0.000810
+##  22 1          00      0       
+##  23 1          17      0.00197 
+##  24 1          08      0.000926
+##  25 1          22      0.00255 
 ##  26 2          02      0.00556 
-##  27 2          29      0.0806  
-##  28 2          02      0.00556 
-##  29 2          02      0.00556 
-##  30 2          19      0.0528  
-##  31 2          24      0.0667  
-##  32 2          05      0.0139  
+##  27 2          18      0.05    
+##  28 2          11      0.0306  
+##  29 2          09      0.025   
+##  30 2          09      0.025   
+##  31 2          12      0.0333  
+##  32 2          08      0.0222  
 ##  33 2          21      0.0583  
-##  34 2          23      0.0639  
-##  35 2          28      0.0778  
-##  36 2          06      0.0167  
-##  37 2          20      0.0556  
-##  38 2          12      0.0333  
-##  39 2          26      0.0722  
-##  40 2          12      0.0333  
-##  41 2          02      0.00556 
-##  42 2          15      0.0417  
-##  43 2          04      0.0111  
-##  44 2          19      0.0528  
-##  45 2          21      0.0583  
-##  46 2          25      0.0694  
-##  47 2          08      0.0222  
-##  48 2          14      0.0389  
-##  49 2          07      0.0194  
-##  50 2          20      0.0556  
-##  51 3          01      0.0833  
-##  52 3          11      0.917   
-##  53 3          11      0.917   
-##  54 3          03      0.25    
-##  55 3          02      0.167   
-##  56 3          08      0.667   
+##  34 2          12      0.0333  
+##  35 2          19      0.0528  
+##  36 2          19      0.0528  
+##  37 2          17      0.0472  
+##  38 2          08      0.0222  
+##  39 2          06      0.0167  
+##  40 2          15      0.0417  
+##  41 2          14      0.0389  
+##  42 2          26      0.0722  
+##  43 2          05      0.0139  
+##  44 2          22      0.0611  
+##  45 2          13      0.0361  
+##  46 2          23      0.0639  
+##  47 2          24      0.0667  
+##  48 2          06      0.0167  
+##  49 2          05      0.0139  
+##  50 2          19      0.0528  
+##  51 3          05      0.417   
+##  52 3          08      0.667   
+##  53 3          09      0.75    
+##  54 3          01      0.0833  
+##  55 3          08      0.667   
+##  56 3          09      0.75    
 ##  57 3          04      0.333   
-##  58 3          09      0.75    
-##  59 3          09      0.75    
-##  60 3          09      0.75    
-##  61 3          06      0.5     
-##  62 3          04      0.333   
-##  63 3          10      0.833   
-##  64 3          09      0.75    
-##  65 3          05      0.417   
-##  66 3          05      0.417   
-##  67 3          10      0.833   
-##  68 3          06      0.5     
-##  69 3          01      0.0833  
+##  58 3          03      0.25    
+##  59 3          04      0.333   
+##  60 3          02      0.167   
+##  61 3          07      0.583   
+##  62 3          01      0.0833  
+##  63 3          11      0.917   
+##  64 3          10      0.833   
+##  65 3          10      0.833   
+##  66 3          08      0.667   
+##  67 3          01      0.0833  
+##  68 3          08      0.667   
+##  69 3          09      0.75    
 ##  70 3          10      0.833   
-##  71 3          05      0.417   
-##  72 3          07      0.583   
-##  73 3          11      0.917   
-##  74 3          06      0.5     
-##  75 3          02      0.167   
-##  76 4          98     98       
-##  77 4          05      5       
-##  78 4          18     18       
-##  79 4          71     71       
-##  80 4          53     53       
-##  81 4          55     55       
-##  82 4          81     81       
-##  83 4          35     35       
-##  84 4          19     19       
-##  85 4          47     47       
-##  86 4          20     20       
-##  87 4          31     31       
-##  88 4          39     39       
-##  89 4          84     84       
-##  90 4          25     25       
-##  91 4          45     45       
-##  92 4          38     38       
-##  93 4          52     52       
-##  94 4          45     45       
-##  95 4          09      9       
-##  96 4          52     52       
-##  97 4          68     68       
-##  98 4          47     47       
-##  99 4          14     14       
-## 100 4          98     98
+##  71 3          11      0.917   
+##  72 3          05      0.417   
+##  73 3          04      0.333   
+##  74 3          01      0.0833  
+##  75 3          05      0.417   
+##  76 4          49     49       
+##  77 4          23     23       
+##  78 4          94     94       
+##  79 4          77     77       
+##  80 4          90     90       
+##  81 4          45     45       
+##  82 4          26     26       
+##  83 4          91     91       
+##  84 4          16     16       
+##  85 4          72     72       
+##  86 4          15     15       
+##  87 4          48     48       
+##  88 4          73     73       
+##  89 4          88     88       
+##  90 4          46     46       
+##  91 4          19     19       
+##  92 4          80     80       
+##  93 4          44     44       
+##  94 4          32     32       
+##  95 4          66     66       
+##  96 4          06      6       
+##  97 4          06      6       
+##  98 4          21     21       
+##  99 4          91     91       
+## 100 4          17     17
 ```
 
 Ao invés de utilizar essas chamadas recursivas de `if_else`, que são muito ruins de ler, como você poderia reescrever a condição usando `case_when`?
@@ -1968,3 +1969,332 @@ gss_cat2 %>% count(rincome2)
 ## 5 Até 5k        1183
 ```
 
+## `ggplot2`
+
+1. O que tem de errado no código abaixo? Por que os pontos não ficaram azuis?
+
+
+```r
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-42-1.png" width="672" />
+
+Os pontos não ficam azuis porque você não está especificando cores! Dentro da função `aes()` você está especificando variáveis para serem mapeadas a uma escala de cores. Portanto, o `ggplot` interpreta "blue" como uma variável sem nome que tem o valor "blue" e mapeia ela para a escala de cores padrão, que é vermelha. Se você quer controlar apenas a "aparência" dos pontos e não está preocupada em mapear nenhuma variável, você pode passar essa estética fora da função `aes()`.
+
+
+```r
+ggplot(data = mpg) + 
+  geom_point(
+    mapping = aes(x = displ, y = hwy), # aqui acabam os mapeamentos estéticos
+    color = "blue", # alteração apenas na aparência do geom
+    size = 2, # alteração apenas na aparência do geom
+    shape = 6 # alteração apenas na aparência do geom
+    ) 
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-43-1.png" width="672" />
+
+
+2. Utilizando o banco `mpg`, faça o diagrama de dispersão de `displ` por `hwy` e mapeie a cor para `class`, o tamanho para `cyl` e a forma para `manufacturer`. Como esses atributos estéticos se comportam diferente para variáveis categóricas vs contínuas?
+
+
+```r
+ggplot(mpg, aes(
+  displ, 
+  hwy, 
+  color = class, 
+  size = cyl,
+  shape = manufacturer)) +
+  geom_point()
+```
+
+```
+## Warning: The shape palette can deal with a maximum of 6 discrete values because
+## more than 6 becomes difficult to discriminate; you have 15. Consider
+## specifying shapes manually if you must have them.
+```
+
+```
+## Warning: Removed 112 rows containing missing values (geom_point).
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-44-1.png" width="672" />
+
+Ao cumprir as instruções como dadas, logo de cara você recebe um aviso do `ggplot2`. A paleta de "shapes" só recebe por padrão 6 shapes diferentes, porque de acordo com o autor, mais de 6 torna difícil de distinguir. Mas eu sou teimoso.
+
+
+```r
+ggplot(mpg, aes(
+  displ, 
+  hwy, 
+  color = class, 
+  size = cyl,
+  shape = manufacturer)) +
+  geom_point() +
+  scale_shape_manual(values = 1:15, guide = "legend")
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-45-1.png" width="672" />
+
+Esse gráfico é mais um exemplo para vocês verem como diferentes escalas se comportam. A variável `cyl` é numérica e ordenada, então faz sentido colocá-la num mapeamento como `size`, já que visualmente é possível indicar que a grandeza aumenta com o tamanho. Classe é uma variável categórica, então ela fica melhor em mapeamentos que ressaltam diferenças entre as categorias, como `colors` ou `shapes`. O pacote também impõe algumas restrições sobre o que é possível mapear. Por exemplo, ele retorna erro se você tenta mapear uma variável discreta para uma escala contínua.
+
+
+```r
+ggplot(mpg, aes(displ, hwy, color = class)) +
+  geom_point() +
+  scale_color_continuous()
+```
+
+```
+## Error: Discrete value supplied to continuous scale
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-46-1.png" width="672" />
+
+Experimentem tentar mapear diferentes variáveis no banco `mpg` para as diferentes escalas e vejam os resultados. Em alguns casos, é possível, mas o gráfico é pouco informativo, em outros, você verá mensagens de erro.
+
+3. Utilizando o `diamonds`, crie um diagrama de dispersão que relacione `carat` com `price`. Explore algumas outras variáveis utilizando escalas de cor para ver se você identifica algum padrão. Aplique transformações nas variáveis que você considerar justificadas.
+
+Esse exercício não tem uma resposta correta. O objetivo era que vocês explorassem as transformações estatísticas e as escalas de cores diferentes presentes no `ggplot`, através do argumento `trans`, ou mesmo fazer outras transformações que interessassem vocês nas variáveis. Abaixo um exemplo de transformação de Yeo-Johnson, um tipo de transformação BoxCox que aceita valores negativos e uma das escalas de cor do pacote `viridis`.
+
+
+```r
+ggplot(diamonds, aes(carat, price, color = clarity)) +
+  geom_point() +
+  scale_x_continuous(trans = scales::yj_trans(p = 2)) +
+  scale_color_viridis_d(option = "magma")
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-47-1.png" width="672" />
+
+4. Ainda continuando o exemplo anterior, aplique um `geom_smooth` utilizando várias opções de `method` para as variáveis originais ou transformadas.
+
+Segundo a mesma lógica, o objetivo era explorar as opções de visualização de modelos simples através do argumento `method`. Abaixo um exemplo de `gam`. Uma mudança que fiz foi usar a variável `cut` ao invés de `clarity`, porque o gráfico não-transformado de `clarity` estava muito poluído.
+
+
+```r
+ggplot(diamonds, aes(carat, price, color = cut)) +
+  geom_point(alpha = 0.1) + # pontos translúcidos para reduzir a poluição
+  geom_smooth(method = "gam", se = FALSE) +
+  scale_color_viridis_d(option = "plasma")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ s(x, bs = "cs")'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-48-1.png" width="672" />
+
+5. No nosso gráfico de barras usando `stat(prop)` a gente precisou colocar `group = 1`, porque? Qual é a diferença entre esses dois códigos?
+
+
+```r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = after_stat(prop)))
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-49-1.png" width="672" />
+
+```r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = color, y = after_stat(prop)))
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-49-2.png" width="672" />
+
+Acabei explicando isso na aula, devido a uma pergunta, mas para quem perdeu, trata-se do comportamento padrão quando há proporções: cada barra terá sua própria proporção e todas somarão a 100%. O uso de `group = 1` indica à função que as proporções que somam a 100% são o total dos níveis do fator e não cada nível individualmente.
+
+
+```r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = after_stat(prop), group = 1))
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-50-1.png" width="672" />
+
+```r
+# No caso em que há um "fill", precisamos normalizar as alturas das barras
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(
+    x = cut,
+    y = stat(prop),
+    fill = clarity
+  ))
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-50-2.png" width="672" />
+
+```r
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(
+    x = cut,
+    y = stat(count)/sum(stat(count)),
+    fill = clarity
+  ))
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-50-3.png" width="672" />
+
+
+6. `stat_smooth` é muito parecido com `geom_smooth`, mas há uma diferença sutil. Compare os códigos abaixo.
+
+`geom_smooth` chama `stat_smooth` quando você utiliza a função para calcular as "médias condicionais" que correspondem a linha de tendência desenhada no gráfico. É assim com todos os `geom`s no pacote. Há uma conexão entre o objeto geométrico e uma transformação estatística. Mesmo que seja a transformação `_identity`, que mantém a variável exatamente como ela estava no dado. A grande vantagem de construir um gráfico com `stat_smooth` ao invés de `geom_smooth` é que você pode especificar outro objeto geométrico que não seja o padrão (`geom_line` + `geom_ribbon`). É isso que os gráficos abaixo demonstram.
+
+
+```r
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-51-1.png" width="672" />
+
+```r
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  stat_smooth(geom = "step")
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-51-2.png" width="672" />
+
+```r
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  stat_smooth(geom = "linerange")
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-51-3.png" width="672" />
+
+```r
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  stat_smooth(geom = "errorbar")
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-51-4.png" width="672" />
+
+```r
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() +
+  stat_smooth(geom = "crossbar")
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-51-5.png" width="672" />
+
+7. Usando o `mpg` e `facet_grid`, crie um scatterplot que contenha `displ` no eixo x, `hwy` no eixo y, `class` na cor, `drv` nas facetas-coluna e `cyl` nas facetas linha.
+
+Esse aqui é para demonstrar o uso de `facet_grid`, que permite especificar fatores de classificação diferentes nas linhas e colunas, diferente de `facet_wrap` mostrado na aula, que só permite especificar uma dimensão.
+
+
+```r
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point() +
+  facet_grid(cyl ~ drv)
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-52-1.png" width="672" />
+
+8. Você acha que os dois gráficos abaixo ficarão diferentes um do outro? Porque? Tente responder antes de rodar o código.
+
+
+```r
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-53-1.png" width="672" />
+
+```r
+ggplot() + 
+  geom_point(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_smooth(data = mpg, mapping = aes(x = displ, y = hwy))
+```
+
+```
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-53-2.png" width="672" />
+
+Mesmo antes de rodar o código, o observador astuto notará que os mapeamentos locais no segundo gráfico são idênticos entre si e aos mapeamentos globais, então os dois gráficos são iguais.
+
+9. Tente recriar o seguinte gráfico
+
+O objetivo dessa era fazer vocês fuçarem um pouco na ajuda para tentar recriar o mais fielmente possível o gráfico final. Não precisava ter acertado, o objetivo era chegar o mais próximo possível.
+
+
+```r
+ggplot(mpg, aes(displ, hwy, color = drv)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) +
+  labs(x = "Rodovia", y = "Toneladas", color = "Tração") +
+  scale_color_brewer(palette = "Set1")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-54-1.png" width="672" />
+
+10. Transforme o gráfico seguir em um gráfico de pizza usando `coord_polar`.
+
+
+```r
+ggplot(diamonds, aes(cut, fill = cut)) +
+  geom_bar()
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-55-1.png" width="672" />
+
+Depois de simplesmente especificar `coord_polar`, em geral o gráfico fica meio estranho, não tem aquela cara bonita de pizza. É preciso corrigir os seguintes problemas:
+
+- A largura das barras deve ser igual a proporção das contagens, mas a altura deve ser igual a 1! Portanto, eu inverto as coisas e passo as contagens/proporções para "x" e "y" fica com o valor fixo = 1.
+
+
+```r
+ggplot(diamonds, 
+       aes(
+         # calculando as proporções do total,
+         # também funciona com o padrão stat(count)
+         x = stat(count)/sum(stat(count)),
+         y = 1, # altura igual a 1
+         fill = cut)) + # cores
+  geom_bar() +
+  coord_polar() + # coordenadas polares
+  # opcional: remover aspectos do tema para um visual mais clean
+  theme_void()
+```
+
+<img src="/courses/tidyverse/solucoes_files/figure-html/unnamed-chunk-56-1.png" width="672" />
+
+Como desafio, tentem adicionar elementos textuais das proporções no gráfico. O problema a ser resolvido é como posicionar o texto num sistema de coordenadas polares. Boa sorte!
+
+Gráficos de pizza são polêmicos na análise de dados porque nossos olhos não captam bem diferenças entre formatos curvos e complexos, então a comparação entre as categorias fica prejudicada se houverem mais de 2 ou 3. Eu sempre dou preferência para barras. Há um tipo de gráfico de pizza melhorzinho chamado "donut plot", em que o meio do círculo é oco, mas eu ainda prefiro as barras.
