@@ -1612,15 +1612,15 @@ x
 ```
 
 ```
-##   [1] "100" "115" "117" "116" "113" "105" "117" "107" "111" "119" "114" "117"
-##  [13] "113" "122" "113" "124" "106" "100" "108" "123" "107" "100" "117" "108"
-##  [25] "122" "202" "218" "211" "209" "209" "212" "208" "221" "212" "219" "219"
-##  [37] "217" "208" "206" "215" "214" "226" "205" "222" "213" "223" "224" "206"
-##  [49] "205" "219" "305" "308" "309" "301" "308" "309" "304" "303" "304" "302"
-##  [61] "307" "301" "311" "310" "310" "308" "301" "308" "309" "310" "311" "305"
-##  [73] "304" "301" "305" "449" "423" "494" "477" "490" "445" "426" "491" "416"
-##  [85] "472" "415" "448" "473" "488" "446" "419" "480" "444" "432" "466" "406"
-##  [97] "406" "421" "491" "417"
+##   [1] "118" "114" "118" "120" "109" "104" "114" "117" "122" "109" "110" "113"
+##  [13] "106" "100" "122" "121" "124" "124" "110" "100" "117" "119" "105" "118"
+##  [25] "122" "201" "205" "212" "216" "228" "213" "227" "221" "214" "227" "206"
+##  [37] "207" "215" "224" "223" "203" "221" "215" "225" "210" "208" "219" "207"
+##  [49] "221" "227" "310" "305" "301" "304" "310" "307" "305" "309" "308" "306"
+##  [61] "308" "305" "304" "303" "306" "302" "310" "306" "301" "310" "306" "304"
+##  [73] "305" "304" "307" "401" "459" "429" "435" "435" "415" "475" "414" "419"
+##  [85] "495" "475" "431" "460" "478" "447" "436" "412" "403" "423" "467" "438"
+##  [97] "475" "467" "418" "476"
 ```
 
 ```r
@@ -1663,106 +1663,106 @@ tibble(
 ## # A tibble: 100 x 3
 ##     tipo_idade idade idade_anos
 ##     <chr>      <chr>      <dbl>
-##   1 1          00      0       
-##   2 1          15      0.00174 
-##   3 1          17      0.00197 
-##   4 1          16      0.00185 
-##   5 1          13      0.00150 
-##   6 1          05      0.000579
-##   7 1          17      0.00197 
-##   8 1          07      0.000810
-##   9 1          11      0.00127 
-##  10 1          19      0.00220 
-##  11 1          14      0.00162 
-##  12 1          17      0.00197 
-##  13 1          13      0.00150 
-##  14 1          22      0.00255 
-##  15 1          13      0.00150 
-##  16 1          24      0.00278 
-##  17 1          06      0.000694
-##  18 1          00      0       
-##  19 1          08      0.000926
-##  20 1          23      0.00266 
-##  21 1          07      0.000810
-##  22 1          00      0       
-##  23 1          17      0.00197 
-##  24 1          08      0.000926
+##   1 1          18      0.00208 
+##   2 1          14      0.00162 
+##   3 1          18      0.00208 
+##   4 1          20      0.00231 
+##   5 1          09      0.00104 
+##   6 1          04      0.000463
+##   7 1          14      0.00162 
+##   8 1          17      0.00197 
+##   9 1          22      0.00255 
+##  10 1          09      0.00104 
+##  11 1          10      0.00116 
+##  12 1          13      0.00150 
+##  13 1          06      0.000694
+##  14 1          00      0       
+##  15 1          22      0.00255 
+##  16 1          21      0.00243 
+##  17 1          24      0.00278 
+##  18 1          24      0.00278 
+##  19 1          10      0.00116 
+##  20 1          00      0       
+##  21 1          17      0.00197 
+##  22 1          19      0.00220 
+##  23 1          05      0.000579
+##  24 1          18      0.00208 
 ##  25 1          22      0.00255 
-##  26 2          02      0.00556 
-##  27 2          18      0.05    
-##  28 2          11      0.0306  
-##  29 2          09      0.025   
-##  30 2          09      0.025   
-##  31 2          12      0.0333  
-##  32 2          08      0.0222  
+##  26 2          01      0.00278 
+##  27 2          05      0.0139  
+##  28 2          12      0.0333  
+##  29 2          16      0.0444  
+##  30 2          28      0.0778  
+##  31 2          13      0.0361  
+##  32 2          27      0.075   
 ##  33 2          21      0.0583  
-##  34 2          12      0.0333  
-##  35 2          19      0.0528  
-##  36 2          19      0.0528  
-##  37 2          17      0.0472  
-##  38 2          08      0.0222  
-##  39 2          06      0.0167  
-##  40 2          15      0.0417  
-##  41 2          14      0.0389  
-##  42 2          26      0.0722  
-##  43 2          05      0.0139  
-##  44 2          22      0.0611  
-##  45 2          13      0.0361  
-##  46 2          23      0.0639  
-##  47 2          24      0.0667  
-##  48 2          06      0.0167  
-##  49 2          05      0.0139  
-##  50 2          19      0.0528  
-##  51 3          05      0.417   
-##  52 3          08      0.667   
-##  53 3          09      0.75    
-##  54 3          01      0.0833  
-##  55 3          08      0.667   
-##  56 3          09      0.75    
-##  57 3          04      0.333   
-##  58 3          03      0.25    
-##  59 3          04      0.333   
-##  60 3          02      0.167   
-##  61 3          07      0.583   
-##  62 3          01      0.0833  
-##  63 3          11      0.917   
-##  64 3          10      0.833   
-##  65 3          10      0.833   
-##  66 3          08      0.667   
-##  67 3          01      0.0833  
-##  68 3          08      0.667   
-##  69 3          09      0.75    
+##  34 2          14      0.0389  
+##  35 2          27      0.075   
+##  36 2          06      0.0167  
+##  37 2          07      0.0194  
+##  38 2          15      0.0417  
+##  39 2          24      0.0667  
+##  40 2          23      0.0639  
+##  41 2          03      0.00833 
+##  42 2          21      0.0583  
+##  43 2          15      0.0417  
+##  44 2          25      0.0694  
+##  45 2          10      0.0278  
+##  46 2          08      0.0222  
+##  47 2          19      0.0528  
+##  48 2          07      0.0194  
+##  49 2          21      0.0583  
+##  50 2          27      0.075   
+##  51 3          10      0.833   
+##  52 3          05      0.417   
+##  53 3          01      0.0833  
+##  54 3          04      0.333   
+##  55 3          10      0.833   
+##  56 3          07      0.583   
+##  57 3          05      0.417   
+##  58 3          09      0.75    
+##  59 3          08      0.667   
+##  60 3          06      0.5     
+##  61 3          08      0.667   
+##  62 3          05      0.417   
+##  63 3          04      0.333   
+##  64 3          03      0.25    
+##  65 3          06      0.5     
+##  66 3          02      0.167   
+##  67 3          10      0.833   
+##  68 3          06      0.5     
+##  69 3          01      0.0833  
 ##  70 3          10      0.833   
-##  71 3          11      0.917   
-##  72 3          05      0.417   
-##  73 3          04      0.333   
-##  74 3          01      0.0833  
-##  75 3          05      0.417   
-##  76 4          49     49       
-##  77 4          23     23       
-##  78 4          94     94       
-##  79 4          77     77       
-##  80 4          90     90       
-##  81 4          45     45       
-##  82 4          26     26       
-##  83 4          91     91       
-##  84 4          16     16       
-##  85 4          72     72       
-##  86 4          15     15       
-##  87 4          48     48       
-##  88 4          73     73       
-##  89 4          88     88       
-##  90 4          46     46       
-##  91 4          19     19       
-##  92 4          80     80       
-##  93 4          44     44       
-##  94 4          32     32       
-##  95 4          66     66       
-##  96 4          06      6       
-##  97 4          06      6       
-##  98 4          21     21       
-##  99 4          91     91       
-## 100 4          17     17
+##  71 3          06      0.5     
+##  72 3          04      0.333   
+##  73 3          05      0.417   
+##  74 3          04      0.333   
+##  75 3          07      0.583   
+##  76 4          01      1       
+##  77 4          59     59       
+##  78 4          29     29       
+##  79 4          35     35       
+##  80 4          35     35       
+##  81 4          15     15       
+##  82 4          75     75       
+##  83 4          14     14       
+##  84 4          19     19       
+##  85 4          95     95       
+##  86 4          75     75       
+##  87 4          31     31       
+##  88 4          60     60       
+##  89 4          78     78       
+##  90 4          47     47       
+##  91 4          36     36       
+##  92 4          12     12       
+##  93 4          03      3       
+##  94 4          23     23       
+##  95 4          67     67       
+##  96 4          38     38       
+##  97 4          75     75       
+##  98 4          67     67       
+##  99 4          18     18       
+## 100 4          76     76
 ```
 
 Ao invés de utilizar essas chamadas recursivas de `if_else`, que são muito ruins de ler, como você poderia reescrever a condição usando `case_when`?
@@ -2298,3 +2298,775 @@ ggplot(diamonds,
 Como desafio, tentem adicionar elementos textuais das proporções no gráfico. O problema a ser resolvido é como posicionar o texto num sistema de coordenadas polares. Boa sorte!
 
 Gráficos de pizza são polêmicos na análise de dados porque nossos olhos não captam bem diferenças entre formatos curvos e complexos, então a comparação entre as categorias fica prejudicada se houverem mais de 2 ou 3. Eu sempre dou preferência para barras. Há um tipo de gráfico de pizza melhorzinho chamado "donut plot", em que o meio do círculo é oco, mas eu ainda prefiro as barras.
+
+## `purrr`
+
+1. Utilize uma das funções `map_` para:
+
+Nos exemplos abaixo, eu utilizo sempre `str()` no final para facilitar a visualização das listas, mas não é obrigatório utilizar esse comando.
+    
+    1. Calcular a média de cada coluna em `mtcars`.
+    
+
+```r
+map(mtcars, mean) %>% str()
+```
+
+```
+## List of 11
+##  $ mpg : num 20.1
+##  $ cyl : num 6.19
+##  $ disp: num 231
+##  $ hp  : num 147
+##  $ drat: num 3.6
+##  $ wt  : num 3.22
+##  $ qsec: num 17.8
+##  $ vs  : num 0.438
+##  $ am  : num 0.406
+##  $ gear: num 3.69
+##  $ carb: num 2.81
+```
+    
+    2. Determinar o tipo de cada coluna em `flights`.
+    
+
+```r
+flights %>% map(class) %>% str()
+```
+
+```
+## List of 19
+##  $ year          : chr "integer"
+##  $ month         : chr "integer"
+##  $ day           : chr "integer"
+##  $ dep_time      : chr "integer"
+##  $ sched_dep_time: chr "integer"
+##  $ dep_delay     : chr "numeric"
+##  $ arr_time      : chr "integer"
+##  $ sched_arr_time: chr "integer"
+##  $ arr_delay     : chr "numeric"
+##  $ carrier       : chr "character"
+##  $ flight        : chr "integer"
+##  $ tailnum       : chr "character"
+##  $ origin        : chr "character"
+##  $ dest          : chr "character"
+##  $ air_time      : chr "numeric"
+##  $ distance      : chr "numeric"
+##  $ hour          : chr "numeric"
+##  $ minute        : chr "numeric"
+##  $ time_hour     : chr [1:2] "POSIXct" "POSIXt"
+```
+    
+    3. Computar o número de valores únicos em cada coluna de `iris`.
+    
+
+```r
+flights %>% map(unique) %>% map(length) %>% str()
+```
+
+```
+## List of 19
+##  $ year          : int 1
+##  $ month         : int 12
+##  $ day           : int 31
+##  $ dep_time      : int 1319
+##  $ sched_dep_time: int 1021
+##  $ dep_delay     : int 528
+##  $ arr_time      : int 1412
+##  $ sched_arr_time: int 1163
+##  $ arr_delay     : int 578
+##  $ carrier       : int 16
+##  $ flight        : int 3844
+##  $ tailnum       : int 4044
+##  $ origin        : int 3
+##  $ dest          : int 105
+##  $ air_time      : int 510
+##  $ distance      : int 214
+##  $ hour          : int 20
+##  $ minute        : int 60
+##  $ time_hour     : int 6936
+```
+
+```r
+# Sugestão do Pedro Gomes
+flights %>% map(n_distinct) %>% str()
+```
+
+```
+## List of 19
+##  $ year          : int 1
+##  $ month         : int 12
+##  $ day           : int 31
+##  $ dep_time      : int 1319
+##  $ sched_dep_time: int 1021
+##  $ dep_delay     : int 528
+##  $ arr_time      : int 1412
+##  $ sched_arr_time: int 1163
+##  $ arr_delay     : int 578
+##  $ carrier       : int 16
+##  $ flight        : int 3844
+##  $ tailnum       : int 4044
+##  $ origin        : int 3
+##  $ dest          : int 105
+##  $ air_time      : int 510
+##  $ distance      : int 214
+##  $ hour          : int 20
+##  $ minute        : int 60
+##  $ time_hour     : int 6936
+```
+    
+    4. Gere 10 distribuições aleatórias (`rnorm`) com médias -10, 0, 10 e 100.
+    
+
+```r
+x <- rep(100, 40)
+medias <- rep(c(-10, 0, 10, 100), each = 10)
+map2(x, medias, ~rnorm(.x, mean = .y)) %>% str()
+```
+
+```
+## List of 40
+##  $ : num [1:100] -9.96 -9.53 -9.12 -9.64 -10.36 ...
+##  $ : num [1:100] -11.71 -10.76 -9.41 -9.22 -10.53 ...
+##  $ : num [1:100] -11.33 -9.51 -8.98 -10.91 -9.52 ...
+##  $ : num [1:100] -11.4 -10.9 -10.7 -12.1 -9.8 ...
+##  $ : num [1:100] -11.06 -10.66 -10.33 -9.13 -9.13 ...
+##  $ : num [1:100] -10.22 -9.59 -9.81 -10.71 -10.24 ...
+##  $ : num [1:100] -11 -9.14 -10.91 -9.38 -9.63 ...
+##  $ : num [1:100] -9.83 -9.61 -11.23 -9.68 -10.47 ...
+##  $ : num [1:100] -9.11 -10.03 -10.62 -9.65 -10.2 ...
+##  $ : num [1:100] -9.06 -10.41 -10.84 -9.16 -9.41 ...
+##  $ : num [1:100] -0.8378 0.1102 0.7519 -0.2477 0.0342 ...
+##  $ : num [1:100] 0.607 -0.902 -2.185 -0.397 -1.019 ...
+##  $ : num [1:100] -0.452 2.067 1.45 -1.184 0.893 ...
+##  $ : num [1:100] -0.604 -0.783 1.767 -0.632 1.322 ...
+##  $ : num [1:100] -2.515 0.43 0.694 1.239 1.091 ...
+##  $ : num [1:100] -1.462 1.177 -0.376 0.037 0.387 ...
+##  $ : num [1:100] -0.0803 -0.0421 2.4765 0.0509 -0.1479 ...
+##  $ : num [1:100] 1.118 0.662 -1.439 -1.074 0.493 ...
+##  $ : num [1:100] -0.3136 0.4455 -0.947 2.0658 -0.0188 ...
+##  $ : num [1:100] 0.193 0.625 2.281 0.297 -0.629 ...
+##  $ : num [1:100] 9.29 9.1 9.54 9.99 10.2 ...
+##  $ : num [1:100] 7.96 7.32 10.7 9.13 10.3 ...
+##  $ : num [1:100] 9.96 10.24 10.31 10.54 11.65 ...
+##  $ : num [1:100] 10.88 10.41 8.19 10.37 10.28 ...
+##  $ : num [1:100] 11.27 9.74 11.75 11.7 9.31 ...
+##  $ : num [1:100] 9.62 11.35 10.78 10.79 9.7 ...
+##  $ : num [1:100] 9.04 10.24 11.85 9.82 10.66 ...
+##  $ : num [1:100] 10.48 6.97 8.97 9.69 11.03 ...
+##  $ : num [1:100] 8.48 10.12 9.09 8.18 10.11 ...
+##  $ : num [1:100] 9.97 9.27 10.19 10.93 11.07 ...
+##  $ : num [1:100] 100 99.2 99.6 100.3 99.2 ...
+##  $ : num [1:100] 99 99.9 100.7 98.7 99.7 ...
+##  $ : num [1:100] 99.6 99.2 100.1 100 99.9 ...
+##  $ : num [1:100] 100.5 100.4 100.2 98.4 98.9 ...
+##  $ : num [1:100] 99.8 99.8 100 99.1 101.1 ...
+##  $ : num [1:100] 100.7 100 100.1 98.6 100 ...
+##  $ : num [1:100] 99 99.4 100.5 100.1 99.3 ...
+##  $ : num [1:100] 99.2 98.6 99.2 100.9 97.4 ...
+##  $ : num [1:100] 99.7 99.8 100.9 100.5 99.9 ...
+##  $ : num [1:100] 99.5 100.9 98.5 99.7 100 ...
+```
+    
+
+2. Como você pode criar um vetor indicando se cada coluna em um `data.frame` é um fator?
+
+
+```r
+# Flights por exemplo
+flights %>% 
+  # Lembrem-se que a pergunta pedia para criar um vetor!
+  map_lgl(is.factor)
+```
+
+```
+##           year          month            day       dep_time sched_dep_time 
+##          FALSE          FALSE          FALSE          FALSE          FALSE 
+##      dep_delay       arr_time sched_arr_time      arr_delay        carrier 
+##          FALSE          FALSE          FALSE          FALSE          FALSE 
+##         flight        tailnum         origin           dest       air_time 
+##          FALSE          FALSE          FALSE          FALSE          FALSE 
+##       distance           hour         minute      time_hour 
+##          FALSE          FALSE          FALSE          FALSE
+```
+
+
+3. Usando as funções predicado `keep` e `discard`:
+    
+    1. Selecione todas as colunas caractere no banco `flights`.
+    
+
+```r
+flights %>% keep(is.character)
+```
+
+```
+## # A tibble: 336,776 x 4
+##    carrier tailnum origin dest 
+##    <chr>   <chr>   <chr>  <chr>
+##  1 UA      N14228  EWR    IAH  
+##  2 UA      N24211  LGA    IAH  
+##  3 AA      N619AA  JFK    MIA  
+##  4 B6      N804JB  JFK    BQN  
+##  5 DL      N668DN  LGA    ATL  
+##  6 UA      N39463  EWR    ORD  
+##  7 B6      N516JB  EWR    FLL  
+##  8 EV      N829AS  LGA    IAD  
+##  9 B6      N593JB  JFK    MCO  
+## 10 AA      N3ALAA  LGA    ORD  
+## # ... with 336,766 more rows
+```
+    
+    2. Descarte os caracteres em `mpg`.
+    
+
+```r
+mpg %>% discard(is.character)
+```
+
+```
+## # A tibble: 234 x 5
+##    displ  year   cyl   cty   hwy
+##    <dbl> <int> <int> <int> <int>
+##  1   1.8  1999     4    18    29
+##  2   1.8  1999     4    21    29
+##  3   2    2008     4    20    31
+##  4   2    2008     4    21    30
+##  5   2.8  1999     6    16    26
+##  6   2.8  1999     6    18    26
+##  7   3.1  2008     6    18    27
+##  8   1.8  1999     4    18    26
+##  9   1.8  1999     4    16    25
+## 10   2    2008     4    20    28
+## # ... with 224 more rows
+```
+    
+    3. Selecione os fatores ordenados em `diamonds`.
+    
+
+```r
+diamonds %>% keep(is.ordered)
+```
+
+```
+## # A tibble: 53,940 x 3
+##    cut       color clarity
+##    <ord>     <ord> <ord>  
+##  1 Ideal     E     SI2    
+##  2 Premium   E     SI1    
+##  3 Good      E     VS1    
+##  4 Premium   I     VS2    
+##  5 Good      J     SI2    
+##  6 Very Good J     VVS2   
+##  7 Very Good I     VVS1   
+##  8 Very Good H     SI1    
+##  9 Fair      E     VS2    
+## 10 Very Good H     VS1    
+## # ... with 53,930 more rows
+```
+    
+    4. Descarte as variáveis não-numéricas em `iris`
+    
+
+```r
+iris %>% discard(negate(is.numeric))
+```
+
+```
+##     Sepal.Length Sepal.Width Petal.Length Petal.Width
+## 1            5.1         3.5          1.4         0.2
+## 2            4.9         3.0          1.4         0.2
+## 3            4.7         3.2          1.3         0.2
+## 4            4.6         3.1          1.5         0.2
+## 5            5.0         3.6          1.4         0.2
+## 6            5.4         3.9          1.7         0.4
+## 7            4.6         3.4          1.4         0.3
+## 8            5.0         3.4          1.5         0.2
+## 9            4.4         2.9          1.4         0.2
+## 10           4.9         3.1          1.5         0.1
+## 11           5.4         3.7          1.5         0.2
+## 12           4.8         3.4          1.6         0.2
+## 13           4.8         3.0          1.4         0.1
+## 14           4.3         3.0          1.1         0.1
+## 15           5.8         4.0          1.2         0.2
+## 16           5.7         4.4          1.5         0.4
+## 17           5.4         3.9          1.3         0.4
+## 18           5.1         3.5          1.4         0.3
+## 19           5.7         3.8          1.7         0.3
+## 20           5.1         3.8          1.5         0.3
+## 21           5.4         3.4          1.7         0.2
+## 22           5.1         3.7          1.5         0.4
+## 23           4.6         3.6          1.0         0.2
+## 24           5.1         3.3          1.7         0.5
+## 25           4.8         3.4          1.9         0.2
+## 26           5.0         3.0          1.6         0.2
+## 27           5.0         3.4          1.6         0.4
+## 28           5.2         3.5          1.5         0.2
+## 29           5.2         3.4          1.4         0.2
+## 30           4.7         3.2          1.6         0.2
+## 31           4.8         3.1          1.6         0.2
+## 32           5.4         3.4          1.5         0.4
+## 33           5.2         4.1          1.5         0.1
+## 34           5.5         4.2          1.4         0.2
+## 35           4.9         3.1          1.5         0.2
+## 36           5.0         3.2          1.2         0.2
+## 37           5.5         3.5          1.3         0.2
+## 38           4.9         3.6          1.4         0.1
+## 39           4.4         3.0          1.3         0.2
+## 40           5.1         3.4          1.5         0.2
+## 41           5.0         3.5          1.3         0.3
+## 42           4.5         2.3          1.3         0.3
+## 43           4.4         3.2          1.3         0.2
+## 44           5.0         3.5          1.6         0.6
+## 45           5.1         3.8          1.9         0.4
+## 46           4.8         3.0          1.4         0.3
+## 47           5.1         3.8          1.6         0.2
+## 48           4.6         3.2          1.4         0.2
+## 49           5.3         3.7          1.5         0.2
+## 50           5.0         3.3          1.4         0.2
+## 51           7.0         3.2          4.7         1.4
+## 52           6.4         3.2          4.5         1.5
+## 53           6.9         3.1          4.9         1.5
+## 54           5.5         2.3          4.0         1.3
+## 55           6.5         2.8          4.6         1.5
+## 56           5.7         2.8          4.5         1.3
+## 57           6.3         3.3          4.7         1.6
+## 58           4.9         2.4          3.3         1.0
+## 59           6.6         2.9          4.6         1.3
+## 60           5.2         2.7          3.9         1.4
+## 61           5.0         2.0          3.5         1.0
+## 62           5.9         3.0          4.2         1.5
+## 63           6.0         2.2          4.0         1.0
+## 64           6.1         2.9          4.7         1.4
+## 65           5.6         2.9          3.6         1.3
+## 66           6.7         3.1          4.4         1.4
+## 67           5.6         3.0          4.5         1.5
+## 68           5.8         2.7          4.1         1.0
+## 69           6.2         2.2          4.5         1.5
+## 70           5.6         2.5          3.9         1.1
+## 71           5.9         3.2          4.8         1.8
+## 72           6.1         2.8          4.0         1.3
+## 73           6.3         2.5          4.9         1.5
+## 74           6.1         2.8          4.7         1.2
+## 75           6.4         2.9          4.3         1.3
+## 76           6.6         3.0          4.4         1.4
+## 77           6.8         2.8          4.8         1.4
+## 78           6.7         3.0          5.0         1.7
+## 79           6.0         2.9          4.5         1.5
+## 80           5.7         2.6          3.5         1.0
+## 81           5.5         2.4          3.8         1.1
+## 82           5.5         2.4          3.7         1.0
+## 83           5.8         2.7          3.9         1.2
+## 84           6.0         2.7          5.1         1.6
+## 85           5.4         3.0          4.5         1.5
+## 86           6.0         3.4          4.5         1.6
+## 87           6.7         3.1          4.7         1.5
+## 88           6.3         2.3          4.4         1.3
+## 89           5.6         3.0          4.1         1.3
+## 90           5.5         2.5          4.0         1.3
+## 91           5.5         2.6          4.4         1.2
+## 92           6.1         3.0          4.6         1.4
+## 93           5.8         2.6          4.0         1.2
+## 94           5.0         2.3          3.3         1.0
+## 95           5.6         2.7          4.2         1.3
+## 96           5.7         3.0          4.2         1.2
+## 97           5.7         2.9          4.2         1.3
+## 98           6.2         2.9          4.3         1.3
+## 99           5.1         2.5          3.0         1.1
+## 100          5.7         2.8          4.1         1.3
+## 101          6.3         3.3          6.0         2.5
+## 102          5.8         2.7          5.1         1.9
+## 103          7.1         3.0          5.9         2.1
+## 104          6.3         2.9          5.6         1.8
+## 105          6.5         3.0          5.8         2.2
+## 106          7.6         3.0          6.6         2.1
+## 107          4.9         2.5          4.5         1.7
+## 108          7.3         2.9          6.3         1.8
+## 109          6.7         2.5          5.8         1.8
+## 110          7.2         3.6          6.1         2.5
+## 111          6.5         3.2          5.1         2.0
+## 112          6.4         2.7          5.3         1.9
+## 113          6.8         3.0          5.5         2.1
+## 114          5.7         2.5          5.0         2.0
+## 115          5.8         2.8          5.1         2.4
+## 116          6.4         3.2          5.3         2.3
+## 117          6.5         3.0          5.5         1.8
+## 118          7.7         3.8          6.7         2.2
+## 119          7.7         2.6          6.9         2.3
+## 120          6.0         2.2          5.0         1.5
+## 121          6.9         3.2          5.7         2.3
+## 122          5.6         2.8          4.9         2.0
+## 123          7.7         2.8          6.7         2.0
+## 124          6.3         2.7          4.9         1.8
+## 125          6.7         3.3          5.7         2.1
+## 126          7.2         3.2          6.0         1.8
+## 127          6.2         2.8          4.8         1.8
+## 128          6.1         3.0          4.9         1.8
+## 129          6.4         2.8          5.6         2.1
+## 130          7.2         3.0          5.8         1.6
+## 131          7.4         2.8          6.1         1.9
+## 132          7.9         3.8          6.4         2.0
+## 133          6.4         2.8          5.6         2.2
+## 134          6.3         2.8          5.1         1.5
+## 135          6.1         2.6          5.6         1.4
+## 136          7.7         3.0          6.1         2.3
+## 137          6.3         3.4          5.6         2.4
+## 138          6.4         3.1          5.5         1.8
+## 139          6.0         3.0          4.8         1.8
+## 140          6.9         3.1          5.4         2.1
+## 141          6.7         3.1          5.6         2.4
+## 142          6.9         3.1          5.1         2.3
+## 143          5.8         2.7          5.1         1.9
+## 144          6.8         3.2          5.9         2.3
+## 145          6.7         3.3          5.7         2.5
+## 146          6.7         3.0          5.2         2.3
+## 147          6.3         2.5          5.0         1.9
+## 148          6.5         3.0          5.2         2.0
+## 149          6.2         3.4          5.4         2.3
+## 150          5.9         3.0          5.1         1.8
+```
+    
+
+4. Imagine que você tem um diretório cheio de arquivos `.csv` que correspondem a um único banco de dados. Você tem os caminhos de todos eles num vetor com a forma `c(arquivo_1.csv, ..., arquivo_n.csv)`. Como você importaria esses arquivos? Tente fazer duas soluções diferentes.
+
+
+```r
+# Vamos usar um diretório temporário que vamos preencher com vários tibbles
+pasta <- tempdir()
+
+# Criamos 100 tibbles e guardamos em 100 arquivos csv.
+x <- rep(10, 100)
+
+arqs <- sprintf("arquivo%s.csv", 1:100)
+
+map(x, ~tibble(var1 = rnorm(.x), var2 = rnorm(.x))) %>% 
+  map2(arqs, ~write_csv(.x, file.path(pasta, .y))) %>% 
+  str()
+```
+
+
+
+```r
+# Nossos arquivos estão salvos no diretório temporário:
+dir(pasta)
+```
+
+```
+##   [1] "arquivo1.csv"    "arquivo10.csv"   "arquivo100.csv"  "arquivo11.csv"  
+##   [5] "arquivo12.csv"   "arquivo13.csv"   "arquivo14.csv"   "arquivo15.csv"  
+##   [9] "arquivo16.csv"   "arquivo17.csv"   "arquivo18.csv"   "arquivo19.csv"  
+##  [13] "arquivo2.csv"    "arquivo20.csv"   "arquivo21.csv"   "arquivo22.csv"  
+##  [17] "arquivo23.csv"   "arquivo24.csv"   "arquivo25.csv"   "arquivo26.csv"  
+##  [21] "arquivo27.csv"   "arquivo28.csv"   "arquivo29.csv"   "arquivo3.csv"   
+##  [25] "arquivo30.csv"   "arquivo31.csv"   "arquivo32.csv"   "arquivo33.csv"  
+##  [29] "arquivo34.csv"   "arquivo35.csv"   "arquivo36.csv"   "arquivo37.csv"  
+##  [33] "arquivo38.csv"   "arquivo39.csv"   "arquivo4.csv"    "arquivo40.csv"  
+##  [37] "arquivo41.csv"   "arquivo42.csv"   "arquivo43.csv"   "arquivo44.csv"  
+##  [41] "arquivo45.csv"   "arquivo46.csv"   "arquivo47.csv"   "arquivo48.csv"  
+##  [45] "arquivo49.csv"   "arquivo5.csv"    "arquivo50.csv"   "arquivo51.csv"  
+##  [49] "arquivo52.csv"   "arquivo53.csv"   "arquivo54.csv"   "arquivo55.csv"  
+##  [53] "arquivo56.csv"   "arquivo57.csv"   "arquivo58.csv"   "arquivo59.csv"  
+##  [57] "arquivo6.csv"    "arquivo60.csv"   "arquivo61.csv"   "arquivo62.csv"  
+##  [61] "arquivo63.csv"   "arquivo64.csv"   "arquivo65.csv"   "arquivo66.csv"  
+##  [65] "arquivo67.csv"   "arquivo68.csv"   "arquivo69.csv"   "arquivo7.csv"   
+##  [69] "arquivo70.csv"   "arquivo71.csv"   "arquivo72.csv"   "arquivo73.csv"  
+##  [73] "arquivo74.csv"   "arquivo75.csv"   "arquivo76.csv"   "arquivo77.csv"  
+##  [77] "arquivo78.csv"   "arquivo79.csv"   "arquivo8.csv"    "arquivo80.csv"  
+##  [81] "arquivo81.csv"   "arquivo82.csv"   "arquivo83.csv"   "arquivo84.csv"  
+##  [85] "arquivo85.csv"   "arquivo86.csv"   "arquivo87.csv"   "arquivo88.csv"  
+##  [89] "arquivo89.csv"   "arquivo9.csv"    "arquivo90.csv"   "arquivo91.csv"  
+##  [93] "arquivo92.csv"   "arquivo93.csv"   "arquivo94.csv"   "arquivo95.csv"  
+##  [97] "arquivo96.csv"   "arquivo97.csv"   "arquivo98.csv"   "arquivo99.csv"  
+## [101] "filecf810bd36a5" "filecf81149221d" "filecf81164e23"  "filecf8161f65f7"
+## [105] "filecf8171030fd" "filecf819e43f49" "filecf81ad26a9f" "filecf81bed9f1" 
+## [109] "filecf81e7a7e68" "filecf81ef03542" "filecf81fa64a3e" "filecf8239d75ab"
+## [113] "filecf8261936"   "filecf826d55378" "filecf8291061a0" "filecf82b985019"
+## [117] "filecf82c00737b" "filecf8339f5"    "filecf8341e67d6" "filecf8344158ac"
+## [121] "filecf837a47cc7" "filecf837f15510" "filecf8387a3d29" "filecf83a71232b"
+## [125] "filecf83ac3253a" "filecf83af94598" "filecf83f794f64" "filecf8402156c1"
+## [129] "filecf840c15566" "filecf84163761c" "filecf841d3b53"  "filecf844d5642" 
+## [133] "filecf845e73bac" "filecf8462819d6" "filecf84b8b3144" "filecf84ddc73a0"
+## [137] "filecf84fe515d4" "filecf8500a5a10" "filecf8512766ea" "filecf852fe119b"
+## [141] "filecf8550a39d"  "filecf85b14fec"  "filecf85e053c83" "filecf85e6a12f4"
+## [145] "filecf8639c6053" "filecf863dc5f3b" "filecf8646e477f" "filecf865645c5d"
+## [149] "filecf868634c0d" "filecf869137c8a" "filecf86a7852d4" "filecf86b5b250" 
+## [153] "filecf86b9e3bb7" "filecf86d216ac"  "filecf86e894a16" "filecf86ea916d3"
+## [157] "filecf86f22266"  "filecf86f975377" "filecf8757a72be" "filecf876956e82"
+## [161] "filecf876967b1"  "filecf8787a1370" "filecf879037c39" "filecf87964711" 
+## [165] "filecf87afe7046" "filecf88456ae0"  "filecf898344ab"
+```
+
+```r
+# Agora vamos ler todos de volta para uma tibble só.
+arqs <- dir(pasta, pattern = ".csv", full.names = T)
+```
+
+
+
+```r
+# Juntando linhas
+df <- map_dfr(arqs, read_csv)
+df
+```
+
+```
+## # A tibble: 1,000 x 2
+##      var1   var2
+##     <dbl>  <dbl>
+##  1  0.837 -0.554
+##  2 -1.12   1.08 
+##  3 -0.821  1.21 
+##  4  0.384  0.465
+##  5  0.885  0.477
+##  6 -0.194  0.517
+##  7  0.710  0.128
+##  8 -1.04  -0.947
+##  9  0.782  1.58 
+## 10  0.571  0.990
+## # ... with 990 more rows
+```
+
+```r
+# Juntando colunas
+df <- map_dfc(arqs, read_csv)
+df
+```
+
+```
+## # A tibble: 10 x 200
+##    var1...1 var2...2 var1...3 var2...4 var1...5 var2...6 var1...7 var2...8
+##       <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
+##  1    0.837   -0.554 -1.35       0.522  1.49      0.648    -0.567   -0.868
+##  2   -1.12     1.08   0.876      2.11   0.0449    0.0737   -0.808    0.177
+##  3   -0.821    1.21   1.77      -1.31   1.51      1.35      0.559   -0.119
+##  4    0.384    0.465 -0.496      1.10   1.13     -0.331     0.427    0.131
+##  5    0.885    0.477 -0.514     -0.573 -0.0704    0.581     0.751    0.629
+##  6   -0.194    0.517  0.362     -1.62  -0.725    -2.37      0.710   -0.293
+##  7    0.710    0.128  1.11       0.144  0.00462   1.66      1.32    -0.414
+##  8   -1.04    -0.947  0.00775   -1.27   0.0365    0.0813   -1.10     0.757
+##  9    0.782    1.58   0.695     -0.375 -0.342     0.341    -0.325    0.834
+## 10    0.571    0.990 -0.475     -0.356 -1.17     -0.827    -0.148   -1.29 
+## # ... with 192 more variables: var1...9 <dbl>, var2...10 <dbl>,
+## #   var1...11 <dbl>, var2...12 <dbl>, var1...13 <dbl>, var2...14 <dbl>,
+## #   var1...15 <dbl>, var2...16 <dbl>, var1...17 <dbl>, var2...18 <dbl>,
+## #   var1...19 <dbl>, var2...20 <dbl>, var1...21 <dbl>, var2...22 <dbl>,
+## #   var1...23 <dbl>, var2...24 <dbl>, var1...25 <dbl>, var2...26 <dbl>,
+## #   var1...27 <dbl>, var2...28 <dbl>, var1...29 <dbl>, var2...30 <dbl>,
+## #   var1...31 <dbl>, var2...32 <dbl>, var1...33 <dbl>, var2...34 <dbl>,
+## #   var1...35 <dbl>, var2...36 <dbl>, var1...37 <dbl>, var2...38 <dbl>,
+## #   var1...39 <dbl>, var2...40 <dbl>, var1...41 <dbl>, var2...42 <dbl>,
+## #   var1...43 <dbl>, var2...44 <dbl>, var1...45 <dbl>, var2...46 <dbl>,
+## #   var1...47 <dbl>, var2...48 <dbl>, var1...49 <dbl>, var2...50 <dbl>,
+## #   var1...51 <dbl>, var2...52 <dbl>, var1...53 <dbl>, var2...54 <dbl>,
+## #   var1...55 <dbl>, var2...56 <dbl>, var1...57 <dbl>, var2...58 <dbl>,
+## #   var1...59 <dbl>, var2...60 <dbl>, var1...61 <dbl>, var2...62 <dbl>,
+## #   var1...63 <dbl>, var2...64 <dbl>, var1...65 <dbl>, var2...66 <dbl>,
+## #   var1...67 <dbl>, var2...68 <dbl>, var1...69 <dbl>, var2...70 <dbl>,
+## #   var1...71 <dbl>, var2...72 <dbl>, var1...73 <dbl>, var2...74 <dbl>,
+## #   var1...75 <dbl>, var2...76 <dbl>, var1...77 <dbl>, var2...78 <dbl>,
+## #   var1...79 <dbl>, var2...80 <dbl>, var1...81 <dbl>, var2...82 <dbl>,
+## #   var1...83 <dbl>, var2...84 <dbl>, var1...85 <dbl>, var2...86 <dbl>,
+## #   var1...87 <dbl>, var2...88 <dbl>, var1...89 <dbl>, var2...90 <dbl>,
+## #   var1...91 <dbl>, var2...92 <dbl>, var1...93 <dbl>, var2...94 <dbl>,
+## #   var1...95 <dbl>, var2...96 <dbl>, var1...97 <dbl>, var2...98 <dbl>,
+## #   var1...99 <dbl>, var2...100 <dbl>, var1...101 <dbl>, var2...102 <dbl>,
+## #   var1...103 <dbl>, var2...104 <dbl>, var1...105 <dbl>, var2...106 <dbl>,
+## #   var1...107 <dbl>, var2...108 <dbl>, ...
+```
+
+```r
+# Usando reduce
+# linhas
+df <- map(arqs, read_csv) %>% reduce(bind_rows)
+df
+```
+
+```
+## # A tibble: 1,000 x 2
+##      var1   var2
+##     <dbl>  <dbl>
+##  1  0.837 -0.554
+##  2 -1.12   1.08 
+##  3 -0.821  1.21 
+##  4  0.384  0.465
+##  5  0.885  0.477
+##  6 -0.194  0.517
+##  7  0.710  0.128
+##  8 -1.04  -0.947
+##  9  0.782  1.58 
+## 10  0.571  0.990
+## # ... with 990 more rows
+```
+
+```r
+# colunas
+df <- map(arqs, read_csv) %>% reduce(bind_cols)
+df
+```
+
+```
+## # A tibble: 10 x 200
+##    var1...1 var2...2 var1...3 var2...4 var1...5 var2...6 var1...7 var2...8
+##       <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
+##  1    0.837   -0.554 -1.35       0.522  1.49      0.648    -0.567   -0.868
+##  2   -1.12     1.08   0.876      2.11   0.0449    0.0737   -0.808    0.177
+##  3   -0.821    1.21   1.77      -1.31   1.51      1.35      0.559   -0.119
+##  4    0.384    0.465 -0.496      1.10   1.13     -0.331     0.427    0.131
+##  5    0.885    0.477 -0.514     -0.573 -0.0704    0.581     0.751    0.629
+##  6   -0.194    0.517  0.362     -1.62  -0.725    -2.37      0.710   -0.293
+##  7    0.710    0.128  1.11       0.144  0.00462   1.66      1.32    -0.414
+##  8   -1.04    -0.947  0.00775   -1.27   0.0365    0.0813   -1.10     0.757
+##  9    0.782    1.58   0.695     -0.375 -0.342     0.341    -0.325    0.834
+## 10    0.571    0.990 -0.475     -0.356 -1.17     -0.827    -0.148   -1.29 
+## # ... with 192 more variables: var1...9 <dbl>, var2...10 <dbl>,
+## #   var1...11 <dbl>, var2...12 <dbl>, var1...13 <dbl>, var2...14 <dbl>,
+## #   var1...15 <dbl>, var2...16 <dbl>, var1...17 <dbl>, var2...18 <dbl>,
+## #   var1...19 <dbl>, var2...20 <dbl>, var1...21 <dbl>, var2...22 <dbl>,
+## #   var1...23 <dbl>, var2...24 <dbl>, var1...25 <dbl>, var2...26 <dbl>,
+## #   var1...27 <dbl>, var2...28 <dbl>, var1...29 <dbl>, var2...30 <dbl>,
+## #   var1...31 <dbl>, var2...32 <dbl>, var1...33 <dbl>, var2...34 <dbl>,
+## #   var1...35 <dbl>, var2...36 <dbl>, var1...37 <dbl>, var2...38 <dbl>,
+## #   var1...39 <dbl>, var2...40 <dbl>, var1...41 <dbl>, var2...42 <dbl>,
+## #   var1...43 <dbl>, var2...44 <dbl>, var1...45 <dbl>, var2...46 <dbl>,
+## #   var1...47 <dbl>, var2...48 <dbl>, var1...49 <dbl>, var2...50 <dbl>,
+## #   var1...51 <dbl>, var2...52 <dbl>, var1...53 <dbl>, var2...54 <dbl>,
+## #   var1...55 <dbl>, var2...56 <dbl>, var1...57 <dbl>, var2...58 <dbl>,
+## #   var1...59 <dbl>, var2...60 <dbl>, var1...61 <dbl>, var2...62 <dbl>,
+## #   var1...63 <dbl>, var2...64 <dbl>, var1...65 <dbl>, var2...66 <dbl>,
+## #   var1...67 <dbl>, var2...68 <dbl>, var1...69 <dbl>, var2...70 <dbl>,
+## #   var1...71 <dbl>, var2...72 <dbl>, var1...73 <dbl>, var2...74 <dbl>,
+## #   var1...75 <dbl>, var2...76 <dbl>, var1...77 <dbl>, var2...78 <dbl>,
+## #   var1...79 <dbl>, var2...80 <dbl>, var1...81 <dbl>, var2...82 <dbl>,
+## #   var1...83 <dbl>, var2...84 <dbl>, var1...85 <dbl>, var2...86 <dbl>,
+## #   var1...87 <dbl>, var2...88 <dbl>, var1...89 <dbl>, var2...90 <dbl>,
+## #   var1...91 <dbl>, var2...92 <dbl>, var1...93 <dbl>, var2...94 <dbl>,
+## #   var1...95 <dbl>, var2...96 <dbl>, var1...97 <dbl>, var2...98 <dbl>,
+## #   var1...99 <dbl>, var2...100 <dbl>, var1...101 <dbl>, var2...102 <dbl>,
+## #   var1...103 <dbl>, var2...104 <dbl>, var1...105 <dbl>, var2...106 <dbl>,
+## #   var1...107 <dbl>, var2...108 <dbl>, ...
+```
+
+
+5. Escreva um código sucinto que implemente vários modelos lineares especificados por você. Salve os resultados numa `tibble` com colunas-lista. Depois, extraia os resultados com `unnest()`. Use o exemplo como guia.
+
+
+```r
+mtcars
+```
+
+```
+##                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+## Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+```
+
+```r
+modelos <- c("mpg ~ wt",
+             "mpg ~ wt + cyl",
+             "mpg ~ wt + cyl + drat",
+             "mpg ~ wt + cyl + drat + am")
+
+# Estou usando funções do pacote broom, mas você não era obrigado a apresentar
+# os resultados bonitinho. O objetivo era treinar esse tipo de workflow.
+modelos_saida <- tibble(
+  especificacao = modelos,
+  ajuste = map(especificacao, lm, data = mtcars),
+  coefs = map(ajuste, broom::tidy),
+  stats = map(ajuste, broom::glance),
+  aums = map(ajuste, broom::augment)
+)
+
+modelos_saida %>% 
+  select(especificacao, coefs) %>% 
+  unnest(coefs) %>% 
+  filter(term != "(Intercept)") 
+```
+
+```
+## # A tibble: 10 x 6
+##    especificacao              term  estimate std.error statistic  p.value
+##    <chr>                      <chr>    <dbl>     <dbl>     <dbl>    <dbl>
+##  1 mpg ~ wt                   wt     -5.34       0.559   -9.56   1.29e-10
+##  2 mpg ~ wt + cyl             wt     -3.19       0.757   -4.22   2.22e- 4
+##  3 mpg ~ wt + cyl             cyl    -1.51       0.415   -3.64   1.06e- 3
+##  4 mpg ~ wt + cyl + drat      wt     -3.19       0.829   -3.85   6.24e- 4
+##  5 mpg ~ wt + cyl + drat      cyl    -1.51       0.446   -3.38   2.14e- 3
+##  6 mpg ~ wt + cyl + drat      drat   -0.0162     1.32    -0.0122 9.90e- 1
+##  7 mpg ~ wt + cyl + drat + am wt     -3.13       0.932   -3.36   2.32e- 3
+##  8 mpg ~ wt + cyl + drat + am cyl    -1.53       0.465   -3.28   2.88e- 3
+##  9 mpg ~ wt + cyl + drat + am drat   -0.130      1.53    -0.0851 9.33e- 1
+## 10 mpg ~ wt + cyl + drat + am am      0.237      1.51     0.157  8.76e- 1
+```
+
+```r
+modelos_saida %>% 
+  select(especificacao, stats) %>% 
+  unnest(stats)
+```
+
+```
+## # A tibble: 4 x 13
+##   especificacao    r.squared adj.r.squared sigma statistic  p.value    df logLik
+##   <chr>                <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl>
+## 1 mpg ~ wt             0.753         0.745  3.05      91.4 1.29e-10     1  -80.0
+## 2 mpg ~ wt + cyl       0.830         0.819  2.57      70.9 6.81e-12     2  -74.0
+## 3 mpg ~ wt + cyl ~     0.830         0.812  2.61      45.6 6.57e-11     3  -74.0
+## 4 mpg ~ wt + cyl ~     0.830         0.805  2.66      33.0 4.84e-10     4  -74.0
+## # ... with 5 more variables: AIC <dbl>, BIC <dbl>, deviance <dbl>,
+## #   df.residual <int>, nobs <int>
+```
+
+```r
+modelos_saida %>% 
+  select(especificacao, aums) %>% 
+  filter(especificacao == "mpg ~ wt + cyl + drat + am") %>% 
+  unnest(aums)
+```
+
+```
+## # A tibble: 32 x 13
+##    especificacao   .rownames   mpg    wt   cyl  drat    am .fitted .resid   .hat
+##    <chr>           <chr>     <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl>  <dbl>  <dbl>
+##  1 mpg ~ wt + cyl~ Mazda RX4  21    2.62     6  3.9      1    22.3 -1.35  0.0899
+##  2 mpg ~ wt + cyl~ Mazda RX~  21    2.88     6  3.9      1    21.6 -0.550 0.0924
+##  3 mpg ~ wt + cyl~ Datsun 7~  22.8  2.32     4  3.85     1    26.3 -3.55  0.137 
+##  4 mpg ~ wt + cyl~ Hornet 4~  21.4  3.22     6  3.08     0    20.4  1.05  0.113 
+##  5 mpg ~ wt + cyl~ Hornet S~  18.7  3.44     8  3.15     0    16.6  2.11  0.122 
+##  6 mpg ~ wt + cyl~ Valiant    18.1  3.46     6  2.76     0    19.6 -1.53  0.207 
+##  7 mpg ~ wt + cyl~ Duster 3~  14.3  3.57     8  3.21     0    16.2 -1.87  0.103 
+##  8 mpg ~ wt + cyl~ Merc 240D  24.4  3.19     4  3.69     0    23.4  0.996 0.189 
+##  9 mpg ~ wt + cyl~ Merc 230   22.8  3.15     4  3.92     0    23.5 -0.700 0.207 
+## 10 mpg ~ wt + cyl~ Merc 280   19.2  3.44     6  3.92     0    19.5 -0.340 0.149 
+## # ... with 22 more rows, and 3 more variables: .sigma <dbl>, .cooksd <dbl>,
+## #   .std.resid <dbl>
+```

@@ -24,3 +24,7 @@ options(
 
 # fix Hugo version
 options(blogdown.hugo.version = "0.83.1")
+
+# load packages
+library(blogdown)
+library(rstudioapi)

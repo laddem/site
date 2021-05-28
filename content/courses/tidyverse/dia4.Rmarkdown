@@ -104,7 +104,7 @@ Outro exemplo.
 ```{r}
 soma_xyz <- function(x) {
   soma_xyz <- vector(mode = "double", length = nrow(x))
-  for (i in seq_along(df$soma_xyz)) {
+  for (i in seq_along(x[[1]])) {
     soma_xyz[[i]] <- x[[1]][[i]] + x[[2]][[i]] + x[[3]][i]
   }
   soma_xyz
@@ -142,7 +142,7 @@ Até o momento, nos limitamos a utilizar funções presentes no `base`, mas o ve
 
 - `invoke_map()`: aplica uma lista de funções a uma (opcional) segunda lista de parâmetros.
 
-- `reduce()` e `accumulate()``: generalizam as operações de sumarização (pense soma acumulada, média, limite, fatorial)
+- `reduce()` e `accumulate()`: generalizam as operações de sumarização (pense soma acumulada, média, limite, fatorial)
 
 - `pluck()`: pesca elementos de uma lista com uma sintaxe linear e bonitinha.
 

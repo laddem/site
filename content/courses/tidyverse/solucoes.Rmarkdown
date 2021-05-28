@@ -850,3 +850,157 @@ ggplot(diamonds,
 Como desafio, tentem adicionar elementos textuais das proporções no gráfico. O problema a ser resolvido é como posicionar o texto num sistema de coordenadas polares. Boa sorte!
 
 Gráficos de pizza são polêmicos na análise de dados porque nossos olhos não captam bem diferenças entre formatos curvos e complexos, então a comparação entre as categorias fica prejudicada se houverem mais de 2 ou 3. Eu sempre dou preferência para barras. Há um tipo de gráfico de pizza melhorzinho chamado "donut plot", em que o meio do círculo é oco, mas eu ainda prefiro as barras.
+
+## `purrr`
+
+1. Utilize uma das funções `map_` para:
+
+Nos exemplos abaixo, eu utilizo sempre `str()` no final para facilitar a visualização das listas, mas não é obrigatório utilizar esse comando.
+    
+    1. Calcular a média de cada coluna em `mtcars`.
+    
+```{r}
+map(mtcars, mean) %>% str()
+```
+    
+    2. Determinar o tipo de cada coluna em `flights`.
+    
+```{r}
+flights %>% map(class) %>% str()
+```
+    
+    3. Computar o número de valores únicos em cada coluna de `iris`.
+    
+```{r}
+flights %>% map(unique) %>% map(length) %>% str()
+
+# Sugestão do Pedro Gomes
+flights %>% map(n_distinct) %>% str()
+```
+    
+    4. Gere 10 distribuições aleatórias (`rnorm`) com médias -10, 0, 10 e 100.
+    
+```{r}
+x <- rep(100, 40)
+medias <- rep(c(-10, 0, 10, 100), each = 10)
+map2(x, medias, ~rnorm(.x, mean = .y)) %>% str()
+```
+    
+
+2. Como você pode criar um vetor indicando se cada coluna em um `data.frame` é um fator?
+
+```{r}
+# Flights por exemplo
+flights %>% 
+  # Lembrem-se que a pergunta pedia para criar um vetor!
+  map_lgl(is.factor)
+  
+```
+
+
+3. Usando as funções predicado `keep` e `discard`:
+    
+    1. Selecione todas as colunas caractere no banco `flights`.
+    
+```{r}
+flights %>% keep(is.character)
+```
+    
+    2. Descarte os caracteres em `mpg`.
+    
+```{r}
+mpg %>% discard(is.character)
+```
+    
+    3. Selecione os fatores ordenados em `diamonds`.
+    
+```{r}
+diamonds %>% keep(is.ordered)
+```
+    
+    4. Descarte as variáveis não-numéricas em `iris`
+    
+```{r}
+iris %>% discard(negate(is.numeric))
+```
+    
+
+4. Imagine que você tem um diretório cheio de arquivos `.csv` que correspondem a um único banco de dados. Você tem os caminhos de todos eles num vetor com a forma `c(arquivo_1.csv, ..., arquivo_n.csv)`. Como você importaria esses arquivos? Tente fazer duas soluções diferentes.
+
+```{r, results='hide'}
+# Vamos usar um diretório temporário que vamos preencher com vários tibbles
+pasta <- tempdir()
+
+# Criamos 100 tibbles e guardamos em 100 arquivos csv.
+x <- rep(10, 100)
+
+arqs <- sprintf("arquivo%s.csv", 1:100)
+
+map(x, ~tibble(var1 = rnorm(.x), var2 = rnorm(.x))) %>% 
+  map2(arqs, ~write_csv(.x, file.path(pasta, .y))) %>% 
+  str()
+```
+
+
+```{r}
+# Nossos arquivos estão salvos no diretório temporário:
+dir(pasta)
+
+# Agora vamos ler todos de volta para uma tibble só.
+arqs <- dir(pasta, pattern = ".csv", full.names = T)
+```
+
+
+```{r, message=FALSE}
+# Juntando linhas
+df <- map_dfr(arqs, read_csv)
+df
+
+# Juntando colunas
+df <- map_dfc(arqs, read_csv)
+df
+
+# Usando reduce
+# linhas
+df <- map(arqs, read_csv) %>% reduce(bind_rows)
+df
+
+# colunas
+df <- map(arqs, read_csv) %>% reduce(bind_cols)
+df
+```
+
+
+5. Escreva um código sucinto que implemente vários modelos lineares especificados por você. Salve os resultados numa `tibble` com colunas-lista. Depois, extraia os resultados com `unnest()`. Use o exemplo como guia.
+
+```{r}
+mtcars
+modelos <- c("mpg ~ wt",
+             "mpg ~ wt + cyl",
+             "mpg ~ wt + cyl + drat",
+             "mpg ~ wt + cyl + drat + am")
+
+# Estou usando funções do pacote broom, mas você não era obrigado a apresentar
+# os resultados bonitinho. O objetivo era treinar esse tipo de workflow.
+modelos_saida <- tibble(
+  especificacao = modelos,
+  ajuste = map(especificacao, lm, data = mtcars),
+  coefs = map(ajuste, broom::tidy),
+  stats = map(ajuste, broom::glance),
+  aums = map(ajuste, broom::augment)
+)
+
+modelos_saida %>% 
+  select(especificacao, coefs) %>% 
+  unnest(coefs) %>% 
+  filter(term != "(Intercept)") 
+
+modelos_saida %>% 
+  select(especificacao, stats) %>% 
+  unnest(stats)
+
+modelos_saida %>% 
+  select(especificacao, aums) %>% 
+  filter(especificacao == "mpg ~ wt + cyl + drat + am") %>% 
+  unnest(aums)
+```
