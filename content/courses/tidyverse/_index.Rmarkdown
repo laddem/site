@@ -6,7 +6,7 @@ title: "\U0001F4CA Aprenda a utilizar o tidyverse"
 type: book
 ---
 
-{{< figure src="featured.jpg" >}}
+{{< figure src="featured.png" >}}
 
 {{< toc hide_on="xl" >}}
 

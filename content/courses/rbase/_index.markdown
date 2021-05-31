@@ -6,7 +6,7 @@ title: "\U0001F4CA Aprenda o básico da linguagem R"
 type: book
 ---
 
-{{< figure src="featured.jpg" >}}
+{{< figure src="featured.png" >}}
 
 {{< toc hide_on="xl" >}}
 
