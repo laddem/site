@@ -1,2 +1,2 @@
-# site
-Repositório do Site do LADDEM
+# Site
+Repositório de código-fonte do Site do LADDEM
