@@ -10,7 +10,7 @@ categories: []
 date: 2021-05-25T15:13:17-03:00
 lastmod: 2021-05-25T15:13:17-03:00
 featured: false
-draft: true
+draft: false
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -28,4 +28,24 @@ image:
 projects: []
 ---
 
-Página começa aqui
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE
+)
+
+library(sigmajs)
+```
+
+
+Teste da visualização
+
+```{r}
+file <- "assets/AT2_AML_Net_interarestas.gexf"
+
+sigmajs() %>% 
+  sg_from_gexf(file, ) %>% 
+  sg_drag_nodes() %>% 
+  sg_neighbors() %>% 
+  sg_settings()
+```
+
