@@ -42,6 +42,7 @@ x <- 1:10
 y <- diff(x)
 mean(y)
 ```
+
 Mas não seria interessante pular os objetos intermediários e ir direto ao ponto? O pipe vem do pacote `magrittr`, mas ele vêm carregado em quase todos os pacotes do tidyverse. Vamos carregar logo o tibble.
 
 ```{r}
@@ -50,6 +51,7 @@ Mas não seria interessante pular os objetos intermediários e ir direto ao pont
 library(tibble)
 x %>% diff() %>% mean()
 ```
+
 Vejamos um exemplo mais real, quantos artistas existem no dataset `billboard`? Podemos usar `unique` e `length` para descobrir. 
 
 ```{r}
