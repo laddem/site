@@ -44,6 +44,7 @@ mean(y)
 ```
 ## [1] 1
 ```
+
 Mas não seria interessante pular os objetos intermediários e ir direto ao ponto? O pipe vem do pacote `magrittr`, mas ele vêm carregado em quase todos os pacotes do tidyverse. Vamos carregar logo o tibble.
 
 
@@ -57,6 +58,7 @@ x %>% diff() %>% mean()
 ```
 ## [1] 1
 ```
+
 Vejamos um exemplo mais real, quantos artistas existem no dataset `billboard`? Podemos usar `unique` e `length` para descobrir. 
 
 
