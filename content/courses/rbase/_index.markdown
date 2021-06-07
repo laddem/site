@@ -4,6 +4,7 @@ linkTitle: R-base
 summary: Dê os seus primeiros passos para a análise de dados em R
 title: "\U0001F4CA Aprenda o básico da linguagem R"
 type: book
+draft: true
 ---
 
 {{< figure src="featured.png" >}}
@@ -12,9 +13,10 @@ type: book
 
 ## O que você vai aprender
 
-- Conceitos chave no uso do software R, como objetos, tipos, vetores, data.frames, matrizes e funções.
-- Importação, manipulação, e visualização básica.
-- Básico de programação, testes lógicos, controle de fluxo, iteração
+- Conceitos chave no uso do software R, como objetos, tipos, vetores, data.frames, matrizes, funções e fórmulas
+- Importação, manipulação, e visualização básica
+- Computar estatísticas descritivas e produzir visualizações simples
+- Básico de programação, testes lógicos, controle de fluxo e iteração
 
 ## O curso
 

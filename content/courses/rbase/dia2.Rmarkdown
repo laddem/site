@@ -1,7 +1,7 @@
 ---
 date: 2021-06-15
 linkTitle: Manipulando dados
-summary: Primeiros passos trabalhando com bancos de dados em R
+summary: "Primeiros passos: trabalhando com bancos de dados em R"
 title: Manipulação de objetos em R
 type: book
 weight: 20

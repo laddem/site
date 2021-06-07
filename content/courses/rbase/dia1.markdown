@@ -82,6 +82,10 @@ draft: true
 
 #### Exercício
 
+### Fórmulas
+
+#### Exerício
+
 ## Revisão
 
 ### Exercícios
