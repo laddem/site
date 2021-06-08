@@ -13,6 +13,18 @@ draft: true
 ## Fundamentos
 
 ### A interface do R e do RStudio
+O RStudio oferece uma maneira de falar com seu computador. O R te fornece um idioma para falar. 
+Para começar, abra o RStudio da mesma forma que você abriria qualquer outro aplicativo em seu computador.
+
+{{<figure src=" ">}}
+
+
+A interface do RStudio é simples. Para 
+Você digita o código R na linha superior do painel do console RStudio e, em seguida, clica em Enter para executá-lo. O código que você digita é chamado de comando, porque ele comandará seu computador para fazer algo por você. A linha em que você digita é chamada de linha de comando.
+
+Quando você digita um comando no script e pressiona Ctrl + Enter, o computador executa o comando e mostra os resultados. Em seguida, o RStudio exibe um novo prompt para seu próximo comando. Por exemplo, se você digitar 1 + 1 e pressionar Enter, o RStudio exibirá:
+
+
 
 #### Exercício
 

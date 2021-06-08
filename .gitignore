@@ -46,3 +46,4 @@ vignettes/*.pdf
 
 .DS_Store
 Thumbs.db
+.Rproj.user
