@@ -126,15 +126,44 @@ vetor * 1:2
 
 ### Programas (scripts)
 
+Eu coloquei o script direto lá em cima, pra mim não faz muito sentido passar pelo console primeiro, mas não sei, o que você acha?
+
 #### Exercício
 
 ### Pacotes
 
-#### Exercício
+Você não é a única pessoa que escreve suas próprias funções com R. Muitos professores, programadores e estatísticos usam R para projetar ferramentas que podem ajudar as pessoas a analisar dados. Eles então tornam essas ferramentas gratuitas para qualquer pessoa usar. Para usar essas ferramentas, basta baixá-las. Eles comem coleções pré-montadas de funções e objetos chamados pacotes. Veremos o básico aqui.
+
+Vamos usar a função qplot para fazer alguns gráficos rápidos. qplot vem no pacote ggplot2, o pacote popular para fazer gráficos. Antes de usar o qplot, ou qualquer outra coisa no pacote ggplot2, você precisa fazer o download e instalá-lo.
+
+Cada pacote R está hospedado em http://cran.r-project.org, o mesmo site que hospeda R. No entanto, você não precisa visitar o site para baixar um pacote R; você pode baixar pacotes direto da linha de comando do R. 
+```{r}
+install.packages('ggplot2')
+```
+
+É isso. O R fará com que seu computador visite o site, baixe ggplot2 e instale o pacote em seu disco rígido exatamente onde o R deseja encontrá-lo. Agora você tem o pacote ggplot2. Se você gostaria de instalar outro pacote, substitua ggplot2 pelo nome do seu pacote no código.
+
 
 ### Ajuda
 
+
 #### No R
+Existem mais de 1.000 funções no núcleo do R e novas funções são criadas o tempo todo. Isso pode ser muito material para memorizar e aprender! Felizmente, cada função R vem com sua própria página de ajuda, que você pode acessar digitando o nome da função após um ponto de interrogação. Por exemplo, cada um desses comandos abrirá uma página de ajuda. Procure as páginas que aparecem na guia Ajuda do painel inferior direito do RStudio:
+
+```{r}
+?sqrt
+?log10
+?sample
+```
+
+As páginas de ajuda contem informações úteis sobre o que cada função faz. Essas páginas de ajuda também servem como documentação de código, portanto, pode ser algo um pouco chato. Muitas vezes parecem ter sido escritas para pessoas que já entendem a função e não precisam de ajuda. Não deixe que isso te faça desistir de entender uma função que você queira usar - você pode ganhar muito com uma página de ajuda examinando-a em busca de informações que façam sentido e ignorando o resto. Essa técnica inevitavelmente o levará à parte mais útil de cada página de ajuda: a parte inferior. Aqui, quase todas as páginas de ajuda incluem algum código de exemplo que coloca a função em ação. Executar esse código é uma ótima maneira de aprender com o exemplo dado.
+
+Se você gostaria de consultar a página de ajuda de uma função, mas esqueceu o nome da função, você pode pesquisar por palavra-chave. Para fazer isso, digite dois pontos de interrogação seguidos por uma palavra-chave na linha de comando de R. R exibirá uma lista de links para páginas de ajuda relacionadas à palavra-chave. Você pode pensar nisso como a página de ajuda para a página de ajuda:
+
+```{r}
+??log
+```
+
 
 #### Online
 
