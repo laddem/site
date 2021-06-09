@@ -352,6 +352,12 @@ is.vector(vetor)
 
 `is.vector` testa se o objeto é um vetor, e retorna `TRUE` se sim, e `FALSE` se não.
 
+#### Exercício
+
+Teste se `vetor2`, criado anteriormente é um vetor. Crie um vetor com os nomes de cinco pessoas da sala.
+
+#### Tamanho
+
 Ao contrário de outras linguagens, o R não diferencia entre escalares e vetores. Se você salvar só 1 valor, ele salva num vetor atômico de tamanho 1.
 
 ```{r}
@@ -362,15 +368,131 @@ length(v)
 length(vetor)
 ```
 
-Vetores atômicos guardam suas informações em uma única dimensão (como se fosse uma caixinha de pílulas semanal), cada compartimento guarda um valor. 
+Vetores atômicos guardam suas informações em uma única dimensão (como se fosse uma caixinha de pílulas semanal), cada compartimento guarda um valor. E todos os valores tem que ser do mesmo tipo! Núemros com números, caracteres com caracteres. Não pode misturar.
+
+```{r}
+inteiro <- 1L
+double <- 1
+texto <- "um"
+```
+
+Ou com mais de um valor:
+
+```{r}
+inteiros <- c(1L, 2L)
+doubles <- c(1, 2)
+textos <- c("um", "dois")
+```
+
+Esses tipos de vetores são importantes pois eles interagem com as funções de maneira lógica:
+
+```{r, error=TRUE}
+sum(inteiros)
+sum(doubles)
+sum(textos)
+```
+
+Veja a mensagem de erro ao tentar somar os textos.
 
 #### Exercício
 
-Teste se `vetor2`, criado anteriormente é um vetor. Crie um vetor com os nomes de cinco pessoas da sala.
+Considerando os dois vetores abaixo, calcule as suas médias. Porque não é possível calcular a média do segundo vetor.
+
+```{r}
+idade1 <- c(20, 25, 30, 35, 40, 45, 50)
+idade2 <- c("20", "25", "30", "35", "40", "45", "50")
+```
+
+#### Tipos
+
+Vetores atômicos podem ter 6 tipos, dois quais 4 são mais utilizados.
+
+#### Números reais
+
+```{r}
+vetor
+
+typeof(vetor)
+```
+
+A função `typeof` me diz qual o tipo de um vetor atômico.
+
+#### Números inteiros
+
+```{r}
+inteiros
+
+typeof(inteiros)
+```
+
+O padrão do R é aceitar números reais, se você não especificar. Para forçar números inteiros, é precisar utilizar:
+
+```{r}
+inteiros <- c(1, 2)
+
+typeof(inteiros)
+
+
+inteiros <- c(1L, 2L)
+
+typeof(inteiros)
+```
+
+Essas diferenças em geral são inconsequentes, mas existem alguns casos, como resultados de divisão e raíz quadrada, em que podemos encontrar resultados curiosos.
+
+```{r}
+sqrt(2)^2 - 2
+```
+
+Em teoria, a operação acima deveria ser 0, mas como o computador tem uma quantidade limitada de memória para armazenar as casas decimais, ele acaba gerando uma "sobrinha" infinitesimal da raíz quadrada de dois.
+
+##### Caracteres
+
+```{r}
+texto <- c("Bem", "Vindos")
+
+texto
+
+typeof(texto)
+```
+
+###### Exercício
+
+Qual a diferença entre: 1, "1", "one" no R? Quais são números e quais são caracteres?
+
+##### Lógicos
+
+```{r}
+3 < 4
+3 > 4
+
+logico <- c(TRUE, FALSE)
+
+logico
+
+typeof(logico)
+```
+
+Vetores lógicos são a base de várias operações úteis no R e vamos voltar a eles em diversos momentos.
+
+Complexos e crus:
+
+```{r}
+comp <- c(1 + 1i, 1 + 2i, 1 + 3i)
+comp
+
+typeof(comp)
+
+raw(3)
+
+typeof(raw(3))
+```
+
+Vetores complexos servem para armazenar número complexos, enquanto vetores crus servem para armazenar os valores em bits de uma informação. Ambos são menos utilizados na análise de dados e eu os introduzo apenas para vocês saberem que eles existem.
 
 ### Atributos
 
-
+Atributos são informações 
 
 #### Exercício
 
