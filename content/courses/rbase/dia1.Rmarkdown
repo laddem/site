@@ -13,6 +13,7 @@ draft: true
 ## Fundamentos
 
 ### A interface do R e do RStudio
+
 O RStudio oferece uma maneira de falar com seu computador. O R te fornece um idioma para falar. 
 Para começar, abra o RStudio da mesma forma que você abriria qualquer outro aplicativo em seu computador.
 
@@ -23,6 +24,7 @@ Você digita o código R na linha superior do painel do console RStudio e, em se
 A interface do RStudio é simples. Para  criar um script novo é necessário ir em `File > New File > R` script no menu no canto esquerdo.É recomendado fortemente que você escreva e edite todo o seu código R em um script antes de executá-lo no console. Por quê? Esse hábito cria um registro reproduzível de seu trabalho. Ao terminar o dia, você pode salvar seu script e usá-lo para executar novamente toda a sua análise no dia seguinte, além disso os scripts são muito úteis para editar e revisar seu código e são uma ótima cópia de seu trabalho para compartilhar com outras pessoas. Para salvar é só clicar no disquete no painel do script e depois ir em `File > Save`. 
 
 Quando você digita um comando no script e pressiona Ctrl + Enter ou Run, o computador executa o comando e mostra os resultados no console logo abaixo. Por exemplo, se você digitar 1 + 1 e pressionar Ctrl + Enter, o RStudio exibirá:
+
 ```{r}
 1 + 1
 ```
@@ -31,12 +33,12 @@ Quando você digita um comando no script e pressiona Ctrl + Enter ou Run, o comp
 
 ### Objetos
 
-Agora que você já sabe como o R funciona, vamos ver alguns operadores e objetos que podem ser criados. Se você quer que o 
-R crie um vetor, use o operador `:`, esse operador vai retornar um conjunto unidimensional de números:
+Agora que você já sabe como o R funciona, vamos ver alguns operadores e objetos que podem ser criados. Se você quer que o R crie um vetor, use o operador `:`, esse operador vai retornar um conjunto unidimensional de números:
 
 ```{r}
 1:6
 ```
+
 Mas quando você roda assim dessa forma, o R gera o vetor que você poderá ver o resultado no console, porém esse vetor não vai ficar salvo em lugar nenhum, é basicamente um pegada de seis números que existiram brevemente. Se você quiser usar novamente essa sequência de número, você precisa pedir para o computador guardar ele em algum lugar. Você pode fazer isso criando um `objeto`.
 
 R permite salvar dados armazenando-os dentro de um objeto R. O que é um objeto? Apenas um nome que você pode usar para acessar os dados armazenados. Por exemplo, você pode salvar dados em um objeto como `a` ou `b` ou qualquer nome que faça sentido para o que você está fazendo. Sempre que R encontrar o objeto, ele irá substituí-lo pelos dados salvos nele, da seguinte forma:
@@ -56,18 +58,18 @@ Você também pode usar seu objeto em novos comandos R. Já que armazenou anteri
 Então, como você faria para armazenar esse vetor de seis números `1:6`, que a gente criou anteriormente, em um objeto?
 
 ```{r}
-vetor<- 1:6
+vetor <- 1:6
 
 vetor
 ```
 
 #### Exercício
 
-Quando você cria um objeto no R, esse objeto vai aparecer armazenado na sessão `Environment` no lado direito da sessão script.
+Quando você cria um objeto no R, esse objeto vai aparecer armazenado na seção `Environment` no lado direito da seção script.
 
 Você pode nomear um objeto no R de praticamente qualquer nome, só tem algumas regras: não pode começar como número, e também não pode ter alguns símbolos, como por exemplo:  `^`, `!`, `$`, `@`, `+`, `-`, `/`, `%` or `*`.
 
-Além disso, o R é sensitivo, portanto se eu colocar um nome de objeto como Name e outro como name eles vão se referir a objetos diferentes, ou seja, ele considera se a letra é maiuscula ou minuscula. 
+Além disso, o R *case-sensitive*, portanto se eu colocar um nome de objeto como `Name` e outro como `name` eles vão se referir a objetos diferentes, ou seja, ele considera se a letra é maiuscula ou minuscula. 
 
 E se você criar um objeto, salvar uma informação neste objeto e logo em seguida salvar outra, ele subscreve o que estava anteriormente, então tome cuidado para não perder informações. O exemplo abaixo mostra exatamente isso:
 
@@ -86,12 +88,9 @@ Com a função `ls()` você consegue listar no console todos os objetos criados.
 O que é possível fazer com esses objetos no R que você criou? Muita coisa! Por exemplo: é possível usar o objeto vetor e fazer uma operação de divisão
 
 ```{r}
-
 vetor/2
 
 vetor - 1
-
-
 ```
 
 O R dividiu por 2 todos os números dentro daquele vetor. Se você subtrair 1 desse objeto, o R vai subtrair 1 de cada elemento dentro deste objeto. 
@@ -99,17 +98,23 @@ O R dividiu por 2 todos os números dentro daquele vetor. Se você subtrair 1 de
 Quando você usa dois ou mais vetores em uma operação, R alinhará os vetores e executará uma sequência de operações individuais. Por exemplo, quando você executa vetor * vetor, o R alinha os dois vetores de dados e, em seguida, multiplica o primeiro elemento do vetor 1 pelo primeiro elemento do vetor 2, então multiplica o segundo elemento do vetor 1 pelo segundo elemento do vetor 2 , e assim por diante, até que cada elemento tenha sido multiplicado. O resultado será um novo vetor com o mesmo comprimento dos dois primeiros:
 
 ```{r}
-
 vetor * vetor
-
 ```
 
-Se você der ao R uma operação com dois vetores de comprimentos diferentes, o R repetirá o vetor mais curto até que seja do mesmo tamanho do vetor maior e, em seguida, fará as contas. Esta não é uma mudança permanente - o vetor mais curto terá seu tamanho original depois que o R fizer as contas. Se o comprimento do vetor curto não se dividir igualmente no comprimento do vetor longo, o R retornará uma mensagem de aviso. Esse comportamento é conhecido como reciclagem de vetor e ajuda o R a fazer operações em elementos:
+Se você der ao R uma operação com dois vetores de comprimentos diferentes, o R repetirá o vetor mais curto até que seja do mesmo tamanho do vetor maior e, em seguida, fará as contas. Esta não é uma mudança permanente - o vetor mais curto terá seu tamanho original depois que o R fizer as contas. Se o comprimento do vetor curto não se dividir igualmente no comprimento do vetor longo, o R retornará uma mensagem de aviso. Esse comportamento é conhecido como **reciclagem** de vetor e ajuda o R a fazer operações em elementos:
 
 ```{r}
 vetor * 1:4
 
 vetor * 1:2
+```
+
+Porém, é preciso cuidado pois se você não estava querendo **reciclar**, é possível cometer erros. No exemplo abaixo, eu crio um segundo vetor com os valores para multiplicação, mas ele tem tamanho menor que o primeiro. Por isso, é bom ficar atento aos `Warning message:`s:
+
+```{r}
+vetor2 <- c(1, 2, 3, 4, 5)
+
+vetor * vetor2
 ```
 
 ### Funções
