@@ -12,42 +12,497 @@ draft: true
 
 ### Leitura/Importação
 
+Você pode importar um data.frame para o R de duas formas. A primeira delas, é carregando através do `Environment` no canto direito superior do RStudio. Clique em Import Dataset e selecione 'From Text File' 
+
+O RStudio solicitará que você selecione o arquivo que deseja importar e, em seguida, abrirá um assistente para ajudá-lo a importar os dados. Use o assistente para informar ao RStudio qual nome dar ao conjunto de dados. Você também pode usar o assistente para informar ao RStudio qual caractere o conjunto de dados usa como separador, qual caractere ele usa para representar decimais (geralmente um ponto nos Estados Unidos e uma vírgula na Europa/Brasil) e se o conjunto de dados vem ou não com uma linha de nomes de coluna (conhecida como cabeçalho). Para ajudá-lo, o assistente mostra a aparência do arquivo bruto, bem como a aparência dos dados carregados com base nas configurações de entrada.
+
+Você também pode desmarcar a caixa “Strings como fatores” no assistente. Eu recomendo fazer isso. Se você fizer isso, o R carregará todas as suas cadeias de caracteres como cadeias de caracteres. Caso contrário, R os converterá em fatores.
+
+A outra forma de importar um arquivo no R, é usando direto no script a função 'read.csv'. Vamos trabalhar com os dados da pnad, no arquivo amostra_pnad.csv. Ele é um arquivo de valores separados por vírgula ou CSV para abreviar. CSVs são arquivos de texto simples, o que significa que você pode abri-los em um editor de texto (assim como em muitos outros programas). Se você abrir amostra_pnad.csv, verá que ele contém uma tabela de dados semelhante à seguinte. Cada linha da tabela é salva em sua própria linha e uma vírgula é usada para separar as células dentro de cada linha. Cada arquivo CSV compartilha este formato básico:
+
+"Ano","Trimestre","UF","V1022","V2007","V2009","V2010","VD2003","VD3005","VD4016"
+"2021","1","Ceará","Urbana","Homem",80,"Branca",2,"16 anos ou mais de estudo",NA
+"2021","1","Distrito Federal","Urbana","Mulher",19,"Parda",4,"11 anos de estudo",NA
+...e assim por diante
+
+Vamos carregar novamente os dados da pnad que foram mostrados na aula passada:
+
+```{r}
+url <- "https://raw.githubusercontent.com/laddem/site/master/amostra_pnad.csv"
+df <- read.csv(url)
+head(df)
+```
+
+Se a importação ocorrer corretamente, o data.frame irá aparecer no ambiente `Environment` mostrando o número de observações e o número de variáveis (colunas). 
+
+Quando você importa um conjunto de dados, o RStudio salva os dados em um quadro de dados e, em seguida, exibe o quadro de dados em uma guia Exibir. Você pode abrir qualquer quadro de dados em uma guia Exibir a qualquer momento com a função View().
+
+
 #### Exercícios
+
+Visualize os dados que você acabou de importar em formato de planilha através do Enviroment e usando a função View().
+É possível também visualizar as 6 primeiras linhas do data.frame ou as 6 últimas linhas. Para isso, use as funções head() e tail().
+
+Obs: se você quiser ver mais que 6 linhas, coloque o segundo argumento na função head(df, 10). Quantas linhas vai ser mostrada neste caso?
 
 ### Escrita/Salvar
 
-#### Exercícios
+Você pode salvar e exportar um novo arquivo .csv para o seu computador. Assim, você pode enviá-lo por e-mail a um colega, armazená-lo em um pen drive ou abri-lo em um programa diferente. Você pode salvar qualquer dados executados e alterado no R em um arquivo .csv com o comando write.csv. 
+
+```{r}
+write.csv(df, file = "df_pnad.csv", row.names = FALSE)
+```
+
+R transformará seu quadro de dados em um arquivo de texto simples com o formato de valores separados por vírgula e salvará o arquivo em seu diretório de trabalho. Para ver onde está seu diretório de trabalho, execute `getwd()`. Para alterar a localização do seu diretório de trabalho, visite Sessão> Definir Diretório de Trabalho> Escolher Diretório na barra de menus do RStudio.
+
+Você pode personalizar o processo de salvamento com o grande conjunto de argumentos opcionais de write.csv (consulte? write.csv para obter detalhes). No entanto, existem três argumentos que você deve usar sempre que executar write.csv.
+
+Primeiro, você deve fornecer a função `write.csv` o nome do data frame que deseja salvar. Em seguida, você deve fornecer um nome de arquivo para dar ao seu arquivo. R entenderá esse nome literalmente, portanto, certifique-se de fornecer uma extensão.
+
+Finalmente, você deve adicionar o argumento row.names = FALSE. Isso impedirá R de adicionar uma coluna de números no início do seu data frame. Esses números identificarão suas linhas de 1 a 1000, mas é improvável que qualquer programa em que você abrir df_pnad.csv compreenderá o sistema de nomes de linhas. Muito provavelmente, o programa assumirá que os nomes das linhas são a primeira coluna de dados em seu quadro de dados. Na verdade, isso é exatamente o que R assumirá se você reabrir cards.csv. Se você salvar e abrir cards.csv várias vezes em R, notará colunas duplicadas de números de linha se formando no início de seu quadro de dados. Não posso explicar por que R faz isso, mas posso explicar como evitá-lo: use row.names = FALSE sempre que salvar dados com write.csv.
 
 ## Notação
+Para que você consiga trabalhar com valores individuais dentro do seu data frame, tarefa necessária em análise de dados, você pode selecionar valores dentro de um objeto R através do sistema de notação do R.
 
 ### Selecionando valores
+O R tem um sistema de notação que permite extrair valores de objetos R. Para extrair um valor ou conjunto de valores de um data frame, escreva o nome do data frame seguido por um par de colchetes:
+
+```{r}
+df[ , ]
+```
+
+Entre os colchetes estarão dois índices separados por uma vírgula. Os índices dizem ao R quais valores retornar. O R usará o primeiro índice para o subconjunto das linhas do dataframe e o segundo índice para o subconjunto das colunas. Ou seja, df[linhas, colunas]
+
+Você tem uma escolha quando se trata de escrever índices. Existem seis maneiras diferentes de escrever um índice para o R e cada uma faz algo ligeiramente diferente. Eles são todos muito simples e muito úteis, então vamos dar uma olhada em cada um deles. Você pode criar índices com:
+
+- Inteiros positivos
+- Inteiros negativos
+- Zero
+- Espaços em branco
+- Valores lógicos
+- Nomes
+
+O mais simples de usar são os inteiros positivos.
+
+Por exemplo, caso você queira extrair um valor que está na primeira linha e na quarta coluna do seu data frame, no caso, estamos usando o df, que é uma pequena amostra da pnad. Lembra? Como podemos fazer isso?
+
+```{r}
+df[1, 4]
+```
+
+Para extrair mais de um valor, use um vetor com inteiros positivos. Por exemplo, se você quer retornar a primeira linha de *df* com df[1, c(1,2,3)] ou df[1, 1:3]
+
+```{r}
+df[1,1:3]
+
+df[1, c(1,2,3)]
+```
+
+Essa notação não é limitada somente a objetos do tipo data frame. Você pode usar a mesma sintaxe para selecionar valores em qualquer objeto R, desde que você forneça um índice para cada dimensão do objeto. Então, por exemplo, você pode definir um subconjunto de um vetor (que tem uma dimensão) com um único índice:
+
+```{r}
+vec <- c(10, 15, 31, 60, 10, 2)
+vec[1:3]
+
+```
+
+Bom, isso é a notação usando usando inteiros positivos. Como seria com inteiros negativos? Quais as diferenças?
+
+Vamos lá!
+
+Os inteiros negativos fazem exatamente o oposto dos inteiros positivos durante a indexação. O R retornará todos os elementos, exceto os elementos em um índice negativo. Por exemplo, df[-1, 1:10] retornará tudo, exceto a primeira linha do data frame. df[- (2:999), 1:10] retornará a primeira linha e a última linha (e excluirá todo o resto):
+
+```{r}
+df[-(2:999), 1:10]
+
+df[-1, 9]
+```
+
+A vantagem de usar inteiros negativos ao invés de inteiros positivos na indexação, é que os inteiros negativos são uma maneira mais eficiente de criar um subconjunto do que os inteiros positivos, se você quiser incluir a maioria das linhas ou colunas de um data frame.
+
+Na notação `df[-2,2]` o que irá ser mostrado pelo R?
+
+O que acontecerá se você usar o zero como um index? Zero não é um inteiro positivo nem um inteiro negativo, mas ele ainda usará para fazer um tipo de subconjunto. O R, neste caso, não retornará nada de uma dimensão quando você usa zero como um índice:
+```{r}
+df[0, 0]
+```
+
+Pra ser sincera, indexar com 0 não ajuda em muita coisa.
+
+Além dos inteiros positivos, inteiros negativos, e zero, você pode também usar espaços em branco na indexação. O espaço em branco no R vai extrair todos os valores em uma dimensão. Isso permite subdividir um objeto em uma dimensão, mas não nas outras, o que é útil para extrair linhas ou colunas inteiras de um data frame:
+
+```{r}
+df[1, ]
+df[, 5]
+```
+
+Estamos quase chegando no final dos tipos de indexação que são possíveis de serem feitas no R.
+No caso de valores lógicos, se você fornecer um vetor de `TRUEs` e `FALSEs` como seu índice, o R combinará cada `TRUE` e `FALSE` com uma linha do data frame (ou uma coluna, dependendo de onde você colocar o índice). O R então retornará cada linha que corresponde a um TRUE.
+
+Pode ser útil imaginar R lendo o quadro de dados e perguntando: "Devo retornar a enésima linha da estrutura de dados?" e depois consultar o enésimo valor do índice para obter sua resposta. Para que este sistema funcione, seu vetor deve ser tão longo quanto a dimensão que você está tentando subdividir:
+
+```{r}
+df[1, c(TRUE, TRUE, FALSE)]
+
+rows <- c(F, TRUE, TRUE, F, F, F, F, F, F, F, F, F, F, F, F, F, 
+  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, 
+  F, F, F, F, F, F, F, F, F, F, F, F, F, F)
+
+df[rows, ]
+```
+
+Esse sistema será de grande ajuda na parte de modificação de valores que veremos daqui a pouco. 
+
+Finalmente, você pode pedir os elementos que deseja pelo nome - se o seu objeto tiver nomes (consulte Nomes). Essa é uma maneira comum de extrair as colunas de um data frame, já que as colunas quase sempre têm nomes:
+
+```{r}
+names(df)
+df[3, c("UF", "V2007", "V2010")]
+
+df[ , "VD3005"]
+```
+
 
 #### Exercícios
 
-### Funções que manipulam objetos
-
-#### Exercícios
+Retorne a informação da observação 800, e as colunas Ano, VD3005, V2009, V2010 do nosso data frame da amostra da pnad. O que o R retornará? Faça a mesma indexação de diferentes formas, usando inteiros positivos, inteiros negativos, valores lógicos e pelo Nome. 
 
 ### Diferentes seleções: `[[` e `$`
 
+Dois tipos de objeto em R obedecem a um segundo sistema opcional de notação. Você pode extrair valores de data frames e listas com a sintaxe `$`. Você encontrará a sintaxe $ repetidamente no R, então vamos examinar como ela funciona.
+
+Para selecionar uma coluna de um data frame, escreva o nome do data frame, no caso df, e o nome da coluna separados por $. Observe que nenhuma aspa deve estar no nome da coluna:
+
+```{r}
+df$V2009
+```
+R retornará todos os valores da coluna como um vetor. Esta notação`$` é muito útil e muito usada porque você freqüentemente armazenará as variáveis de seus conjuntos de dados como colunas em um data frame. De vez em quando, você desejará executar uma função como mean() ou median nos valores de uma variável. Em R, essas funções esperam um vetor de valores como entrada, e o df$V2009 entrega seus dados no formato certo:
+
+```{r}
+mean(df$V2009)
+```
+
+Você pode usar a mesma notação com `$` com os elementos de uma lista, se eles tiverem nomes. Essa notação também tem uma vantagem com listas. Se você criar um subconjunto de uma lista da maneira usual, o R retornará uma nova lista que contém os elementos solicitados, mesmo se você solicitar apenas um único elemento.
+
+```{r}
+lista <- list(numbers = c(1, 2), logical = TRUE, strings = c("a", "b", "c"))
+
+lista
+
+lista[1]
+
+```
+
+O resultado é uma lista menor com um elemento. Esse elemento é o vetor c(1, 2). Isso pode ser irritante porque muitas funções R não funcionam com listas. Por exemplo, sum(lst[1]) retornará um erro. Para você conseguir fazer uma operação com lista, você precisará usar `$`:
+
+
+```{r}
+sum(lst$numbers)
+```
+
+Se os elementos em sua lista não tiverem nomes (ou você não quiser usar os nomes), você pode usar dois colchetes `[[ ]]`, em vez de um, para criar um subconjunto da lista. Essa notação fará a mesma coisa que a notação $:
+
+```{r}
+lista[[1]]
+
+```
+
+Em outras palavras, se você subdividir uma lista com a notação de colchete único, R retornará uma lista menor. Se você subdividir uma lista com a notação de colchetes duplos, o R retornará apenas os valores que estavam dentro de um elemento da lista. Você pode combinar esse recurso com qualquer um dos métodos de indexação de R:
+
+```{r}
+lista["numbers"]
+
+lista[["numbers"]]
+```
+
+Essa diferença é sutil, mas importante. Na comunidade R, há uma maneira popular e útil de pensar sobre isso. Imagine que cada lista é um trem e cada elemento é um vagão. Quando você usa colchetes simples, o R seleciona vagões de trem individuais e os retorna como um novo trem. Cada vagão mantém seu conteúdo, mas esse conteúdo ainda está dentro de um vagão de trem (ou seja, uma lista). Quando você usa colchetes duplos, o R realmente descarrega o carro e lhe devolve o conteúdo. Resumindo:
+
+Use colchetes simples para selecionar vagões de trem e colchetes duplos para selecionar o conteúdo dentro de um vagão.
 <!-- A metáfora do trem -->
 
 #### Exercícios
 
+Assim como na lista, é possível usar os colchetes [[]] em data frame. Tente usá-los no data frame da pnad. Quais são as diferenças encontradas?
+
 ## Modificando valores
+Para manipular os valores dentro do seu data frame, faça primeiro uma cópia que você pode manipular. Isso garantirá que você sempre tenha uma cópia original do data frame para usar (caso as coisas dêem errado):
+
+```{r}
+df2 <- df
+```
 
 ### Modificando os valores diretamente
 
+Você pode usar o sistema de notação de R para modificar valores dentro de um objeto. Primeiro, descreva o valor (ou valores) que você deseja modificar. Em seguida, use o operador de atribuição `<-` para sobrescrever esses valores. O R irá atualizar os valores selecionados no objeto original. Em um exemplo real:
+
+```{r}
+vetor <- c(0, 0, 0, 0, 0, 0)
+vetor
+```
+
+Você pode selecionar um valor dentro desse vetor· Neste caso selecionamos o primeiro:
+
+```{r}
+vetor[1]
+```
+
+E aqui, podemos modificar o valor:
+```{r}
+vetor[1] <- 35
+vetor
+```
+
+Você pode substituir vários valores de uma vez, desde que o número de novos valores seja igual ao número de valores selecionados:
+
+```{r}
+vetor[c(3, 4, 5)] <- c(1, 1, 1)
+vetor
+
+vetor[4:6] <- vetor[4:6] + 1
+vetor
+```
+Você também pode criar valores que ainda não existem em seu objeto. O R irá expandir o objeto para acomodar os novos valores:
+
+```{r}
+vetor[7] <- 20
+vetor
+```
+
+É possível fornecer uma ótima maneira de adicionar novas variáveis ao data frame:
+
+```{r}
+df2$nova_coluna <- 1:1000
+
+head(df2)
+```
+
+Da mesma forma que você criou uma nova coluna, é possível removê-la atribuindo o valor `NULL`
+```{r}
+df2$nova_coluna <- NULL
+
+head(df2)
+```
+
+Você selecionar um conjunto de linhas dentro de um data frame usando o sistema notação do R. Você pode destacar apenas os valores que você quer, definindo a dimensão das colunas do df2. Ou, você pode definir um subconjunto da coluna `df2$UF`
+```{r}
+df2[c(5, 8, 39,44), ]
+
+## selecionando linhas especificas e a coluna V2010
+df2[c(5, 8, 39,44), 6]
+
+## podemos fazer o mesmo dessa forma
+df2$V2009[c(5, 8, 39,44)]
+```
+
+Suponha que você sabe que os valores dessas linhas na coluna UF estão errados e você precisa arrumá-los atribuindo novos valores. O conjunto de novos valores terá que ser do mesmo tamanho que o conjunto de valores que você está substituindo. 
+
+```{r}
+df2$V2009[c(5, 8, 39,44)] <- c(23, 23, 23, 23)
+
+# ou
+
+df2$V2009[c(5, 8, 39,44)]<- 23
+
+head(df2, 44)
+
+```
+Observe que os valores mudam no local. Você não acaba com uma cópia modificada do df2; os novos valores aparecerão dentro do df2.
+
+A mesma técnica funcionará se você armazenar seus dados em um vetor, matriz, array, lista ou data frame. Basta descrever os valores que você deseja alterar com o sistema de notação de R e, em seguida, atribuir esses valores com o operador de atribuição de R `<-`.
+
+
 #### Exercícios
+Considere o vetor abaixo. Atribua um novo valor na posição 3 deste vetor. É possível atribuir uma string no lugar de um número?
+```{r}
+vetor_x<- c(10,30,50,10)
+```
 
 ### Modificando com testes lógicos
 
+E se você precisa saber um valor específico e precise que o R te retorne a linha em que este valor está? Por que no caso anterior você sabia as linhas que você queria mudar. Como fazer?
+
+Lembra do sistema de notação do R que permitia valores lógicos? Você pode deixar um teste lógico criar um vetor de TRUEs e FALSEs para você. 
+Um teste lógico é uma comparação como “um é menor que dois?”, 1 <2 ou “é três maior que quatro?”, `3 > 4`. O R fornece sete operadores lógicos que você pode usar para fazer comparações. Os operadores são `>`(a > b, a é maior que b?); `>=`(a >= b, a é maior ou igual a b?); `<`(a<b, a é menor que b?); `<=` (a<=b, a é menor ou igual a b?); `==` (a == b, a é igual a b?); `!=` (a!=b, a não é igual b?); `%in%`(a %in% c(a,b,c), a está contido no vetor c(a,b,c)?)
+
+Cada operador retorna TRUE ou FALSE. Se você usar um operador para comparar vetores, o R fará comparações entre elementos - assim como faz com os operadores aritméticos:
+
+<!-- Queria colocar uma tabela com os tipos de operadores possíveis -->
+
+```{r}
+1 > 2
+
+1 > c(0, 1, 2)
+
+c(1, 2, 3) == c(3, 2, 1)
+
+```
+
+O operado `%in%` é o único operador que não executa a execução normal do elemento inteiro. `%in%` testa se os valores do lado esquerdo estão no vetor do lado direito. Se você fornecer um vetor no lado esquerdo, este operador não irá emparelhar os valores à esquerda com os valores à direita e, em seguida, fará testes de elementos. Em vez disso, ele testará independentemente se cada valor à esquerda está em algum lugar do vetor à direita:
+
+```{r}
+1 %in% c(3, 4, 5)
+
+c(1, 2) %in% c(3, 4, 5)
+
+c(1, 2, 3) %in% c(3, 4, 5)
+
+c(1, 2, 3, 4) %in% c(3, 4, 5)
+```
+
+Observe que você testa a igualdade com um sinal de igual duplo, `==`, e não um único sinal de igual, =, que é outra maneira de escrever <-. É fácil esquecer e usar a = b para testar se a é igual a b. Infelizmente, você terá uma surpresa desagradável. O R não retornará TRUE ou FALSE, porque não terá que: a será igual a b, porque você acabou de executar o equivalente a a <- b.
+
+Você pode comparar quaisquer dois objetos no R com um operador lógico; no entanto, os operadores lógicos fazem mais sentido se você comparar dois objetos do mesmo tipo de dados. Se você comparar objetos de diferentes tipos de dados, o R usará suas regras de coerção para forçar os objetos ao mesmo tipo antes de fazer a comparação.
+
 #### Exercícios
+Extraia a coluna V2010 do df2 e teste se cada valor é igual a 'Branca'. Além disso conte quantas linhas são iguais a 'Branca'. Dica: use a função sum() para fazer a contagem. 
+
+Para resumir, você pode usar um teste lógico para selecionar valores dentro de um objeto.
+
+O subconjunto lógico é uma técnica poderosa porque permite identificar, extrair e modificar rapidamente valores individuais em seu conjunto de dados. Ao trabalhar com subconjuntos lógicos, você não precisa saber onde existe um valor em seu conjunto de dados. Você só precisa saber como descrever o valor com um teste lógico.
+
+Além dos operadores lógicos, também temos os operadores booleanos, os operadores booleanos são como (`&`) ou (`|`). Eles reduzem os resultados de vários testes lógicos em um único `TRUE` ou `FALSE`: `&`	(cond1 & cond2,	Ambas cond1 and cond2 são verdadeiras?); `|`	(cond1 | cond2,	Um ou mais da cond1 e da cond2 são verdadeiras?); `xor`(xor(cond1, cond2),	Exatamente um da cond1 e cond2 são verdadeiros?); `!`(!cond1,	A cond1 é falsa?); `any` (any(cond1, cond2, cond3, ...),	Alguma dessas condições é verdadeira?); `all`	(all(cond1, cond2, cond3,...), Todas as condições são verdadeiras?)
+
+Para usar um operador booleano, coloque-o entre dois testes lógicos completos. O R irá executar cada teste lógico e, em seguida, usar o operador booleano para combinar os resultados em um único `TRUE` ou `FALSE`.
+
+Quando usados com vetores, os operadores booleanos seguirão a mesma execução elementar que os operadores aritméticos e lógicos:
+```{r}
+a <- c(1, 2, 3)
+b <- c(1, 2, 3)
+c <- c(1, 2, 4)
+
+a == b
+
+b == c
+
+a == b & b == c
+```
+
+Você pode usar um operador booleano para localizar as pessoas de 23 anos e de escolaridade 9 anos de estudo no df2. 
+
+```{r}
+df2$V2009 == 40 & df2$VD3005 == "8 anos de estudo"
+
+```
 
 ### Valores desconhecidos
+Problemas com informações desconhecidas acontecem com frequência na análise de dados. Normalmente, eles são mais simples: você não sabe um valor porque a medição foi perdida, corrompida ou nunca feita para começar. O R tem uma maneira de ajudá-lo a gerenciar esses valores ausentes.
+
+O caractere `NA` é um símbolo especial em R. Ele significa “não disponível” e pode ser usado como um espaço reservado para informações ausentes. O R tratará `NA` exatamente como você deseja que as informações ausentes sejam tratadas. Por exemplo, qual resultado você esperaria se adicionar 1 a uma informação ausente?
+
+```{r}
+1 + NA
+```
+
+O R retornará uma segunda informação faltante. Não seria correto dizer que 1 + NA = 1 porque há uma boa chance de que o valor ausente não seja zero. Você não tem informações suficientes para determinar o resultado.
+```{r}
+NA == 1
+```
+
+Valores ausentes podem ajudá-lo a contornar lacunas em seus conjuntos de dados, mas também podem criar alguns problemas frustrantes. Suponha, por exemplo, que você coletou 1.000 observações e deseja tirar sua média com a função mean(). Se um dos valores for NA, seu resultado será NA:
+
+```{r}
+c(NA, 1:50)
+
+mean(c(NA, 1:50))
+```
+
+A maioria das funções R vem com o argumento opcional, `na.rm`, que significa `NA remove`. o R irá ignorar NAs quando avaliar uma função se você adicionar o argumento `na.rm = TRUE`:
+```{r}
+mean(c(NA, 1:50), na.rm = TRUE)
+```
+
+Ocasionalmente, você pode querer identificar os NAs em seu conjunto de dados com um teste lógico, mas isso também cria um problema. Como você faria isso? Se algo for um valor ausente, qualquer teste lógico que o use retornará um valor ausente, até mesmo este teste:
+
+```{r}
+NA == NA
+```
+
+O que significa que testes como este não ajudarão você a encontrar valores ausentes:
+```{r}
+c(1, 2, 3, NA) == NA
+```
+
+O R fornece uma função especial que pode testar se um valor é um NA. A função é `is.na`:
+```{r}
+is.na(NA)
+
+vet <- c(1, 2, 3, NA)
+
+is.na(vet)
+
+
+```
 
 #### Exercícios
+
+Conte o número de NAs na coluna VD4016 do data frame df2.
 
 ## Revisão
 
+Na aula de hoje falamos sobre como importar dados, exportar dados, manipulação e diferentes notações para identificação de informações e modificação.
+
+Para selecionar os valores em um data frame, ou em outro objeto R, aprendemos a usar a notaçã dataframe[ , ] e a partir dessa notação, selecionar diferentes linhas e colunas, usando números inteiros, números negativos, espaços em branco, valores lógicos e nomes. 
+
+Aprendemos com listas e dataframes a seleção pela notação de colchetes duplos `[[` e `$`. 
+
+Em relação a modificação de valores, aprendemos a modificar os valores no local dentro de um objeto R ao combinar a sintaxe da notação de R com o operador de atribuição, `<-`. Isso permite que você atualize seus dados e limpe seus conjuntos de dados.
+
+Aprendemos diferentes operadores lógicos: `>`; `>=`; `<`; `<=`; `==`; `!=`; `%in%` 
+E operadores booleanos: `&`; `|`; `xor`; `!`; `any`; `all`.
+
+Quando você trabalha com grandes conjuntos de dados, modificar e recuperar valores cria um problema logístico próprio. Como você pode pesquisar os dados para encontrar os valores que deseja modificar ou recuperar? Como um usuário R, você pode fazer isso com subconjuntos lógicos. Crie um teste lógico com operadores lógicos e booleanos e, em seguida, use o teste como um índice na notação de colchetes de R. O R retornará os valores que você está procurando, mesmo se você não souber onde eles estão.
+
+
 ### Exercícios
+Para os próximos exercícios considere o dataframe da pnad que estamos usando nas aulas.
+
+1. Como você selecionaria o mesmo valor abaixo, mas usando inteiros negativos na seleção?
+```{r}
+df2[1,5]
+```
+
+2. Qual a diferença em usar em selecionar determinada informação em um data frame usando colchetes duplos [[]] e usando colchetes simples? Observe o exemplo abaixo para responder:
+```{r}
+df2[['Ano']]
+
+df['Ano']
+```
+
+3. Considere o data frame abaixo:
+```{r}
+sala <- data.frame(
+  id = c(1, 2, 3, 4, 5, 6),
+  idade = c(20, 25, 30, 35, 40, 45),
+  nome = c("Fulano", "Cicrano", "Beltrano", "Herculano", "Mariano", "Carrano"),
+  sexo = "Masculino",
+  origem = c("Campinas", "Barueri", "Monte Verde", "Rio de Janeiro", "Natal", "Belo Horizonte")
+)
+```
+
+Modifique o nome de 'Mariano' por 'Mariana'. E altere a variável sexo para que seja um vetor que altere o valor para 'Feminino' na posição em que o nome foi trocado para Mariana.
+
+4. Considere o mesmo data frame sala construído no exercício anterior. Usando testes lógicos e operadores Booleanos. Verifique:
+a. Verifique se existe algum aluno que seja do sexo Masculino e seja de São Paulo. 
+b. Verifique se existe algum aluno que tem idade maior ou iguam a 20 anos ou que seja de Campinas.
+c. Verifique se existe alguém com o nome Beltrano.
+
+5. Agora considere o seguinte data frame:
+```{r}
+cadastro<- data.frame(
+  id = c(10, 105, 299, 645, 7907, 8660, 4992, 630),
+  idade = c(20, 25, 30, 35, 40, 45, 60, 53),
+  nome = c("Thais", NA, "Guilherme", "Betânia", "Ana Lucia", NA, NA, "Pâmela"),
+  sexo = c("Feminino", "Masculino","Masculino", NA ,NA, "Feminino", "Masculino", "Feminino"),
+  origem = c("Campinas", NA, "Monte Verde", "Rio de Janeiro", NA, "Belo Horizonte","São Paulo", "Rio de Janeiro")
+)
+
+```
+
+Usando as funções apropriadas:
+a. Quantos NAs existe na coluna nome?
+b. Quantos NAs existe na coluna sexo?
+c. Quantos NAs existe na coluna origem?
+d. Substitua os NAs na coluna sexo pelo valor 'Feminino'
+
+
+6. Salve o data frame 'cadastro' do exercicio anterior. Como você faria isso? Quais os argumentos que devem ser usados?
