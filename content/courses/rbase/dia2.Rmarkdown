@@ -35,7 +35,7 @@ head(df)
 
 Se a importação ocorrer corretamente, o data.frame irá aparecer no ambiente `Environment` mostrando o número de observações e o número de variáveis (colunas). 
 
-Quando você importa um conjunto de dados, o RStudio salva os dados em um quadro de dados e, em seguida, exibe o quadro de dados em uma guia Exibir. Você pode abrir qualquer quadro de dados em uma guia Exibir a qualquer momento com a função View().
+Quando você importa um conjunto de dados, o RStudio salva os dados em um data frame e, em seguida, exibe o data frame em uma guia Exibir. Você pode abrir qualquer data frame em uma guia Exibir a qualquer momento com a função View().
 
 
 #### Exercícios
@@ -53,13 +53,13 @@ Você pode salvar e exportar um novo arquivo .csv para o seu computador. Assim, 
 write.csv(df, file = "df_pnad.csv", row.names = FALSE)
 ```
 
-R transformará seu quadro de dados em um arquivo de texto simples com o formato de valores separados por vírgula e salvará o arquivo em seu diretório de trabalho. Para ver onde está seu diretório de trabalho, execute `getwd()`. Para alterar a localização do seu diretório de trabalho, visite Sessão> Definir Diretório de Trabalho> Escolher Diretório na barra de menus do RStudio.
+R transformará seu data frame em um arquivo de texto simples com o formato de valores separados por vírgula e salvará o arquivo em seu diretório de trabalho. Para ver onde está seu diretório de trabalho, execute `getwd()`. Para alterar a localização do seu diretório de trabalho, visite Sessão> Definir Diretório de Trabalho> Escolher Diretório na barra de menus do RStudio.
 
 Você pode personalizar o processo de salvamento com o grande conjunto de argumentos opcionais de write.csv (consulte? write.csv para obter detalhes). No entanto, existem três argumentos que você deve usar sempre que executar write.csv.
 
 Primeiro, você deve fornecer a função `write.csv` o nome do data frame que deseja salvar. Em seguida, você deve fornecer um nome de arquivo para dar ao seu arquivo. R entenderá esse nome literalmente, portanto, certifique-se de fornecer uma extensão.
 
-Finalmente, você deve adicionar o argumento row.names = FALSE. Isso impedirá R de adicionar uma coluna de números no início do seu data frame. Esses números identificarão suas linhas de 1 a 1000, mas é improvável que qualquer programa em que você abrir df_pnad.csv compreenderá o sistema de nomes de linhas. Muito provavelmente, o programa assumirá que os nomes das linhas são a primeira coluna de dados em seu quadro de dados. Na verdade, isso é exatamente o que R assumirá se você reabrir cards.csv. Se você salvar e abrir cards.csv várias vezes em R, notará colunas duplicadas de números de linha se formando no início de seu quadro de dados. Não posso explicar por que R faz isso, mas posso explicar como evitá-lo: use row.names = FALSE sempre que salvar dados com write.csv.
+Finalmente, você deve adicionar o argumento row.names = FALSE. Isso impedirá R de adicionar uma coluna de números no início do seu data frame. Esses números identificarão suas linhas de 1 a 1000, mas é improvável que qualquer programa em que você abrir df_pnad.csv compreenderá o sistema de nomes de linhas. Muito provavelmente, o programa assumirá que os nomes das linhas são a primeira coluna de dados em seu data frame. Na verdade, isso é exatamente o que R assumirá se você reabrir cards.csv. Se você salvar e abrir cards.csv várias vezes em R, notará colunas duplicadas de números de linha se formando no início de seu data frame. Não posso explicar por que R faz isso, mas posso explicar como evitá-lo: use row.names = FALSE sempre que salvar dados com write.csv.
 
 ## Notação
 Para que você consiga trabalhar com valores individuais dentro do seu data frame, tarefa necessária em análise de dados, você pode selecionar valores dentro de um objeto R através do sistema de notação do R.
@@ -139,7 +139,7 @@ df[, 5]
 Estamos quase chegando no final dos tipos de indexação que são possíveis de serem feitas no R.
 No caso de valores lógicos, se você fornecer um vetor de `TRUEs` e `FALSEs` como seu índice, o R combinará cada `TRUE` e `FALSE` com uma linha do data frame (ou uma coluna, dependendo de onde você colocar o índice). O R então retornará cada linha que corresponde a um TRUE.
 
-Pode ser útil imaginar R lendo o quadro de dados e perguntando: "Devo retornar a enésima linha da estrutura de dados?" e depois consultar o enésimo valor do índice para obter sua resposta. Para que este sistema funcione, seu vetor deve ser tão longo quanto a dimensão que você está tentando subdividir:
+Pode ser útil imaginar R lendo o data frame e perguntando: "Devo retornar a enésima linha da estrutura de dados?" e depois consultar o enésimo valor do índice para obter sua resposta. Para que este sistema funcione, seu vetor deve ser tão longo quanto a dimensão que você está tentando subdividir:
 
 ```{r}
 df[1, c(TRUE, TRUE, FALSE)]
