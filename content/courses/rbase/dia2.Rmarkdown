@@ -498,11 +498,10 @@ cadastro<- data.frame(
 
 ```
 
-Usando as funções apropriadas:
+Usando as funções apropriadas ensinadas na aula de hoje:
 a. Quantos NAs existe na coluna nome?
 b. Quantos NAs existe na coluna sexo?
 c. Quantos NAs existe na coluna origem?
 d. Substitua os NAs na coluna sexo pelo valor 'Feminino'
-
 
 6. Salve o data frame 'cadastro' do exercicio anterior. Como você faria isso? Quais os argumentos que devem ser usados?
