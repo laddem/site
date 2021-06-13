@@ -137,7 +137,7 @@ df[, 5]
 ```
 
 Estamos quase chegando no final dos tipos de indexação que são possíveis de serem feitas no R.
-No caso de valores lógicos, se você fornecer um vetor de `TRUEs` e `FALSEs` como seu índice, o R combinará cada `TRUE` e `FALSE` com uma linha do data frame (ou uma coluna, dependendo de onde você colocar o índice). O R então retornará cada linha que corresponde a um TRUE.
+No caso de valores lógicos, se você fornecer um vetor de `TRUEs` e `FALSEs` como seu índice, o R combinará cada `TRUE` e `FALSE` com uma linha do data frame (ou uma coluna, dependendo de onde você colocar o índice). O R então retornará cada linha que corresponde a um `TRUE`.
 
 Pode ser útil imaginar R lendo o data frame e perguntando: "Devo retornar a enésima linha da estrutura de dados?" e depois consultar o enésimo valor do índice para obter sua resposta. Para que este sistema funcione, seu vetor deve ser tão longo quanto a dimensão que você está tentando subdividir:
 
@@ -153,10 +153,11 @@ df[rows, ]
 
 Esse sistema será de grande ajuda na parte de modificação de valores que veremos daqui a pouco. 
 
-Finalmente, você pode pedir os elementos que deseja pelo nome - se o seu objeto tiver nomes (consulte Nomes). Essa é uma maneira comum de extrair as colunas de um data frame, já que as colunas quase sempre têm nomes:
+Finalmente, você pode pedir os elementos que deseja pelo nome - se o seu objeto tiver nomes (consulte Nomes). Essa é uma maneira comum de extrair as colunas de um data frame, já que as colunas quase sempre têm um nome:
 
 ```{r}
 names(df)
+
 df[3, c("UF", "V2007", "V2010")]
 
 df[ , "VD3005"]
@@ -176,7 +177,8 @@ Para selecionar uma coluna de um data frame, escreva o nome do data frame, no ca
 ```{r}
 df$V2009
 ```
-R retornará todos os valores da coluna como um vetor. Esta notação`$` é muito útil e muito usada porque você freqüentemente armazenará as variáveis de seus conjuntos de dados como colunas em um data frame. De vez em quando, você desejará executar uma função como mean() ou median nos valores de uma variável. Em R, essas funções esperam um vetor de valores como entrada, e o df$V2009 entrega seus dados no formato certo:
+
+O R retornará todos os valores da coluna como um vetor. Esta notação `$` é muito útil e muito usada porque você freqüentemente armazenará as variáveis de seus conjuntos de dados como colunas em um data frame. De vez em quando, você desejará executar uma função como mean() ou median() nos valores de uma variável. Em R, essas funções esperam um vetor de valores como entrada, e o df$V2009 entrega seus dados no formato certo:
 
 ```{r}
 mean(df$V2009)
@@ -200,14 +202,14 @@ O resultado é uma lista menor com um elemento. Esse elemento é o vetor c(1, 2)
 sum(lst$numbers)
 ```
 
-Se os elementos em sua lista não tiverem nomes (ou você não quiser usar os nomes), você pode usar dois colchetes `[[ ]]`, em vez de um, para criar um subconjunto da lista. Essa notação fará a mesma coisa que a notação $:
+Se os elementos em sua lista não tiverem nomes (ou você não quiser usar os nomes), você pode usar dois colchetes `[[ ]]`, em vez de um, para criar um subconjunto da lista. Essa notação fará a mesma coisa que a notação `$`:
 
 ```{r}
 lista[[1]]
 
 ```
 
-Em outras palavras, se você subdividir uma lista com a notação de colchete único, R retornará uma lista menor. Se você subdividir uma lista com a notação de colchetes duplos, o R retornará apenas os valores que estavam dentro de um elemento da lista. Você pode combinar esse recurso com qualquer um dos métodos de indexação de R:
+Em outras palavras, se você subdividir uma lista com a notação de colchete único, o R retornará uma lista menor. Se você subdividir uma lista com a notação de colchetes duplos, o R retornará apenas os valores que estavam dentro de um elemento da lista. Você pode combinar esse recurso com qualquer um dos métodos de indexação de R:
 
 ```{r}
 lista["numbers"]
@@ -222,7 +224,7 @@ Use colchetes simples para selecionar vagões de trem e colchetes duplos para se
 
 #### Exercícios
 
-Assim como na lista, é possível usar os colchetes [[]] em data frame. Tente usá-los no data frame da pnad. Quais são as diferenças encontradas?
+Assim como na lista, é possível usar os colchetes `[[ ]]` em data frame. Tente usá-los no data frame da pnad. Quais são as diferenças encontradas?
 
 ## Modificando valores
 Para manipular os valores dentro do seu data frame, faça primeiro uma cópia que você pode manipular. Isso garantirá que você sempre tenha uma cópia original do data frame para usar (caso as coisas dêem errado):
@@ -354,13 +356,13 @@ Observe que você testa a igualdade com um sinal de igual duplo, `==`, e não um
 Você pode comparar quaisquer dois objetos no R com um operador lógico; no entanto, os operadores lógicos fazem mais sentido se você comparar dois objetos do mesmo tipo de dados. Se você comparar objetos de diferentes tipos de dados, o R usará suas regras de coerção para forçar os objetos ao mesmo tipo antes de fazer a comparação.
 
 #### Exercícios
-Extraia a coluna V2010 do df2 e teste se cada valor é igual a 'Branca'. Além disso conte quantas linhas são iguais a 'Branca'. Dica: use a função sum() para fazer a contagem. 
+Extraia a coluna V2010 do df2 e teste os valores igual a 'Branca'. Além disso conte quantas linhas são iguais a 'Branca'. Dica: use a função sum() para fazer a contagem. 
 
 Para resumir, você pode usar um teste lógico para selecionar valores dentro de um objeto.
 
 O subconjunto lógico é uma técnica poderosa porque permite identificar, extrair e modificar rapidamente valores individuais em seu conjunto de dados. Ao trabalhar com subconjuntos lógicos, você não precisa saber onde existe um valor em seu conjunto de dados. Você só precisa saber como descrever o valor com um teste lógico.
 
-Além dos operadores lógicos, também temos os operadores booleanos, os operadores booleanos são como (`&`) ou (`|`). Eles reduzem os resultados de vários testes lógicos em um único `TRUE` ou `FALSE`: `&`	(cond1 & cond2,	Ambas cond1 and cond2 são verdadeiras?); `|`	(cond1 | cond2,	Um ou mais da cond1 e da cond2 são verdadeiras?); `xor`(xor(cond1, cond2),	Exatamente um da cond1 e cond2 são verdadeiros?); `!`(!cond1,	A cond1 é falsa?); `any` (any(cond1, cond2, cond3, ...),	Alguma dessas condições é verdadeira?); `all`	(all(cond1, cond2, cond3,...), Todas as condições são verdadeiras?)
+Além dos operadores lógicos, também temos os operadores booleanos, os operadores booleanos são como `&` ou `|`. Eles reduzem os resultados de vários testes lógicos em um único `TRUE` ou `FALSE`. São eles `&`	(cond1 & cond2,	Ambas cond1 and cond2 são verdadeiras?); `|`	(cond1 | cond2,	Um ou mais da cond1 e da cond2 são verdadeiras?); `xor`(xor(cond1, cond2),	Exatamente um da cond1 e cond2 são verdadeiros?); `!`(!cond1,	A cond1 é falsa?); `any` (any(cond1, cond2, cond3, ...),	Alguma dessas condições é verdadeira?); `all`	(all(cond1, cond2, cond3,...), Todas as condições são verdadeiras?)
 
 Para usar um operador booleano, coloque-o entre dois testes lógicos completos. O R irá executar cada teste lógico e, em seguida, usar o operador booleano para combinar os resultados em um único `TRUE` ou `FALSE`.
 
