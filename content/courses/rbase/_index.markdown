@@ -20,7 +20,7 @@ draft: false
 
 ## O curso
 
-4 dias, com aulas à noite, no formato *workshop* misturando teoria e prática, com muitos exercícios para você colocar a mão na massa.
+5 dias, com aulas à noite, no formato *workshop* misturando teoria e prática, com muitos exercícios para você colocar a mão na massa.
 
 ## Programação
 
