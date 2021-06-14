@@ -5,12 +5,10 @@ summary: Os conceitos-chave que vão fundamentar sua aprendizagem e seu uso da l
 title: A base da linguagem R
 type: book
 weight: 10
-draft: true
+draft: false
 ---
 
 
-
-<!-- Precisamos dar um bom nome para a introdução -->
 
 ## Fundamentos
 
@@ -20,10 +18,9 @@ O RStudio oferece uma maneira de falar com seu computador. O R te fornece um idi
 Para começar, abra o RStudio da mesma forma que você abriria qualquer outro aplicativo em seu computador.
 
 
-
 Você digita o código R na linha superior do painel do console RStudio e, em seguida, clica em Enter para executá-lo. O código que você digita é chamado de comando, porque ele comandará seu computador para fazer algo por você. A linha em que você digita é chamada de linha de comando.
 
-A interface do RStudio é simples. Para  criar um script novo é necessário ir em `File > New File > R` script no menu no canto esquerdo.É recomendado fortemente que você escreva e edite todo o seu código R em um script antes de executá-lo no console. Por quê? Esse hábito cria um registro reproduzível de seu trabalho. Ao terminar o dia, você pode salvar seu script e usá-lo para executar novamente toda a sua análise no dia seguinte, além disso os scripts são muito úteis para editar e revisar seu código e são uma ótima cópia de seu trabalho para compartilhar com outras pessoas. Para salvar é só clicar no disquete no painel do script e depois ir em `File > Save`. 
+A interface do RStudio é simples. Para  criar um script novo é necessário ir em `File > New File > R > script` no menu no canto esquerdo. É recomendado fortemente que você escreva e edite todo o seu código R em um script antes de executá-lo no console. Por quê? Esse hábito cria um registro reproduzível de seu trabalho. Ao terminar o dia, você pode salvar seu script e usá-lo para executar novamente toda a sua análise no dia seguinte, além disso os scripts são muito úteis para editar e revisar seu código e são uma ótima cópia de seu trabalho para compartilhar com outras pessoas. Para salvar é só clicar no disquete no painel do script e depois ir em `File > Save`. 
 
 Quando você digita um comando no script e pressiona Ctrl + Enter ou Run, o computador executa o comando e mostra os resultados no console logo abaixo. Por exemplo, se você digitar 1 + 1 e pressionar Ctrl + Enter, o RStudio exibirá:
 
@@ -35,8 +32,6 @@ Quando você digita um comando no script e pressiona Ctrl + Enter ou Run, o comp
 ```
 ## [1] 2
 ```
-
-#### Exercício
 
 ### Objetos
 
@@ -51,9 +46,9 @@ Agora que você já sabe como o R funciona, vamos ver alguns operadores e objeto
 ## [1] 1 2 3 4 5 6
 ```
 
-Mas quando você roda assim dessa forma, o R gera o vetor que você poderá ver o resultado no console, porém esse vetor não vai ficar salvo em lugar nenhum, é basicamente um pegada de seis números que existiram brevemente. Se você quiser usar novamente essa sequência de número, você precisa pedir para o computador guardar ele em algum lugar. Você pode fazer isso criando um `objeto`.
+Mas quando você roda assim dessa forma, o R gera o vetor que você poderá ver o resultado no console, porém esse vetor não vai ficar salvo em lugar nenhum, é basicamente uma pegada de seis números que existiram naquela execução pontual. Se você quiser usar novamente essa sequência de número, você precisa pedir para o R guardar ele em algum lugar. Você pode fazer isso criando um `objeto`.
 
-R permite salvar dados armazenando-os dentro de um objeto R. O que é um objeto? Apenas um nome que você pode usar para acessar os dados armazenados. Por exemplo, você pode salvar dados em um objeto como `a` ou `b` ou qualquer nome que faça sentido para o que você está fazendo. Sempre que R encontrar o objeto, ele irá substituí-lo pelos dados salvos nele, da seguinte forma:
+O R permite salvar dados armazenando-os dentro de um objeto R. O que é um objeto? Apenas um nome que você pode usar para acessar os dados armazenados. Por exemplo, você pode salvar dados em um objeto como `a` ou `b` ou qualquer nome que faça sentido para o que você está fazendo. Sempre que o R encontrar o objeto, ele irá substituí-lo pelos dados salvos nele, da seguinte forma:
 
 
 ```r
@@ -91,13 +86,11 @@ vetor
 ## [1] 1 2 3 4 5 6
 ```
 
-#### Exercício
+Quando você cria um objeto no R, esse objeto vai aparecer armazenado na seção `Environment` no lado direito, do lado da seção script (essa que você digita os comandos para usá-los depois).
 
-Quando você cria um objeto no R, esse objeto vai aparecer armazenado na seção `Environment` no lado direito da seção script.
+Você pode nomear um objeto no R de praticamente qualquer nome, só tem algumas regras: não pode começar com número, e também não pode ter alguns símbolos, como por exemplo:  `^`, `!`, `$`, `@`, `+`, `-`, `/`, `%` or `*`.
 
-Você pode nomear um objeto no R de praticamente qualquer nome, só tem algumas regras: não pode começar como número, e também não pode ter alguns símbolos, como por exemplo:  `^`, `!`, `$`, `@`, `+`, `-`, `/`, `%` or `*`.
-
-Além disso, o R *case-sensitive*, portanto se eu colocar um nome de objeto como `Name` e outro como `name` eles vão se referir a objetos diferentes, ou seja, ele considera se a letra é maiuscula ou minuscula. 
+Além disso, o R é *case-sensitive*, portanto se eu colocar um nome de objeto como `Name` e outro como `name` eles vão se referir a objetos diferentes, ou seja, ele considera se a letra é maíuscula ou minúscula. 
 
 E se você criar um objeto, salvar uma informação neste objeto e logo em seguida salvar outra, ele subscreve o que estava anteriormente, então tome cuidado para não perder informações. O exemplo abaixo mostra exatamente isso:
 
@@ -144,7 +137,7 @@ vetor - 1
 
 O R dividiu por 2 todos os números dentro daquele vetor. Se você subtrair 1 desse objeto, o R vai subtrair 1 de cada elemento dentro deste objeto. 
 
-Quando você usa dois ou mais vetores em uma operação, R alinhará os vetores e executará uma sequência de operações individuais. Por exemplo, quando você executa vetor * vetor, o R alinha os dois vetores de dados e, em seguida, multiplica o primeiro elemento do vetor 1 pelo primeiro elemento do vetor 2, então multiplica o segundo elemento do vetor 1 pelo segundo elemento do vetor 2 , e assim por diante, até que cada elemento tenha sido multiplicado. O resultado será um novo vetor com o mesmo comprimento dos dois primeiros:
+Quando você usa dois ou mais vetores em uma operação, o R alinhará os vetores e executará uma sequência de operações individuais. Por exemplo, quando você executa vetor * vetor, o R alinha os dois vetores de dados e, em seguida, multiplica o primeiro elemento do vetor 1 pelo primeiro elemento do vetor 2, então multiplica o segundo elemento do vetor 1 pelo segundo elemento do vetor 2, e assim por diante, até que cada elemento tenha sido multiplicado. O resultado será um novo vetor com o mesmo comprimento dos dois primeiros:
 
 
 ```r
@@ -199,7 +192,7 @@ vetor * vetor2
 
 ### Funções
 
-R vem com muitas funções instaladas. Praticamente tudo que você vê que não são `objetos` que você criou são funções e seus componentes. Por isso, dizemos que, no seu núcleo, o R é uma linguagem "funcional". Vejamos alguns exemplos de funções:
+O R vem com muitas funções instaladas. Praticamente tudo que você vê que não são `objetos` que você criou são funções e seus componentes. Por isso, dizemos que, no seu núcleo, o R é uma linguagem "funcional". Vejamos alguns exemplos de funções:
 
 
 ```r
@@ -331,7 +324,7 @@ sample(x = vetor, size = 1)
 ```
 
 ```
-## [1] 6
+## [1] 1
 ```
 
 Com os argumentos opcionais, podemos mudar detalhes do processo de amostragem
@@ -342,10 +335,10 @@ sample(x = vetor, size = 1, prob = c(1/8, 1/8, 1/8, 1/8, 1/8, 3/8))
 ```
 
 ```
-## [1] 3
+## [1] 4
 ```
 
-E ao mudar as probabilidades de que cada uma amostra vai ser selecionada, eu criei um dado viciado!
+E ao mudar as probabilidades de como cada amostra vai ser selecionada, eu criei um dado viciado!
 
 Você pode verificar os argumentos de uma função com:
 
@@ -367,7 +360,7 @@ Que outros argumentos existem na função `sample`? Qual o papel do argumento `r
 
 ### Sua primeira função
 
-Ok, mas suponha que você esteja cansado de repetir as coisas no seu programa. Existe uma operação que você realiza de novo e novo, e ela é relativamente simples, mas é um tédio ficar copiando e cola a mesma coisa. Por exemplo, se você tem o vetor que criamos com seis números, e precisa sortear dois valores e somar seu resultado, como se estivesse jogando dois dados de 6 faces e somando os resultados?
+Ok, mas suponha que você esteja cansado de repetir as coisas no seu programa. Existe uma operação que você realiza de novo e novo, e ela é relativamente simples, mas é um tédio ficar copiando e colando a mesma coisa. Por exemplo, se você tem o vetor que criamos com seis números, e precisa sortear dois valores e somar seu resultado, como se estivesse jogando dois dados de 6 faces e somando os resultados?
 
 
 ```r
@@ -377,7 +370,7 @@ x + y
 ```
 
 ```
-## [1] 8
+## [1] 10
 ```
 
 Seu código funciona bem, mas você quer simplificar isso para uma função que faça tudo de uma vez, podemos chamar ela de `role`, como se fosse "role dois dados".
@@ -388,15 +381,7 @@ role()
 ```
 
 ```
-## [1] 5
-```
-
-```r
-role()
-```
-
-```
-## [1] 8
+## [1] 3
 ```
 
 ```r
@@ -405,6 +390,14 @@ role()
 
 ```
 ## [1] 3
+```
+
+```r
+role()
+```
+
+```
+## [1] 11
 ```
 
 A função `role` não existe no R base, mas você mesmo pode construí-la:
@@ -421,7 +414,7 @@ role()
 ```
 
 ```
-## [1] 6
+## [1] 7
 ```
 
 Pause para contemplar os diferentes elementos do construtor de funções do R:
@@ -445,11 +438,11 @@ V: Olha, pra mim depende muito do aluno. Acho que as vezes gente que começa a e
 
 -->
 
-Na maioria das situações, esses conceitos soltos que introduzimos não são muito úteis isoladamente. Afinal de contas, objetos, funções e números individuais não servem para muita coisa. Esses conceitos ganham corpo quando os utilizamos juntos para produzir nossos programas. O que são programas? A metáfora mais comumemente utilizada é a culinária. Um programa é uma sequência de instruções, uma receita para produzir alguma coisa. A diferença é que ao invés de produtos culinários, os ingredientes são informações na memória de uma computador, e ao invés de um prato, estamos tentando produzir resultados que podem ser analisados: estatísticas descritivas, representações gráficas, modelos matemáticos, tabelas, etc.
+Na maioria das situações, esses conceitos soltos que introduzimos não são muito úteis isoladamente. Afinal de contas, objetos, funções e números individuais não servem para muita coisa. Esses conceitos ganham corpo quando os utilizamos juntos para produzir nossos programas. O que são programas? A metáfora mais comumemente utilizada é a culinária. Um programa é uma sequência de instruções, uma receita para produzir alguma coisa. A diferença é que ao invés de produtos culinários, os ingredientes são informações na memória de um computador, e ao invés de um prato, estamos tentando produzir resultados que podem ser analisados: estatísticas descritivas, representações gráficas, modelos matemáticos, tabelas, etc.
 
 Falaremos mais sobre programas e estratégias de construção de programas (se der tempo), em outra aula. Por aqui, seria interessante que vocês levassem adiante a noção de que o programa é o conjunto da obra. É comum desenvolvermos ou encontrarmos programas para:
 
-- importar a corrigir quaisquer problemas nos meus dados
+- importar e corrigir quaisquer problemas nos meus dados
 - produzir estatísticas descritivas a partir de meus dados
 - produzir diversos gráficos que descrevem meus dados
 - produzir tabulações e exportá-las para outros softwares
@@ -488,7 +481,7 @@ Existem mais de 1.000 funções no núcleo do R e novas funções são criadas o
 
 As páginas de ajuda contem informações úteis sobre o que cada função faz. Essas páginas de ajuda também servem como documentação de código, portanto, pode ser algo um pouco chato. Muitas vezes parecem ter sido escritas para pessoas que já entendem a função e não precisam de ajuda. Não deixe que isso te faça desistir de entender uma função que você queira usar - você pode ganhar muito com uma página de ajuda examinando-a em busca de informações que façam sentido e ignorando o resto. Essa técnica inevitavelmente o levará à parte mais útil de cada página de ajuda: a parte inferior. Aqui, quase todas as páginas de ajuda incluem algum código de exemplo que coloca a função em ação. Executar esse código é uma ótima maneira de aprender com o exemplo dado.
 
-Se você gostaria de consultar a página de ajuda de uma função, mas esqueceu o nome da função, você pode pesquisar por palavra-chave. Para fazer isso, digite dois pontos de interrogação seguidos por uma palavra-chave na linha de comando de R. R exibirá uma lista de links para páginas de ajuda relacionadas à palavra-chave. Você pode pensar nisso como a página de ajuda para a página de ajuda:
+Se você gostaria de consultar a página de ajuda de uma função, mas esqueceu o nome da função, você pode pesquisar por palavra-chave. Para fazer isso, digite dois pontos de interrogação seguidos por uma palavra-chave na linha de comando de R, o R exibirá uma lista de links para páginas de ajuda relacionadas à palavra-chave. Você pode pensar nisso como a página de ajuda para a página de ajuda:
 
 
 ```r
@@ -588,7 +581,7 @@ length(vetor)
 ## [1] 6
 ```
 
-Vetores atômicos guardam suas informações em uma única dimensão (como se fosse uma caixinha de pílulas semanal), cada compartimento guarda um valor. E todos os valores tem que ser do mesmo tipo! Núemros com números, caracteres com caracteres. Não pode misturar.
+Vetores atômicos guardam suas informações em uma única dimensão (como se fosse uma caixinha de pílulas semanal), cada compartimento guarda um valor. E todos os valores tem que ser do mesmo tipo! Números com números, caracteres com caracteres. Não pode misturar.
 
 
 ```r
@@ -647,7 +640,7 @@ idade2 <- c("20", "25", "30", "35", "40", "45", "50")
 
 #### Tipos
 
-Vetores atômicos podem ter 6 tipos, dois quais 4 são mais utilizados.
+Vetores atômicos podem ser de 6 tipos, dois são mais utilizados.
 
 #### Números reais
 
@@ -1077,7 +1070,7 @@ agora
 ```
 
 ```
-## [1] "2021-06-10 20:24:39 -03"
+## [1] "2021-06-14 12:51:59 -03"
 ```
 
 ```r
@@ -1106,7 +1099,7 @@ unclass(agora)
 ```
 
 ```
-## [1] 1623367479
+## [1] 1623685919
 ```
 
 R transformou meu objeto data/tempo em um número. O que ocorre é que quando meu objeto tem as classes adequadas, isso alerta o R para que ele trate esse objeto de forma diferente. As funções do R utilizarão métodos de `print` para facilitar a visualização de objetos data/tempo, mas, por debaixo do capô, preservarão suas características computacionais numéricas. Você pode, por exemplo, somar 24h ao seu objeto:
@@ -1117,10 +1110,10 @@ agora + (24 * 60 * 60)
 ```
 
 ```
-## [1] "2021-06-11 20:24:39 -03"
+## [1] "2021-06-15 12:51:59 -03"
 ```
 
-Você também pode, se assim desejar, transformar um valor numérico arbitrária numa data (só demonstração, não vale a pena fazer isso) atribuindo uma classe para ele:
+Você também pode, se assim desejar, transformar um valor numérico arbitrário numa data (só demonstração, não vale a pena fazer isso) atribuindo uma classe para ele:
 
 
 ```r
@@ -1572,7 +1565,7 @@ Por fim, falamos de dois comportamentos importantes do software: coerção e rec
 
 - Os nomes dos colegas da sua turma
 - Seus números de telefone
-- Um variável que indica se esta pessoa nasceu antes de 1989
+- Uma variável que indica se esta pessoa nasceu antes de 1989
 - A idade de um grupo de pessoas
 - Informações de cadastro de uma pessoa: nome completo, afiliações, telefones para contato, endereços, etc.
 - Uma coleção de funções que você utiliza frequentemente
@@ -1590,7 +1583,7 @@ Por fim, falamos de dois comportamentos importantes do software: coerção e rec
 v <- c(1, 1, TRUE, FALSE)
 ```
 
-O que acontecerá com as informações desse vetor ao ele ser armazenado no R? Como você poderia alterar esse resultado? Porque o R se comporta dessa maneira?
+O que acontecerá com as informações desse vetor ao ser armazenado no R? Como você poderia alterar esse resultado? Porque o R se comporta dessa maneira?
 
 7. Considere a operação matemática abaixo:
 
