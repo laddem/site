@@ -4,7 +4,7 @@ linkTitle: R-base
 summary: Dê os seus primeiros passos para a análise de dados em R
 title: "\U0001F4CA Aprenda o básico da linguagem R"
 type: book
-draft: true
+draft: false
 ---
 
 {{< figure src="featured.png" >}}
