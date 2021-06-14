@@ -376,7 +376,7 @@ knitr::kable(tabela, caption = "Operadores lógicos")
 c(1, 2, 3) == c(3, 2, 1)
 ```
 
-O operado `%in%` é o único operador que não executa a execução normal do elemento inteiro. `%in%` testa se os valores do lado esquerdo estão no vetor do lado direito. Se você fornecer um vetor no lado esquerdo, este operador não irá emparelhar os valores à esquerda com os valores à direita e, em seguida, fará testes de elementos. Em vez disso, ele testará independentemente se cada valor à esquerda está em algum lugar do vetor à direita:
+O operador `%in%` é o único que não executa normalmente o vetor inteiro. `%in%` testa se os valores do lado esquerdo estão no vetor do lado direito. Se você fornecer um vetor com comprimento maior que 1 no lado esquerdo, este operador não irá emparelhar os valores à esquerda com os valores à direita e, em seguida, fará testes de elementos. Em vez disso, ele testará independentemente se cada valor à esquerda está em algum lugar do vetor à direita:
 
 ```{r}
 1 %in% c(3, 4, 5)
