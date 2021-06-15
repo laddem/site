@@ -1024,15 +1024,15 @@ Para os próximos exercícios considere o data frame da pnad que estamos usando 
    )
    ```
 
-   Modifique o nome de 'Mariano' por 'Mariana'. E altere a variável sexo para que seja um vetor que altere o valor para 'Feminino' na posição em que o nome foi trocado para Mariana.
+   Modifique o nome de 'Mariano' por 'Mariana'. E altere a variável sexo para que seja um vetor que altere o valor para 'Feminino' na posição em que o nome foi trocado para Mariana.  
 
-4. Considere o mesmo data frame sala construído no exercício anterior. Usando testes lógicos e operadores Booleanos. Verifique:
+4. Considere o mesmo data frame sala construído no exercício anterior. Usando testes lógicos e operadores Booleanos. Verifique:  
 
    a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo.  
-   b. se existe algum aluno que tem idade maior ou iguam a 20 anos ou que seja de Campinas.  
+   b. se existe algum aluno que tem idade maior ou igual a 20 anos ou que seja de Campinas.  
    c. se existe alguém com o nome Beltrano.  
 
-5. Agora considere o seguinte data frame e, usando as funções apropriadas ensinadas na aula de hoje, responda:
+5. Agora considere o seguinte data frame e, usando as funções apropriadas ensinadas na aula de hoje, responda:  
 
    
    ```r
@@ -1049,6 +1049,8 @@ Para os próximos exercícios considere o data frame da pnad que estamos usando 
    1. Quantos NAs existe na coluna nome?
    2. Quantos NAs existe na coluna sexo?
    3. Quantos NAs existe na coluna origem?
-   4. Substitua os NAs na coluna sexo pelo valor 'Feminino'
+   4. Substitua os NAs na coluna sexo pelo valor 'Feminino'  
 
-6. Salve o data frame 'cadastro' do exercicio anterior em um arquivo `.csv`. Como você faria isso? Quais os argumentos que devem ser usados?
+6. Salve o data frame 'cadastro' do exercicio anterior em um arquivo `.csv`. Como você faria isso? Quais os argumentos que devem ser usados?  
+
+_____________________________________________________
