@@ -5,7 +5,7 @@ summary: "Primeiros passos: trabalhando com bancos de dados em R"
 title: Manipulação de objetos em R
 type: book
 weight: 20
-draft: true
+draft: false
 ---
 
 ```{r setup, include=FALSE}

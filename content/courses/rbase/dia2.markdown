@@ -64,7 +64,7 @@ Quando você importa um conjunto de dados, o RStudio salva os dados em um data f
 Visualize os dados que você acabou de importar em formato de planilha através do Environment e usando a função View().
 É possível também visualizar as 6 primeiras linhas do data.frame ou as 6 últimas linhas. Para isso, use as funções head() e tail().
 
-Obs: se você quiser ver mais que 6 linhas, coloque o segundo argumento na função head(df, 10). Quantas linhas vai ser mostrada neste caso?
+Obs: se você quiser ver mais que 6 linhas, coloque o segundo argumento na função head(df, 10). Quantas linhas vão ser mostradas neste caso?
 
 ### Escrita/Salvar
 
@@ -77,15 +77,15 @@ write.csv(df, file = "df_pnad.csv", row.names = FALSE)
 
 R transformará seu data frame em um arquivo de texto simples com o formato de valores separados por vírgula e salvará o arquivo em seu diretório de trabalho. Para ver onde está seu diretório de trabalho, execute `getwd()`. Para alterar a localização do seu diretório de trabalho, visite *Sessão > Definir Diretório de Trabalho > Escolher Diretório* na barra de menus do RStudio.
 
-Você pode personalizar o processo de salvamento com o grande conjunto de argumentos opcionais de write.csv (consulte `?write.csv` para obter detalhes). No entanto, existem três argumentos que você deve usar sempre que executar write.csv.
+Você pode personalizar o processo de salvamento com o grande conjunto de argumentos opcionais de write.csv (consulte `?write.csv` para obter detalhes). No entanto, existem três argumentos que você deve usar sempre que executar `write.csv`.
 
 Primeiro, você deve fornecer a função `write.csv` o nome do data frame que deseja salvar. Em seguida, você deve fornecer um nome de arquivo para dar ao seu arquivo. R entenderá esse nome literalmente, portanto, certifique-se de fornecer uma extensão.
 
-Finalmente, você deve adicionar o argumento `row.names = FALSE`. Isso impedirá R de adicionar uma coluna de números no início do seu data frame. Esses números identificarão suas linhas de 1 a 1000, mas é improvável que qualquer programa em que você abrir `df_pnad.csv` compreenderá o sistema de nomes de linhas. Muito provavelmente, o programa assumirá que os nomes das linhas são a primeira coluna de dados em seu data frame. Na verdade, isso é exatamente o que R assumirá se você reabrir `cards.csv`. Se você salvar e abrir `cards.csv` várias vezes em R, notará colunas duplicadas de números de linha se formando no início de seu data frame. Não posso explicar por que R faz isso, mas posso explicar como evitá-lo: use `row.names = FALSE` sempre que salvar dados com `write.csv`.
+Finalmente, você deve adicionar o argumento `row.names = FALSE`. Isso impedirá R de adicionar uma coluna de números no início do seu data frame. Esses números identificarão suas linhas de 1 a 1000, mas é improvável que qualquer programa em que você abrir `df_pnad.csv` compreenderá o sistema de nomes de linhas. Muito provavelmente, o programa assumirá que os nomes das linhas são a primeira coluna de dados em seu data frame. Na verdade, isso é exatamente o que R assumirá se você reabrir `df_pnad.csv`. Se você salvar e abrir `df_pnad.csv` várias vezes em R, notará colunas duplicadas de números de linha se formando no início de seu data frame. Não posso explicar por que R faz isso, mas posso explicar como evitá-lo: use `row.names = FALSE` sempre que salvar dados com `write.csv`.
 
 ## Notação
 
-Para que você consiga trabalhar com valores individuais dentro do seu data frame, tarefa necessária em análise de dados, você pode selecionar valores dentro de um objeto R através do sistema de notação do R.
+Para que você consiga trabalhar com valores individuais dentro do seu data frame, tarefa necessária em análise de dados, você pode selecionar valores dentro de um objeto R através do seu sistema de notação.
 
 ### Selecionando valores
 
@@ -174,7 +174,7 @@ Bom, isso é a notação usando usando inteiros positivos. Como seria com inteir
 
 Vamos lá!
 
-Os inteiros negativos fazem exatamente o oposto dos inteiros positivos durante a indexação. O R retornará todos os elementos, exceto os elementos em um índice negativo. Por exemplo, df[-1, 1:10] retornará tudo, exceto a primeira linha do data frame. df[- (2:999), 1:10] retornará a primeira linha e a última linha (e excluirá todo o resto):
+Os inteiros negativos fazem exatamente o oposto dos inteiros positivos durante a indexação. O R retornará todos os elementos, exceto os elementos em um índice negativo. Por exemplo, df[-1, 1:10] retornará tudo, exceto a primeira linha do data frame. df[-(2:999), 1:10] retornará a primeira linha e a última linha (e excluirá todo o resto):
 
 
 ```r
@@ -342,7 +342,7 @@ Saída truncada para visualização
 
 #### Exercícios
 
-Retorne a informação da observação 800, e as colunas Ano, VD3005, V2009, V2010 do nosso data frame da amostra da pnad. O que o R retornará? Faça a mesma indexação de diferentes formas, usando inteiros positivos, inteiros negativos, valores lógicos e pelo Nome. 
+Retorne a informação da observação 800, e as colunas Ano, VD3005, V2009, V2010 do nosso data frame da amostra da pnad. O que o R retornará? Faça a mesma indexação usando inteiros positivos ou inteiros negativos.
 
 ### Diferentes seleções: `[[` e `$`
 
@@ -630,7 +630,7 @@ df2$V2009[c(5, 8, 39,44)]
 ## [1] 43 23 48 36
 ```
 
-Suponha que você sabe que os valores dessas linhas na coluna UF estão errados e você precisa arrumá-los atribuindo novos valores. O conjunto de novos valores terá que ser do mesmo tamanho que o conjunto de valores que você está substituindo. 
+Suponha que você sabe que os valores dessas linhas na coluna V2009 estão errados e você precisa arrumá-los atribuindo novos valores. O conjunto de novos valores terá que ser do mesmo tamanho que o conjunto de valores que você está substituindo. 
 
 
 ```r
@@ -721,7 +721,7 @@ c(1, 2, 3) == c(3, 2, 1)
 ## [1] FALSE  TRUE FALSE
 ```
 
-O operador `%in%` é o único que não executa normalmente o vetor inteiro. `%in%` testa se os valores do lado esquerdo estão no vetor do lado direito. Se você fornecer um vetor com comprimento maior que 1 no lado esquerdo, este operador não irá emparelhar os valores à esquerda com os valores à direita e, em seguida, fará testes de elementos. Em vez disso, ele testará independentemente se cada valor à esquerda está em algum lugar do vetor à direita:
+O operado `%in%` é o único operador que não executa a execução normal do elemento inteiro. `%in%` testa se os valores do lado esquerdo estão no vetor do lado direito. Se você fornecer um vetor no lado esquerdo, este operador não irá emparelhar os valores à esquerda com os valores à direita e, em seguida, fará testes de elementos. Em vez disso, ele testará independentemente se cada valor à esquerda está em algum lugar do vetor à direita:
 
 
 ```r
@@ -942,7 +942,7 @@ Conte o número de NAs na coluna `VD4016` do data frame `df2`.
 
 Na aula de hoje falamos sobre como importar dados, exportar dados, manipulação e diferentes notações para identificação de informações e modificação.
 
-Para selecionar os valores em um data frame, ou em outro objeto R, aprendemos a usar a notaçã `data.frame[ , ]` e a partir dessa notação, selecionar diferentes linhas e colunas, usando números inteiros, números negativos, espaços em branco, valores lógicos e nomes. 
+Para selecionar os valores em um data frame, ou em outro objeto R, aprendemos a usar a notação `data.frame[ , ]` e a partir dessa notação, selecionar diferentes linhas e colunas, usando números inteiros, números negativos, espaços em branco, valores lógicos e nomes. 
 
 Aprendemos com listas e dataframes a seleção pela notação de colchetes duplos `[[` e `$`. 
 
@@ -1026,9 +1026,9 @@ Modifique o nome de 'Mariano' por 'Mariana'. E altere a variável sexo para que 
 
 4. Considere o mesmo data frame sala construído no exercício anterior. Usando testes lógicos e operadores Booleanos. Verifique:
 
-a. Verifique se existe algum aluno que seja do sexo Masculino e seja de São Paulo. 
-b. Verifique se existe algum aluno que tem idade maior ou iguam a 20 anos ou que seja de Campinas.
-c. Verifique se existe alguém com o nome Beltrano.
+a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo. 
+b. se existe algum aluno que tem idade maior ou iguam a 20 anos ou que seja de Campinas.
+c. se existe alguém com o nome Beltrano.
 
 5. Agora considere o seguinte data frame:
 
