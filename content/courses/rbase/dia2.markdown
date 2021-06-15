@@ -961,95 +961,94 @@ Para os próximos exercícios considere o data frame da pnad que estamos usando 
 
 1. Como você selecionaria o mesmo valor abaixo, mas usando inteiros negativos na seleção?
 
-
-```r
-df2[1,5]
-```
-
-```
-## [1] "Homem"
-```
+   
+   ```r
+   df2[1,5]
+   ```
+   
+   ```
+   ## [1] "Homem"
+   ```
 
 2. Qual a diferença em usar em selecionar determinada informação em um data frame usando colchetes duplos `[[]]` e usando colchetes simples? Observe o exemplo abaixo para responder:
 
-
-```r
-df2[['Ano']]
-```
-
-```
-##    [1] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##   [15] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##   [29] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##   [43] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##   [57] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##   [71] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##   [85] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##   [99] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##  [113] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-##  [127] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
-....
-Saída truncada para visualização
-```
-
-```r
-df['Ano']
-```
-
-```
-##       Ano
-## 1    2021
-## 2    2021
-## 3    2021
-## 4    2021
-## 5    2021
-## 6    2021
-## 7    2021
-## 8    2021
-## 9    2021
-....
-Saída truncada para visualização
-```
+   
+   ```r
+   df2[['Ano']]
+   ```
+   
+   ```
+   ##    [1] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##   [15] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##   [29] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##   [43] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##   [57] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##   [71] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##   [85] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##   [99] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##  [113] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ##  [127] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+   ....
+   Saída truncada para visualização
+   ```
+   
+   ```r
+   df['Ano']
+   ```
+   
+   ```
+   ##       Ano
+   ## 1    2021
+   ## 2    2021
+   ## 3    2021
+   ## 4    2021
+   ## 5    2021
+   ## 6    2021
+   ## 7    2021
+   ## 8    2021
+   ## 9    2021
+   ....
+   Saída truncada para visualização
+   ```
 
 3. Considere o data frame abaixo:
 
+   
+   ```r
+   sala <- data.frame(
+     id = c(1, 2, 3, 4, 5, 6),
+     idade = c(20, 25, 30, 35, 40, 45),
+     nome = c("Fulano", "Cicrano", "Beltrano", "Herculano", "Mariano", "Carrano"),
+     sexo = "Masculino",
+     origem = c("Campinas", "Barueri", "Monte Verde", "Rio de Janeiro", "Natal", "Belo Horizonte")
+   )
+   ```
 
-```r
-sala <- data.frame(
-  id = c(1, 2, 3, 4, 5, 6),
-  idade = c(20, 25, 30, 35, 40, 45),
-  nome = c("Fulano", "Cicrano", "Beltrano", "Herculano", "Mariano", "Carrano"),
-  sexo = "Masculino",
-  origem = c("Campinas", "Barueri", "Monte Verde", "Rio de Janeiro", "Natal", "Belo Horizonte")
-)
-```
-
-Modifique o nome de 'Mariano' por 'Mariana'. E altere a variável sexo para que seja um vetor que altere o valor para 'Feminino' na posição em que o nome foi trocado para Mariana.
+   Modifique o nome de 'Mariano' por 'Mariana'. E altere a variável sexo para que seja um vetor que altere o valor para 'Feminino' na posição em que o nome foi trocado para Mariana.
 
 4. Considere o mesmo data frame sala construído no exercício anterior. Usando testes lógicos e operadores Booleanos. Verifique:
 
-a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo. 
-b. se existe algum aluno que tem idade maior ou iguam a 20 anos ou que seja de Campinas.
-c. se existe alguém com o nome Beltrano.
+   a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo.  
+   b. se existe algum aluno que tem idade maior ou iguam a 20 anos ou que seja de Campinas.  
+   c. se existe alguém com o nome Beltrano.  
 
-5. Agora considere o seguinte data frame:
+5. Agora considere o seguinte data frame e, usando as funções apropriadas ensinadas na aula de hoje, responda:
 
+   
+   ```r
+   cadastro <- data.frame(
+     id = c(10, 105, 299, 645, 7907, 8660, 4992, 630),
+     idade = c(20, 25, 30, 35, 40, 45, 60, 53),
+     nome = c("Thais", NA, "Guilherme", "Betânia", "Ana Lucia", NA, NA, "Pâmela"),
+     sexo = c("Feminino", "Masculino","Masculino", NA ,NA, "Feminino", "Masculino", "Feminino"),
+     origem = c("Campinas", NA, "Monte Verde", "Rio de Janeiro", NA, "Belo Horizonte","São Paulo",
+                "Rio de Janeiro")
+   )
+   ```
 
-```r
-cadastro <- data.frame(
-  id = c(10, 105, 299, 645, 7907, 8660, 4992, 630),
-  idade = c(20, 25, 30, 35, 40, 45, 60, 53),
-  nome = c("Thais", NA, "Guilherme", "Betânia", "Ana Lucia", NA, NA, "Pâmela"),
-  sexo = c("Feminino", "Masculino","Masculino", NA ,NA, "Feminino", "Masculino", "Feminino"),
-  origem = c("Campinas", NA, "Monte Verde", "Rio de Janeiro", NA, "Belo Horizonte","São Paulo", "Rio de Janeiro")
-)
-```
-
-Usando as funções apropriadas ensinadas na aula de hoje:
-
-a. Quantos NAs existe na coluna nome?
-b. Quantos NAs existe na coluna sexo?
-c. Quantos NAs existe na coluna origem?
-d. Substitua os NAs na coluna sexo pelo valor 'Feminino'
+   1. Quantos NAs existe na coluna nome?
+   2. Quantos NAs existe na coluna sexo?
+   3. Quantos NAs existe na coluna origem?
+   4. Substitua os NAs na coluna sexo pelo valor 'Feminino'
 
 6. Salve o data frame 'cadastro' do exercicio anterior em um arquivo `.csv`. Como você faria isso? Quais os argumentos que devem ser usados?
