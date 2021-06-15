@@ -721,7 +721,7 @@ c(1, 2, 3) == c(3, 2, 1)
 ## [1] FALSE  TRUE FALSE
 ```
 
-O operado `%in%` é o único operador que não executa a execução normal do elemento inteiro. `%in%` testa se os valores do lado esquerdo estão no vetor do lado direito. Se você fornecer um vetor no lado esquerdo, este operador não irá emparelhar os valores à esquerda com os valores à direita e, em seguida, fará testes de elementos. Em vez disso, ele testará independentemente se cada valor à esquerda está em algum lugar do vetor à direita:
+O operador `%in%` é o único que não executa normalmente o elemento inteiro. `%in%` testa se os valores do lado esquerdo estão no vetor do lado direito. Se você fornecer um vetor no lado esquerdo, este operador não irá emparelhar os valores à esquerda com os valores à direita e, em seguida, fará testes de elementos. Em vez disso, ele testará independentemente se cada valor à esquerda está em algum lugar do vetor à direita:
 
 
 ```r
@@ -785,6 +785,7 @@ Table: Table 2: Operadores booleanos
 Para usar um operador booleano, coloque-o entre dois testes lógicos completos. O R irá executar cada teste lógico e, em seguida, usar o operador booleano para combinar os resultados em um único `TRUE` ou `FALSE`.
 
 Quando usados com vetores, os operadores booleanos seguirão a mesma execução elementar que os operadores aritméticos e lógicos:
+
 
 ```r
 a <- c(1, 2, 3)
@@ -915,6 +916,7 @@ c(1, 2, 3, NA) == NA
 ```
 
 O R fornece uma função especial que pode testar se um valor é um NA. A função é `is.na`:
+
 
 ```r
 is.na(NA)
