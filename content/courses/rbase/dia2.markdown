@@ -815,7 +815,7 @@ a == b & b == c
 ## [1]  TRUE  TRUE FALSE
 ```
 
-Você pode usar um operador booleano para localizar as pessoas de 23 anos e de escolaridade 9 anos de estudo no df2. 
+Você pode usar um operador booleano para localizar as pessoas de 40 anos e de escolaridade 9 anos de estudo no df2. 
 
 
 ```r
