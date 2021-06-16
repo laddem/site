@@ -59,8 +59,16 @@ Some as primeiras 30 observações da variável VD4016 do data frame df. O que a
 
 ### Contagens
 
+Para a fazer a contagem de observações em uma variável use a função `table()`.
+```{r}
+table(df$V2010)
+```
 
-#### Exercício
+Ela também permite fazer o cruzamento de uma variável em relação a outra. 
+```{r}
+table(df$V2010, df$V2007)
+```
+
 
 ### Médias
 
@@ -77,7 +85,7 @@ mean(vetor[2:4])
 A função `mean()` também permite calcular a média especificando a posição das observações que você quer no cálculo.
 
 #### Média "trimmed"
-Quando nos deparamos com casos em os dados podem ser suspeitos, como este por exemplo: -15,2,3,4,5,6,7,8,9,12 o valor -15 é meio suspeito, porém não conseguimos saber se é verdadeiro ou não. A média é altamente sensível a um ou dois valores extremos e, portanto, não é considerado uma medida robusta. Uma forma de resolver é usado a média trimmed. Para calcular este tipo de média, o que acontece é que você descarta os valores mais extremos nas duas pontas do vetor (o maior e o menor) e depois tira a média de todo o resto. 
+Quando nos deparamos com casos em os dados podem ser suspeitos, como este por exemplo: -15,2,3,4,5,6,7,8,9,12 o valor -15 é meio suspeito, porém não conseguimos saber se é verdadeiro ou não. A média é altamente sensível a um ou dois valores extremos e, portanto, não é considerado uma medida robusta. Uma forma de resolver é usando a média trimmed. Para calcular este tipo de média, o que acontece é que você descarta os valores mais extremos nas duas pontas do vetor (o maior e o menor) e depois tira a média de todo o resto. 
 
 Geralmente, descrevemos uma média trimmed em termos da porcentagem de observação de cada lado que é descartada. Por exemplo, uma média trimmed de 10% descarta os maiores 10% das observações e os menores 10% e, em seguida, toma a média dos 80% restantes das observações.
 
@@ -189,7 +197,7 @@ mad(a)
 Calcule o Desvio absoluto da mediana da variável V2009 do data frame df.
 
 ### Sumário
-Existe uma função do R que capaz de calcular as principais medidas apresentadas acima, de uma vez, em uma única função. Dessa forma, é muito mais prático as funções que sumarizam algumas medidas estatísticas principais `summary()`.
+Existe uma função do R que capaz de calcular as principais medidas apresentadas acima, de uma vez, em uma única função. Dessa forma, essa função sumariza algumas medidas estatísticas principais `summary()`.
 
 ```{r}
 summary(df$V2009)
@@ -448,6 +456,7 @@ Crie um barplot para a variável V2007 do dataframe *df*.
 
 #### O primo pobre: gráficos de pizza
 
+Para calcular um gráfico de pizzas, a função se chama `pie()`
 pie
 ```{r}
 sexo<- tabulate(df$V2007)
@@ -461,9 +470,9 @@ Crie um gráfico de pizza da variável V1022.
 ### Parâmetros globais
 É possível usar alguns parâmetros globais a partir da função `par()`. Vamos especificar alguns aqui.
 
-Caso você queira mudar as margens do gráfico, podemos usar o parâmetro `mar`. Parece simples, mas em alguns situações acaba sendo complicado do que você pode imaginar. Em princípio, o tamanho das margens é estruturado através parâmetro gráfico chamado `mar`, então tudo o que precisamos fazer é alterar esse parâmetro. Primeiro, vamos ver o que o argumento especifica. O argumento é um vetor contendo quatro números: especificando a quantidade de espaço na parte inferior, na esquerda, na parte superior e, em seguida, na direita. As unidades são “número de linhas”.
+Caso você queira mudar as margens do gráfico, podemos usar o parâmetro `mar`. Parece simples, mas em alguns situações acaba sendo mais complicado do que você pode imaginar. Em princípio, o tamanho das margens é estruturado através do parâmetro gráfico chamado `mar`, então tudo o que precisamos fazer é alterar esse parâmetro. Primeiro, vamos ver o que o argumento especifica. O argumento é um vetor contendo quatro números: especificando a quantidade de espaço na parte inferior, na esquerda, na parte superior e, em seguida, na direita. As unidades são “número de linhas”.
 ```{r}
-par( mar = c( 10.1, 4.1, 4.1, 2.1) )
+par(mar = c( 10.1, 4.1, 4.1, 2.1))
 ```
 
 Não há saída visível aqui, mas nos bastidores o R mudou os parâmetros gráficos associados ao dispositivo atual (lembre-se, na terminologia todos os gráficos são desenhados em um "dispositivo" ou `device`). Agora que isso foi feito, poderíamos usar exatamente o mesmo comando para plotar um gráfico, mas desta vez você veria que todos os rótulos se ajustam, porque o R agora vai deixar o dobro de espaço para os rótulos na parte inferior. No entanto, como agora descobri como fazer com que os rótulos sejam exibidos corretamente, posso também brincar com algumas das outras opções, todas as quais você já viu antes:
@@ -489,8 +498,6 @@ barplot(height = escolaridade,
 
 ```
 
-#### Exercício
-
 ### Salvando seus gráficos
 
 #### Usando a interface do RStudio
@@ -498,23 +505,24 @@ Se você estiver executando o R através do Rstudio, a maneira mais fácil de sa
 
 #### Usando grDevices
 
-dev.list
+A função `dev.list()` lista todos os dispositivos gráficos que existem no dispositivo nesse momento
 ```{r}
-Di2.
+boxplot(df$V2009)
+dev.list()
 ```
 
+O que isso significa é que há um dispositivo gráfico (dispositivo 2) que está aberto no momento e é uma janela com uma figura.
 
 dev.print
 ```{r}
-dev.print( device = jpeg, 
-           filename = "thisfile.jpg",  
-           width = 480,   
-           height = 300)
+dev.print(device = jpeg, 
+          filename = "thisfile.jpg",  
+          width = 480,   
+          height = 300)
 ```
 
-png, jpeg, tiff
+A parte filename = "thisfile.jpg" diz ao R como nomear o arquivo gráfico, e os argumentos `width = 480` (largura) e `height = 300` (altura) dizem ao R para desenhar uma imagem com 300 pixels de altura e 480 pixels de largura. Se você quiser um tipo diferente de arquivo, apenas altere o argumento do dispositivo de jpeg para outro. O salva em *png*, *tiff* e *bmp* que funcionam exatamente da mesma maneira que o comando jpeg, mas produzem diferentes tipos de arquivos.
 
-#### Exercício
 
 ### Customização de gráficos
 
@@ -720,4 +728,44 @@ boxplot(x = df$V2009,
 
 ## Revisão
 
+Nesta aula vimos algumas funções principais que calculam medidas usadas em estatística descritiva que permitem você entender melhor os seus dados e o que eles podem estar querendo mostrar para você:
+ - entre as funções que nos retornam uma medida única, aprendemos: `sum()`, `mean()`, `median()`, `range()`,
+ `max()`, `min()`, `quantile()`,`IQR()`, `var()`, `sd()` e `mad()`. 
+ - a função `table()` permite que você faça a contagem de observações em uma determinada categoria, assim como permite cruzar a contagem em duas variáveis. 
+ - as funções que entregam várias medidas sumarisadas: `summary()`, `by()`, `aggregate()`
+ - vimos também a função `cor()`e as funções de testes estatísticos: 
+ 
+ Além disso, vimos diferentes formas de fazermos gráficos básicos com a função global `plot()` e também aprendemos as funções para gráficos específicos como `hist()` (para histogramas), `barplot()` (para gráficos de barras),  `pie()` para gráficos de pizza e `boxplot()` (bom, o nome é auto explicativo)
+
 ### Exercícios
+1 - Usando as funções de medidas individuais, rode o dataset 'airquality' (se você escrever assim no R, ele já mostra o dataset). 
+```{r}
+head(airquality)
+```
+
+2 - Crie um histograma para a variável airquality$Temp.
+
+3 - Use a função que sumarisa as principais informações de estatística básica e também construa um boxplot para comparar as informações escritas e visuais para as seguintes variáveis do dado airquality: Wind, Temp and Ozone).
+
+```{r}
+Exemplo:
+summary(airquality$Wind)
+```
+
+4 - Agora usando somente os dados da amostra da pnad que temos visto até agora, faça uma análise descritiva usando as medidas individiuais, as de correlação e as de contagem. Além disso observe as diferenças entre a medida sumary para uma variável numérica e uma variável categórica.
+```{r}
+head(df)
+```
+
+Algumas ideias:
+
+a. Use a função table para ver as relações entre a variável V1022 e V2007. Faça também para a variável V2007 e V2010. Veja as contagens de observações para cada categoria e entenda um pouco melhor o perfil dos dados.
+
+b. Faça as medida resumo para a ver a média, mediana, quartis da sua amostra.
+
+5 - Depois de fazer as análises descritivas, faça gráficos para ver os dados de forma visual, com o mesmo dado da pnad usado no exercício 4.
+
+Ideias:
+
+a. Faça um histograma das variáveis numéricas, talvez um boxplot também seja interessante.
+b. Faça um gráfico de barras para as variáveis categóricas. 
