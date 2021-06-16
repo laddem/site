@@ -433,7 +433,7 @@ b == c
 a == b & b == c
 ```
 
-Você pode usar um operador booleano para localizar as pessoas de 23 anos e de escolaridade 9 anos de estudo no df2. 
+Você pode usar um operador booleano para localizar as pessoas de 40 anos e de escolaridade 9 anos de estudo no df2. 
 
 ```{r, out.lines=10}
 df2$V2009 == 40 & df2$VD3005 == "8 anos de estudo"
