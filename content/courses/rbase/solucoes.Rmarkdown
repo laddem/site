@@ -9,6 +9,7 @@ date: 2021-06-15T20:04:57-03:00
 lastmod: 2021-06-15T20:04:57-03:00
 featured: false
 draft: false
+type: book
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -26,6 +27,25 @@ image:
 #   Otherwise, set `projects = []`.
 projects: []
 ---
+
+```{r setup, include = FALSE}
+# save the built-in output hook
+hook_output <- knitr::knit_hooks$get("output")
+
+# set a new output hook to truncate text output
+knitr::knit_hooks$set(output = function(x, options) {
+  if (!is.null(n <- options$out.lines)) {
+    x <- xfun::split_lines(x)
+    if (length(x) > n) {
+      # truncate the output
+      x <- c(head(x, n), "....\nSaída truncada para visualização\n")
+    }
+    x <- paste(x, collapse = "\n")
+  }
+  hook_output(x, options)
+})
+```
+
 
 Soluções para os exercícios feitos em sala e os exercícios de revisão do final das aulas.
 
@@ -426,3 +446,243 @@ sala <- data.frame(
 Verifique as variáveis `id` e `sexo`. Os valores dessas variáveis fazem sentido? Elas não impedem a construção do data frame, por quê? Que característica do R está operando nessas variáveis?
 
 O valor da variável id está incorreto, pois temos ids repetidas para pessoas diferentes. O valor da variável sexo está correto, aparentemente, de acordo com a variável nome. Em ambos os casos, R está reciclando os vetores mais curtos para preencher os espaços vazios e criar um data frame completo. A variável id precisa ser corrigida, pois a reciclagem aqui está prejudicando a consistência da informação, mas no caso de sexo, é um uso válido da regra da reciclagem para evitar repetição.
+
+## Aula 2: Manipulação de dados
+
+### Leitura/Importação
+
+Visualize os dados que você acabou de importar em formato de planilha através do Environment e usando a função View().
+É possível também visualizar as 6 primeiras linhas do data.frame ou as 6 últimas linhas. Para isso, use as funções head() e tail().
+
+Obs: se você quiser ver mais que 6 linhas, coloque o segundo argumento na função head(df, 10). Quantas linhas vão ser mostradas neste caso?
+
+```{r}
+url <- "https://raw.githubusercontent.com/laddem/site/master/amostra_pnad.csv"
+df <- read.csv(url)
+```
+
+
+```{r, eval=FALSE}
+View(df)
+```
+
+
+```{r}
+head(df, 10)
+tail(df)
+```
+
+Exercício apenas para vocês se familiarizem com as formas de ver o conteúdo de bancos de dados em R. A função View() é útil para bancos pequenos, mas tem performance ruim para bancos com muitas informações. head() e tail() são ótimas formas de verificar a forma geral do banco de dados sem precisar sobrecarregar seu computador.
+
+### Selecionando valores
+
+Retorne a informação da observação 800, e as colunas Ano, VD3005, V2009, V2010 do nosso data frame da amostra da pnad. O que o R retornará? Faça a mesma indexação usando inteiros positivos ou inteiros negativos.
+
+```{r}
+df[800, c(1, 8, 6, 7)]
+
+df[-c(1:799, 801:1000), -c(2:5, 9, 10)]
+```
+
+Aqui, o objetivo era praticar a seleção de linhas e colunas usando inteiros positivos e negativos. É meio trabalhoso e nem sempre é a forma mais eficiente, mas é ocasionalmente útil. Note o uso de vetores tanto no caso de seleções positivas quanto de negativas e de sequências com `:` para facilitar a digitação.
+
+#### Diferentes seleções: `[[` e `$`
+
+Assim como na lista, é possível usar os colchetes `[[ ]]` em data frame. Tente usá-los no data frame da pnad. Quais são as diferenças encontradas?
+
+```{r, out.lines = 10}
+df[[1]]
+df[[6]]
+
+df[["Ano"]]
+df[["V2009"]]
+```
+
+Os colchetes duplos `[[` funcionam no data frame porque ele é, por debaixo do capô, uma lista. Eles retornam os vetores que compõem o nosso data frame e permitem a realização de operações com vetores. São diferentes dos colchetes simples `[`, que retornarão listas/data frames menores, contendo apenas as partes que você selecionar. Lembrem-se da metáfora do trem!
+
+### Modificando valores
+
+#### Modificando os valores diretamente
+
+Considere o vetor abaixo. Atribua um novo valor na posição 3 deste vetor. É possível atribuir uma string no lugar de um número?
+
+```{r}
+vetor_x<- c(10,30,50,10)
+
+vetor_x[3] <- 70
+
+vetor_x
+```
+
+A atribuição em si é um processo relativamente simples. Vamos ver o que acontece se atribuímos um texto.
+
+```{r}
+vetor_x[3] <- "Texto"
+
+vetor_x
+```
+
+R usa suas regras de coerção para preservar as informações e transforma os valores numéricos em texto.
+
+#### Modificando com testes lógicos
+
+Extraia a coluna `V2010` do `df2` e teste os valores igual a 'Branca'. Além disso conte quantas linhas são iguais a 'Branca'. Dica: use a função sum() para fazer a contagem. 
+
+```{r}
+# Cópia de df
+df2 <- df
+
+sum(df2$V2010 == "Branca")
+```
+
+Usamos um teste lógico no vetor `df2$V2010` para criar um vetor de valores lógicos `TRUE/FALSE` e as regras de coerção do R para fazer a soma dos valores verdadeiros `1` e descobrimos que 407 pessoas da amostra são brancas.
+
+#### Valores desconhecidos
+
+Conte o número de NAs na coluna `VD4016` do data frame `df2`.
+
+```{r}
+sum(is.na(df2$VD4016))
+```
+
+Usando a mesma lógica do exercício anterior, porém, usando a função `is.na()` no lugar de `==` por causa do comportamento especial de valores `NA` em R.
+
+### Revisão
+
+Para os próximos exercícios considere o data frame da pnad que estamos usando nas aulas.
+
+1. Como você selecionaria o mesmo valor abaixo, mas usando inteiros negativos na seleção?
+
+```{r}
+df2[1,5]
+
+df2[-(2:1000), -c(1:4, 6:20)]
+```
+
+Exercício maroto, apenas para vocês botarem a cabeça para trabalhar e lembrarem de usar `:` ao invés de digitar milhares de números.
+
+2. Qual a diferença em usar em selecionar determinada informação em um data frame usando colchetes duplos `[[]]` e usando colchetes simples? Observe o exemplo abaixo para responder:
+
+```{r, out.lines=10}
+df2[['Ano']]
+
+df['Ano']
+```
+
+A diferença é o tipo da saída do R e o que você pode fazer com ela:
+
+```{r, error=TRUE}
+# Vetor!
+typeof(df2[['Ano']])
+class(df2[['Ano']])
+
+# Lista/data.frame!
+typeof(df2['Ano'])
+class(df2['Ano'])
+
+# Funciona!
+mean(df2[['Ano']])
+
+# Erro!
+mean(df2['Ano'])
+```
+
+3. Considere o data frame abaixo:
+
+```{r}
+sala <- data.frame(
+   id = c(1, 2, 3, 4, 5, 6),
+   idade = c(20, 25, 30, 35, 40, 45),
+   nome = c("Fulano", "Cicrano", "Beltrano", "Herculano", "Mariano", "Carrano"),
+   sexo = "Masculino",
+   origem = c("Campinas", "Barueri", "Monte Verde", "Rio de Janeiro", "Natal", "Belo Horizonte")
+)
+```
+
+Modifique o nome de 'Mariano' por 'Mariana'. E altere a variável sexo para que seja um vetor que altere o valor para 'Feminino' na posição em que o nome foi trocado para Mariana.  
+
+```{r}
+# Ver a informação
+sala[sala$nome == "Mariano", "nome"]
+sala[sala$nome == "Mariana", "sexo"]
+
+# Modificar a informação
+sala[sala$nome == "Mariano", "nome"] <- "Mariana"
+sala[sala$nome == "Mariana", "sexo"] <- "Feminino"
+
+# Checar o resultado
+sala
+```
+
+Vocês podiam utilizar uma seleção por números inteiros, porque o banco é pequeno, mas optei por fazer o exercício usando testes lógicos, porque é um caso mais geral e serve para mais de uma posição.
+
+4. Considere o mesmo data frame sala construído no exercício anterior. Usando testes lógicos e operadores Booleanos. Verifique:  
+
+   a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo.  
+   b. se existe algum aluno que tem idade maior ou igual a 20 anos ou que seja de Campinas. 
+   c. se existe alguém com o nome Beltrano.  
+
+```{r}
+# a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo.
+sala[sala$origem == "São Paulo", ]
+
+# b. se existe algum aluno que tem idade maior ou igual a 20 anos ou que seja de Campinas. 
+sala[sala$idade >= 20 & sala$origem == "Campinas", ]
+
+# c. se existe alguém com o nome Beltrano.
+sala[sala$nome == "Beltrano", ]
+```
+
+Exercício para exercitar os músculos de testes lógicos dentro de bancos de dados!
+
+5. Agora considere o seguinte data frame e, usando as funções apropriadas ensinadas na aula de hoje, responda:  
+
+```{r}
+cadastro <- data.frame(
+   id     = c(10, 105, 299, 645, 7907, 8660, 4992, 630),
+   idade  = c(20, 25, 30, 35, 40, 45, 60, 53),
+   nome   = c("Thais", NA, "Guilherme", "Betânia", "Ana Lucia", NA, NA, "Pâmela"),
+   sexo   = c("Feminino", "Masculino","Masculino", 
+              NA ,NA, "Feminino", "Masculino", "Feminino"),
+   origem = c("Campinas", NA, "Monte Verde", "Rio de Janeiro",
+              NA, "Belo Horizonte","São Paulo", "Rio de Janeiro")
+)
+```
+
+   1. Quantos NAs existe na coluna nome?
+   2. Quantos NAs existe na coluna sexo?
+   3. Quantos NAs existe na coluna origem?
+   4. Substitua os NAs na coluna sexo pelo valor 'Feminino'
+   
+```{r}
+# 1. Quantos NAs existem na coluna nome?
+sum(is.na(cadastro$nome))
+
+# 2. Quantos NAs existem na coluna sexo?
+sum(is.na(cadastro$sexo))
+
+# 3. Quantos NAs existem na coluna origem?
+sum(is.na(cadastro$origem))
+
+# 4. Substitua os NAs na coluna sexo pelo valor 'Feminino'
+
+     # Ver os dados
+     cadastro[is.na(cadastro$sexo), ]
+
+     # Modificar
+     cadastro[is.na(cadastro$origem), "sexo"] <- "Feminino"
+
+     # Ver o resultado
+     cadastro
+```
+   
+
+6. Salve o data frame 'cadastro' do exercicio anterior em um arquivo `.csv`. Como você faria isso? Quais os argumentos que devem ser usados?
+
+```{r, eval=FALSE}
+write.csv(cadastro, "cadastro.csv", row.names = FALSE)
+```
+
+Só para relembrar o uso da função `write.csv`. Não deixem de consultar também as funções `?read.table`, `?write.table`, `?read.csv2`, `?write.csv2`, `?read.fwf` e `?write.fwf`. Essas funções permitem ler a maior parte dos dados em formato texto que vocês encontrarão nas suas vidas como analistas ou pesquisadores, que utilizam convenções como separadores de colunas (`;`, `,`, `\t`, `" "`), separadores de casas decimais (`,`, `.`), caracteres de escape (`\`, `"`), codificação de caracteres acentuados ("UTF-8", "Windows-1252", etc.) e outras questões similares.
+
+_____________________________________________________

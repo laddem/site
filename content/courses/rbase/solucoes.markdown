@@ -9,6 +9,7 @@ date: 2021-06-15T20:04:57-03:00
 lastmod: 2021-06-15T20:04:57-03:00
 featured: false
 draft: false
+type: book
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -26,6 +27,9 @@ image:
 #   Otherwise, set `projects = []`.
 projects: []
 ---
+
+
+
 
 Soluções para os exercícios feitos em sala e os exercícios de revisão do final das aulas.
 
@@ -72,7 +76,7 @@ sample(dado, size = 1)
 ```
 
 ```
-## [1] 6
+## [1] 5
 ```
 
 ```r
@@ -81,7 +85,7 @@ sample(dado, size = 1, prob = c(1/8, 1/8, 1/8, 1/8, 1/8, 3/8))
 ```
 
 ```
-## [1] 6
+## [1] 2
 ```
 
 
@@ -109,7 +113,7 @@ role10()
 ```
 
 ```
-## [1] 19
+## [1] 10
 ```
 
 #### Ajuda
@@ -725,3 +729,565 @@ sala <- data.frame(
 Verifique as variáveis `id` e `sexo`. Os valores dessas variáveis fazem sentido? Elas não impedem a construção do data frame, por quê? Que característica do R está operando nessas variáveis?
 
 O valor da variável id está incorreto, pois temos ids repetidas para pessoas diferentes. O valor da variável sexo está correto, aparentemente, de acordo com a variável nome. Em ambos os casos, R está reciclando os vetores mais curtos para preencher os espaços vazios e criar um data frame completo. A variável id precisa ser corrigida, pois a reciclagem aqui está prejudicando a consistência da informação, mas no caso de sexo, é um uso válido da regra da reciclagem para evitar repetição.
+
+## Aula 2: Manipulação de dados
+
+### Leitura/Importação
+
+Visualize os dados que você acabou de importar em formato de planilha através do Environment e usando a função View().
+É possível também visualizar as 6 primeiras linhas do data.frame ou as 6 últimas linhas. Para isso, use as funções head() e tail().
+
+Obs: se você quiser ver mais que 6 linhas, coloque o segundo argumento na função head(df, 10). Quantas linhas vão ser mostradas neste caso?
+
+
+```r
+url <- "https://raw.githubusercontent.com/laddem/site/master/amostra_pnad.csv"
+df <- read.csv(url)
+```
+
+
+
+```r
+View(df)
+```
+
+
+
+```r
+head(df, 10)
+```
+
+```
+##     Ano Trimestre               UF  V1022  V2007 V2009   V2010 VD2003
+## 1  2021         1            Ceará Urbana  Homem    80  Branca      2
+## 2  2021         1 Distrito Federal Urbana Mulher    19   Parda      4
+## 3  2021         1       Pernambuco Urbana Mulher    36   Preta      2
+## 4  2021         1   Santa Catarina Urbana  Homem    50   Parda      2
+## 5  2021         1        São Paulo Urbana Mulher    43   Parda      3
+## 6  2021         1            Goiás Urbana  Homem    35   Parda      3
+## 7  2021         1            Amapá Urbana  Homem    72   Parda      3
+## 8  2021         1        São Paulo Urbana Mulher    23 Amarela      8
+## 9  2021         1 Distrito Federal Urbana  Homem    23   Parda      5
+## 10 2021         1         Maranhão  Rural  Homem    47   Parda      9
+##                       VD3005 VD4016
+## 1  16 anos ou mais de estudo     NA
+## 2          11 anos de estudo     NA
+## 3          12 anos de estudo   1045
+## 4           5 anos de estudo   1500
+## 5           9 anos de estudo   1600
+## 6          14 anos de estudo   3000
+## 7  16 anos ou mais de estudo     NA
+## 8          12 anos de estudo   1200
+## 9          14 anos de estudo   1200
+## 10          5 anos de estudo   2000
+```
+
+```r
+tail(df)
+```
+
+```
+##       Ano Trimestre             UF  V1022  V2007 V2009  V2010 VD2003
+## 995  2021         1          Bahia  Rural Mulher    15  Preta      3
+## 996  2021         1       Amazonas  Rural Mulher    32  Parda      3
+## 997  2021         1       Maranhão Urbana  Homem    69  Parda      3
+## 998  2021         1          Ceará Urbana  Homem    33 Branca      6
+## 999  2021         1          Goiás Urbana  Homem    58  Parda      3
+## 1000 2021         1 Santa Catarina  Rural  Homem    66 Branca      2
+##                         VD3005 VD4016
+## 995           8 anos de estudo     NA
+## 996          12 anos de estudo     NA
+## 997           3 anos de estudo     NA
+## 998          12 anos de estudo   1000
+## 999  16 anos ou mais de estudo   7000
+## 1000          5 anos de estudo   1000
+```
+
+Exercício apenas para vocês se familiarizem com as formas de ver o conteúdo de bancos de dados em R. A função View() é útil para bancos pequenos, mas tem performance ruim para bancos com muitas informações. head() e tail() são ótimas formas de verificar a forma geral do banco de dados sem precisar sobrecarregar seu computador.
+
+### Selecionando valores
+
+Retorne a informação da observação 800, e as colunas Ano, VD3005, V2009, V2010 do nosso data frame da amostra da pnad. O que o R retornará? Faça a mesma indexação usando inteiros positivos ou inteiros negativos.
+
+
+```r
+df[800, c(1, 8, 6, 7)]
+```
+
+```
+##      Ano VD2003 V2009  V2010
+## 800 2021      3    45 Branca
+```
+
+```r
+df[-c(1:799, 801:1000), -c(2:5, 9, 10)]
+```
+
+```
+##      Ano V2009  V2010 VD2003
+## 800 2021    45 Branca      3
+```
+
+Aqui, o objetivo era praticar a seleção de linhas e colunas usando inteiros positivos e negativos. É meio trabalhoso e nem sempre é a forma mais eficiente, mas é ocasionalmente útil. Note o uso de vetores tanto no caso de seleções positivas quanto de negativas e de sequências com `:` para facilitar a digitação.
+
+#### Diferentes seleções: `[[` e `$`
+
+Assim como na lista, é possível usar os colchetes `[[ ]]` em data frame. Tente usá-los no data frame da pnad. Quais são as diferenças encontradas?
+
+
+```r
+df[[1]]
+```
+
+```
+##    [1] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [15] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [29] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [43] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [57] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [71] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [85] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [99] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##  [113] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##  [127] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+....
+Saída truncada para visualização
+```
+
+```r
+df[[6]]
+```
+
+```
+##    [1]  80  19  36  50  43  35  72  23  23  47  71  16  48  13  25   3  27  83
+##   [19]  55  79  14  80  20  21  22  69  57  27  63  35  28  41  39  71   7  45
+##   [37]  11   9  48  14  48  47   5  36  25  55   8  64   7  58  30   1  18  44
+##   [55]  45  17   9  24  11  11  71  75  49  20  55  31  60   2   7  81  68  15
+##   [73]  31   2  44  40  49  55   9  40  55   0  35  32   7  63  62  54  48   5
+##   [91]  46  49  20  90  16   0  41  15  67  26  22  18  58  63   0  31  14  39
+##  [109]  34  44  61  48  47  29  43  65  10  36  20   7  28  18  23  75  37  49
+##  [127]  45   3  61  54  38  50  41  47  39  44  32  27  66  55  70  69  41  31
+##  [145]  38  91  62  30  21  59   4  29   5  24  83   6  15  38  20  89  85  44
+##  [163]  73   7  49  22  33   5  18   4  27  22   0  21  74  26  58  52  77  36
+....
+Saída truncada para visualização
+```
+
+```r
+df[["Ano"]]
+```
+
+```
+##    [1] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [15] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [29] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [43] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [57] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [71] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [85] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [99] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##  [113] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##  [127] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+....
+Saída truncada para visualização
+```
+
+```r
+df[["V2009"]]
+```
+
+```
+##    [1]  80  19  36  50  43  35  72  23  23  47  71  16  48  13  25   3  27  83
+##   [19]  55  79  14  80  20  21  22  69  57  27  63  35  28  41  39  71   7  45
+##   [37]  11   9  48  14  48  47   5  36  25  55   8  64   7  58  30   1  18  44
+##   [55]  45  17   9  24  11  11  71  75  49  20  55  31  60   2   7  81  68  15
+##   [73]  31   2  44  40  49  55   9  40  55   0  35  32   7  63  62  54  48   5
+##   [91]  46  49  20  90  16   0  41  15  67  26  22  18  58  63   0  31  14  39
+##  [109]  34  44  61  48  47  29  43  65  10  36  20   7  28  18  23  75  37  49
+##  [127]  45   3  61  54  38  50  41  47  39  44  32  27  66  55  70  69  41  31
+##  [145]  38  91  62  30  21  59   4  29   5  24  83   6  15  38  20  89  85  44
+##  [163]  73   7  49  22  33   5  18   4  27  22   0  21  74  26  58  52  77  36
+....
+Saída truncada para visualização
+```
+
+Os colchetes duplos `[[` funcionam no data frame porque ele é, por debaixo do capô, uma lista. Eles retornam os vetores que compõem o nosso data frame e permitem a realização de operações com vetores. São diferentes dos colchetes simples `[`, que retornarão listas/data frames menores, contendo apenas as partes que você selecionar. Lembrem-se da metáfora do trem!
+
+### Modificando valores
+
+#### Modificando os valores diretamente
+
+Considere o vetor abaixo. Atribua um novo valor na posição 3 deste vetor. É possível atribuir uma string no lugar de um número?
+
+
+```r
+vetor_x<- c(10,30,50,10)
+
+vetor_x[3] <- 70
+
+vetor_x
+```
+
+```
+## [1] 10 30 70 10
+```
+
+A atribuição em si é um processo relativamente simples. Vamos ver o que acontece se atribuímos um texto.
+
+
+```r
+vetor_x[3] <- "Texto"
+
+vetor_x
+```
+
+```
+## [1] "10"    "30"    "Texto" "10"
+```
+
+R usa suas regras de coerção para preservar as informações e transforma os valores numéricos em texto.
+
+#### Modificando com testes lógicos
+
+Extraia a coluna `V2010` do `df2` e teste os valores igual a 'Branca'. Além disso conte quantas linhas são iguais a 'Branca'. Dica: use a função sum() para fazer a contagem. 
+
+
+```r
+# Cópia de df
+df2 <- df
+
+sum(df2$V2010 == "Branca")
+```
+
+```
+## [1] 407
+```
+
+Usamos um teste lógico no vetor `df2$V2010` para criar um vetor de valores lógicos `TRUE/FALSE` e as regras de coerção do R para fazer a soma dos valores verdadeiros `1` e descobrimos que 407 pessoas da amostra são brancas.
+
+#### Valores desconhecidos
+
+Conte o número de NAs na coluna `VD4016` do data frame `df2`.
+
+
+```r
+sum(is.na(df2$VD4016))
+```
+
+```
+## [1] 613
+```
+
+Usando a mesma lógica do exercício anterior, porém, usando a função `is.na()` no lugar de `==` por causa do comportamento especial de valores `NA` em R.
+
+### Revisão
+
+Para os próximos exercícios considere o data frame da pnad que estamos usando nas aulas.
+
+1. Como você selecionaria o mesmo valor abaixo, mas usando inteiros negativos na seleção?
+
+
+```r
+df2[1,5]
+```
+
+```
+## [1] "Homem"
+```
+
+```r
+df2[-(2:1000), -c(1:4, 6:20)]
+```
+
+```
+## [1] "Homem"
+```
+
+Exercício maroto, apenas para vocês botarem a cabeça para trabalhar e lembrarem de usar `:` ao invés de digitar milhares de números.
+
+2. Qual a diferença em usar em selecionar determinada informação em um data frame usando colchetes duplos `[[]]` e usando colchetes simples? Observe o exemplo abaixo para responder:
+
+
+```r
+df2[['Ano']]
+```
+
+```
+##    [1] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [15] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [29] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [43] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [57] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [71] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [85] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##   [99] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##  [113] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+##  [127] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021
+....
+Saída truncada para visualização
+```
+
+```r
+df['Ano']
+```
+
+```
+##       Ano
+## 1    2021
+## 2    2021
+## 3    2021
+## 4    2021
+## 5    2021
+## 6    2021
+## 7    2021
+## 8    2021
+## 9    2021
+....
+Saída truncada para visualização
+```
+
+A diferença é o tipo da saída do R e o que você pode fazer com ela:
+
+
+```r
+# Vetor!
+typeof(df2[['Ano']])
+```
+
+```
+## [1] "integer"
+```
+
+```r
+class(df2[['Ano']])
+```
+
+```
+## [1] "integer"
+```
+
+```r
+# Lista/data.frame!
+typeof(df2['Ano'])
+```
+
+```
+## [1] "list"
+```
+
+```r
+class(df2['Ano'])
+```
+
+```
+## [1] "data.frame"
+```
+
+```r
+# Funciona!
+mean(df2[['Ano']])
+```
+
+```
+## [1] 2021
+```
+
+```r
+# Erro!
+mean(df2['Ano'])
+```
+
+```
+## Warning in mean.default(df2["Ano"]): argumento não é numérico nem lógico:
+## retornando NA
+```
+
+```
+## [1] NA
+```
+
+3. Considere o data frame abaixo:
+
+
+```r
+sala <- data.frame(
+   id = c(1, 2, 3, 4, 5, 6),
+   idade = c(20, 25, 30, 35, 40, 45),
+   nome = c("Fulano", "Cicrano", "Beltrano", "Herculano", "Mariano", "Carrano"),
+   sexo = "Masculino",
+   origem = c("Campinas", "Barueri", "Monte Verde", "Rio de Janeiro", "Natal", "Belo Horizonte")
+)
+```
+
+Modifique o nome de 'Mariano' por 'Mariana'. E altere a variável sexo para que seja um vetor que altere o valor para 'Feminino' na posição em que o nome foi trocado para Mariana.  
+
+
+```r
+# Ver a informação
+sala[sala$nome == "Mariano", "nome"]
+```
+
+```
+## [1] "Mariano"
+```
+
+```r
+sala[sala$nome == "Mariana", "sexo"]
+```
+
+```
+## character(0)
+```
+
+```r
+# Modificar a informação
+sala[sala$nome == "Mariano", "nome"] <- "Mariana"
+sala[sala$nome == "Mariana", "sexo"] <- "Feminino"
+
+# Checar o resultado
+sala
+```
+
+```
+##   id idade      nome      sexo         origem
+## 1  1    20    Fulano Masculino       Campinas
+## 2  2    25   Cicrano Masculino        Barueri
+## 3  3    30  Beltrano Masculino    Monte Verde
+## 4  4    35 Herculano Masculino Rio de Janeiro
+## 5  5    40   Mariana  Feminino          Natal
+## 6  6    45   Carrano Masculino Belo Horizonte
+```
+
+Vocês podiam utilizar uma seleção por números inteiros, porque o banco é pequeno, mas optei por fazer o exercício usando testes lógicos, porque é um caso mais geral e serve para mais de uma posição.
+
+4. Considere o mesmo data frame sala construído no exercício anterior. Usando testes lógicos e operadores Booleanos. Verifique:  
+
+   a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo.  
+   b. se existe algum aluno que tem idade maior ou igual a 20 anos ou que seja de Campinas. 
+   c. se existe alguém com o nome Beltrano.  
+
+
+```r
+# a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo.
+sala[sala$origem == "São Paulo", ]
+```
+
+```
+## [1] id     idade  nome   sexo   origem
+## <0 linhas> (ou row.names de comprimento 0)
+```
+
+```r
+# b. se existe algum aluno que tem idade maior ou igual a 20 anos ou que seja de Campinas. 
+sala[sala$idade >= 20 & sala$origem == "Campinas", ]
+```
+
+```
+##   id idade   nome      sexo   origem
+## 1  1    20 Fulano Masculino Campinas
+```
+
+```r
+# c. se existe alguém com o nome Beltrano.
+sala[sala$nome == "Beltrano", ]
+```
+
+```
+##   id idade     nome      sexo      origem
+## 3  3    30 Beltrano Masculino Monte Verde
+```
+
+Exercício para exercitar os músculos de testes lógicos dentro de bancos de dados!
+
+5. Agora considere o seguinte data frame e, usando as funções apropriadas ensinadas na aula de hoje, responda:  
+
+
+```r
+cadastro <- data.frame(
+   id     = c(10, 105, 299, 645, 7907, 8660, 4992, 630),
+   idade  = c(20, 25, 30, 35, 40, 45, 60, 53),
+   nome   = c("Thais", NA, "Guilherme", "Betânia", "Ana Lucia", NA, NA, "Pâmela"),
+   sexo   = c("Feminino", "Masculino","Masculino", 
+              NA ,NA, "Feminino", "Masculino", "Feminino"),
+   origem = c("Campinas", NA, "Monte Verde", "Rio de Janeiro",
+              NA, "Belo Horizonte","São Paulo", "Rio de Janeiro")
+)
+```
+
+   1. Quantos NAs existe na coluna nome?
+   2. Quantos NAs existe na coluna sexo?
+   3. Quantos NAs existe na coluna origem?
+   4. Substitua os NAs na coluna sexo pelo valor 'Feminino'
+   
+
+```r
+# 1. Quantos NAs existem na coluna nome?
+sum(is.na(cadastro$nome))
+```
+
+```
+## [1] 3
+```
+
+```r
+# 2. Quantos NAs existem na coluna sexo?
+sum(is.na(cadastro$sexo))
+```
+
+```
+## [1] 2
+```
+
+```r
+# 3. Quantos NAs existem na coluna origem?
+sum(is.na(cadastro$origem))
+```
+
+```
+## [1] 2
+```
+
+```r
+# 4. Substitua os NAs na coluna sexo pelo valor 'Feminino'
+
+     # Ver os dados
+     cadastro[is.na(cadastro$sexo), ]
+```
+
+```
+##     id idade      nome sexo         origem
+## 4  645    35   Betânia <NA> Rio de Janeiro
+## 5 7907    40 Ana Lucia <NA>           <NA>
+```
+
+```r
+     # Modificar
+     cadastro[is.na(cadastro$origem), "sexo"] <- "Feminino"
+
+     # Ver o resultado
+     cadastro
+```
+
+```
+##     id idade      nome      sexo         origem
+## 1   10    20     Thais  Feminino       Campinas
+## 2  105    25      <NA>  Feminino           <NA>
+## 3  299    30 Guilherme Masculino    Monte Verde
+## 4  645    35   Betânia      <NA> Rio de Janeiro
+## 5 7907    40 Ana Lucia  Feminino           <NA>
+## 6 8660    45      <NA>  Feminino Belo Horizonte
+## 7 4992    60      <NA> Masculino      São Paulo
+## 8  630    53    Pâmela  Feminino Rio de Janeiro
+```
+   
+
+6. Salve o data frame 'cadastro' do exercicio anterior em um arquivo `.csv`. Como você faria isso? Quais os argumentos que devem ser usados?
+
+
+```r
+write.csv(cadastro, "cadastro.csv", row.names = FALSE)
+```
+
+Só para relembrar o uso da função `write.csv`. Não deixem de consultar também as funções `?read.table`, `?write.table`, `?read.csv2`, `?write.csv2`, `?read.fwf` e `?write.fwf`. Essas funções permitem ler a maior parte dos dados em formato texto que vocês encontrarão nas suas vidas como analistas ou pesquisadores, que utilizam convenções como separadores de colunas (`;`, `,`, `\t`, `" "`), separadores de casas decimais (`,`, `.`), caracteres de escape (`\`, `"`), codificação de caracteres acentuados ("UTF-8", "Windows-1252", etc.) e outras questões similares.
+
+_____________________________________________________

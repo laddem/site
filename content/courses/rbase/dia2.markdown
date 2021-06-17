@@ -464,6 +464,7 @@ Use colchetes simples para selecionar vagões de trem e colchetes duplos para se
 Assim como na lista, é possível usar os colchetes `[[ ]]` em data frame. Tente usá-los no data frame da pnad. Quais são as diferenças encontradas?
 
 ## Modificando valores
+
 Para manipular os valores dentro do seu data frame, faça primeiro uma cópia que você pode manipular. Isso garantirá que você sempre tenha uma cópia original do data frame para usar (caso as coisas dêem errado):
 
 
@@ -1029,7 +1030,7 @@ Para os próximos exercícios considere o data frame da pnad que estamos usando 
 4. Considere o mesmo data frame sala construído no exercício anterior. Usando testes lógicos e operadores Booleanos. Verifique:  
 
    a. se existe algum aluno que seja do sexo Masculino e seja de São Paulo.  
-   b. se existe algum aluno que tem idade maior ou igual a 20 anos ou que seja de Campinas.  
+   b. se existe algum aluno que tem idade maior ou igual a 20 anos ou que seja de Campinas.
    c. se existe alguém com o nome Beltrano.  
 
 5. Agora considere o seguinte data frame e, usando as funções apropriadas ensinadas na aula de hoje, responda:  
