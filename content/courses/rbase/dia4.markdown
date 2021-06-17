@@ -901,11 +901,11 @@ head(df [ sample(1:nrow(df), 5), c("cor_pele", "cor_pele2") ] )
 
 ```
 ##     cor_pele cor_pele2
-## 462    Parda     Negra
-## 134    Parda     Negra
-## 799    Parda     Negra
-## 90     Parda     Negra
-## 225   Branca    Branca
+## 490    Parda     Negra
+## 841    Parda     Negra
+## 136    Parda     Negra
+## 553   Branca    Branca
+## 326    Parda     Negra
 ```
 
 Note que eu optei por salvar o resultado numa nova variável, chamada `cor_pele2`. Em geral, essa é a abordagem correta, você preserva a sua variável original e cria uma variável derivada dela, mas existem situações em que pode ser mais adequado alterar a variável original. Cabe a vocês refletir sobre o "preço" que se paga por esta opção no caso concreto de vocês.
@@ -924,7 +924,7 @@ Isso é relevante porque nossos códigos são documentos textuais, como mensagen
 
 ### Loops
 
-Voltando para o nosso banco de dados, agora que recategorizamos a variável renda, temos que resolver um segundo problema: preciso calcular a média e a mediana da renda para cada grupo da variável `cor_pele2`. Já vimos que podemos fazer isso com muita digitação lá em cima, mas não é difícil imaginar situações em que o número de grupos é muito grande e isso não seja recomendado. Além disso, códigos que exigem muita digitação são cansativos e nos levam a cometer muitos erros de digitação.
+Voltando para o nosso banco de dados, agora que recategorizamos a variável renda, temos que resolver um segundo problema: preciso calcular a média e a mediana da renda para cada grupo da variável `cor_pele2`. Já vimos que podemos fazer isso com muita digitação lá em cima, mas não é difícil imaginar situações em que o número de grupos é muito grande e isso não seja recomendado. Além disso, códigos que exigem muita digitação são cansativos e nos levam a cometer muitos erros.
 
 Por essas razões, a solução mais adequada é utilizar laços:
 
@@ -1085,7 +1085,7 @@ system.time({
 ##      0.05      0.00      0.05
 ```
 
-Vejam que mesmo em um banco de dados pequeno, com apenas mil observações, a operação vetorizada foi quase instantânea, enquanto o for loop demorou alguns segundos milisegundos. Na hora que passamos para operações com milhares ou milhões de observações, essa diferença se traduz em tempo perdido e vale a pena considerar procurar uma solução vetorizada para o nosso problema.
+Vejam que mesmo em um banco de dados pequeno, com apenas mil observações, a operação vetorizada foi quase instantânea, enquanto o for loop demorou alguns milisegundos. Na hora que passamos para operações com milhares ou milhões de observações, essa diferença se traduz em tempo perdido e vale a pena considerar procurar uma solução vetorizada para o nosso problema.
 
 O outro ponto que acho importante levantar é que existe uma correspondência entre esses dois tipos de estrutura: sempre que você vir um código que faz uma árvore de decisão dentro de um `for` loop, provavelmente é um problema que pode ser facilmente resolvido com uma lookup table. De quebra, você ainda tem um código muito mais rápido.
 
