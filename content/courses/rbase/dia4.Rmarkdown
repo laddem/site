@@ -4,9 +4,28 @@ linkTitle: Programação
 summary: Boas práticas e ferramentas úteis em R
 title: "Programando: scripts, controle de fluxo e iteração"
 type: book
-draft: true
+draft: false
 weight: 40
 ---
+
+```{r setup, include=FALSE}
+# save the built-in output hook
+hook_output <- knitr::knit_hooks$get("output")
+
+# set a new output hook to truncate text output
+knitr::knit_hooks$set(output = function(x, options) {
+  if (!is.null(n <- options$out.lines)) {
+    x <- xfun::split_lines(x)
+    if (length(x) > n) {
+      # truncate the output
+      x <- c(head(x, n), "....\nSaída truncada para visualização\n")
+    }
+    x <- paste(x, collapse = "\n")
+  }
+  hook_output(x, options)
+})
+```
+
 
 ## Programas
 
@@ -61,6 +80,10 @@ O outro problema que precisamos resolver frequentemente, é a repetição de uma
 
 Mesmo que implicitamente, estamos tratando da repetição de uma operação muitas e muitas vezes. Em programação, isso é chamado de "loop", ou laço.
 
+Exemplo de um programa:
+
+![Exemplo de um programa em forma de fluxograma](/courses/rbase/dia4_files/hopr_program.png)
+
 ### Estratégia de programação
 
 Ok, mas você tem autonomia para construir seus programas da forma como você preferir, com um pouco de esforço e bateção de cabeça, dá pra fazer qualquer programa funcionar. Porque falar de estratégias então? Bom, se você aderir a algumas convenções você pode facilitar muito a sua vida, e evitar problemas comuns que ocorrem na hora que sentamos diante do computador para implementar nossos programas. Então, seguem algumas dicas:
@@ -73,11 +96,11 @@ Além disso, atualize seu programa a medida que você o implementa. Muitas vezes
 
 #### Divida o trabalho em tarefas menores
 
-Ao desenhar um programa na nossa imaginação, não temos muita clareza da real dificuldade de realização de determinadas tarefas até que de fato nos sentamos para realizá-las. Quando isso ocorrer, não tente pular etapas: quebre suas tarefas em subtarefas menores até que elas possam ser realizadas com mais facilidade. Lembre-se que, ao contrário de um ser humano, o computador nunca se cansa de repetir pequenas tarefas milhões de vezes, então se utilize disso para simplificar ao máximo os passos sequênciais e paralelos necessários para realizar uma tarefa.
+Ao desenhar um programa na nossa imaginação, não temos muita clareza da real dificuldade de realização de determinadas tarefas até que de fato nos sentamos para realizá-las. Quando isso ocorrer, não tente pular etapas: quebre suas tarefas em subtarefas menores até que elas possam ser realizadas com mais facilidade. Lembre-se que, ao contrário de um ser humano, o computador nunca se cansa de repetir pequenas tarefas milhões de vezes, então se utilize disso para simplificar ao máximo os passos sequenciais e paralelos necessários para realizar uma tarefa.
 
 #### Crie exemplos mínimos para testar seu código
 
-Se você está inseguro sobre a saída de uma função ou o resultado de um cálculo, crie um pequeno exemplo para testá-lo. Assim, você adquire controle e segurança sobre o input e o resultado, bem como evita cometer erros de programação que são difíceis de identificar depois. Utilize seus conhecimentos de vetores e data frames para criar pequenos experimentos e verifique se o programa está executando-os corretamente. Lembre-se que uma das grandes vantagens de um computador é que se um código funciona para 10 casos, ele funciona para 10.000.000 de casos.
+Se você está inseguro sobre a saída de uma função ou o resultado de um cálculo, crie um pequeno exemplo para testá-lo. Assim, você adquire controle e segurança sobre o input e o output (ou a entrada e a saída), bem como evita cometer erros de programação que são difíceis de identificar depois. Utilize seus conhecimentos de vetores e data frames para criar pequenos experimentos e verifique se o programa está executando-os corretamente. Lembre-se que uma das grandes vantagens de um computador é que se um código funciona para 10 casos, ele funciona para 10.000.000 de casos.
 
 ## Criando programas no R
 
@@ -186,7 +209,7 @@ descreva <- function(x) {
 descreva(df$rend_mes_trab_princ)
 ```
 
-Minha primeira tentativa de construir a função não deu muito certo. A função simplesmente retorna o primeiro valor. Isso faz parte do comportamento das funções em R, elas retornam apenas uma coisa. Mas eu tenho a solução: posso guardar todos os cálculos numa lista e mandar a função retornar ela.
+Minha primeira tentativa de construir a função não deu muito certo. A função simplesmente retorna o primeiro valor. Isso faz parte do comportamento das funções em R, elas retornam apenas uma coisa. Mas eu tenho a solução: posso guardar todos os cálculos numa lista e a função a retornará.
 
 ```{r}
 descreva <- function(x) {
@@ -204,7 +227,7 @@ descreva <- function(x) {
 descreva(df$rend_mes_trab_princ)
 ```
 
-Posso melhorar muito minha função, nesse caso, optei simplesmente por colocar nomes nos elementos da lista. Agora posso facilmente descrever os meus três grupos:
+Aproveitei também para melhorar minha função, nesse caso, optei simplesmente por colocar nomes nos elementos da lista. Agora posso facilmente descrever os meus três grupos:
 
 ```{r}
 # Renda total
@@ -224,16 +247,28 @@ Até aqui, tudo bem, mas e a minha correção?
 Para aplicar essa correção, decidi inflar a renda rural em 20% e diminuir a renda urbana em 10%. Não sei se esses valores fazem sentido, mas vamos partir do pressuposto que sim. Como eu poderia colocar isso dentro da minha função `descreva` de tal forma que o resultado reflita a minha correção? Preciso de uma estrutura que execute uma operação para rendas urbanas e outra para rendas rurais. Algo assim:
 
 ```{r}
-teste <- data.frame(renda = 2000,
+teste1 <- data.frame(renda = 2000,
                     sit_dom = "rural")
-teste
+teste1
 
-if (teste$sit_dom[1] == "urbana") {
-  mean(teste$renda[1] * 0.9)
+teste2 <- data.frame(renda = 2000,
+                    sit_dom = "urbana")
+teste2
+
+if (teste1$sit_dom[1] == "urbana") {
+  mean(teste1$renda[1] * 0.9)
 }
 
-if (teste$sit_dom[1] == "rural") {
-  mean(teste$renda[1] * 1.2)
+if (teste1$sit_dom[1] == "rural") {
+  mean(teste1$renda[1] * 1.2)
+}
+
+if (teste2$sit_dom[1] == "urbana") {
+  mean(teste2$renda[1] * 0.9)
+}
+
+if (teste2$sit_dom[1] == "rural") {
+  mean(teste2$renda[1] * 1.2)
 }
 ```
 
@@ -247,7 +282,7 @@ Vocês podem testar alterar os valores de "teste" e verificar se o resultado mud
 Porém, esse tipo de estrutura tem duas limitações importantes:
 
 - Só funciona para testes lógicos que retornam um único valor TRUE/FALSE
-- Exige que o computador execute um teste lógico para operação, mesmo que ele já tenha encontrado o caso verdadeiro
+- Exige que o computador execute um teste lógico para cada operação, mesmo que ele já tenha encontrado o caso verdadeiro
 
 A solução para o primeiro problema a gente vê mais tarde, mas a solução para o segundo é você criar uma árvore de decisão para seu problema, indicando o que fazer em cada caso.
 
@@ -359,7 +394,7 @@ mude_corpele(cor2)
 mude_corpele(cor3)
 ```
 
-Eu também precisaria de um jeito de repetir essa operação muitas vezes, talvez com um laço, que veremos adiante. Mas nesse tipo de caso específico, há uma saída muito mais elegante, rápida e fácil: lookup tables. Conceitualmente, lookup tables são como uma tabelinha no qual você diz ao computador para procurar um resultado que corresponde a uma chave. Por exemplo:
+Eu também precisaria de um jeito de repetir essa operação muitas vezes, talvez com um laço, que veremos adiante. Mas nesse tipo de caso específico, há uma saída muito mais elegante, rápida e fácil: **lookup tables**. Conceitualmente, lookup tables são como uma tabelinha no qual você diz ao computador para procurar um resultado que corresponde a uma chave. Por exemplo:
 
 - Branca -> Branca
 - Preta -> Negra
@@ -389,11 +424,11 @@ mudecor["Indígena"]
 
 E é fácil fazer o mesmo para todas as observações salvas no vetor `df$cor_pele`, desde que façamos um passo intermediário de coerção para "caractere".
 
-```{r}
-head(mudecor[as.character(df$cor_pele)])
+```{r, out.lines=10}
+mudecor[as.character(df$cor_pele)]
 ```
 
-No data frame, ficaríamos com:
+Para salvar esse resultado no data frame, ficaríamos com:
 
 ```{r}
 df$cor_pele2 <- mudecor[as.character(df$cor_pele)]
@@ -401,21 +436,23 @@ df$cor_pele2 <- mudecor[as.character(df$cor_pele)]
 head(df [ sample(1:nrow(df), 5), c("cor_pele", "cor_pele2") ] )
 ```
 
+Note que eu optei por salvar o resultado numa nova variável, chamada `cor_pele2`. Em geral, essa é a abordagem correta, você preserva a sua variável original e cria uma variável derivada dela, mas existem situações em que pode ser mais adequado alterar a variável original. Cabe a vocês refletir sobre o "preço" que se paga por esta opção no caso concreto de vocês.
+
 Utilizando uma lookup table, pulamos o problema de ter que repetir a operação uma vez para cada observação, nos aproveitando do comportamento do R quando utilizamos a indexação de data frames com `[]`.
 
 ### Comentários
 
-Aproveito que mudamos a função descreva para falar sobre o uso de comentários `#` no código. São informações que o computador ignora ao rodar o programa, mas cuja presença ajuda o analista a rapidamente compreender o que um determinado código faz sem precisar entender os detalhes. Comentários são cruciais para que o programa seja legível para outras pessoas, como seus colaboradores e para seu "eu futuro", que pode voltar àquele programa original muito tempo depois e ter dificuldade de compreender o que ele está fazendo. Volte para a função `descreva` e a função `descreva2` e veja a diferença entre as duas.
+Aproveito que mudamos a função descreva para falar sobre o uso de comentários `#` no código. São informações que o computador ignora ao rodar o programa, mas cuja presença ajuda o leitor a rapidamente compreender o que um determinado código faz sem precisar mergulhar nos detalhes. Comentários são cruciais para que o programa seja legível para outras pessoas, como seus colaboradores e para seu "eu futuro", que pode voltar àquele programa original muito tempo depois e ter dificuldade de compreender o que ele está fazendo. Volte para a função `descreva` e a função `descreva2` e veja a diferença entre as duas.
 
 Comentários fazem parte da documentação de códigos, e um bom uso deles ajuda você a aprender programação, manter códigos, colaborar com outras pessoas e identificar problemas rapidamente. Criem o hábito de escreverem comentários nos seus programas. 
 
 No começo, é comum a gente escrever muitos comentários, detalhando todas as tarefas. Com o tempo, os nossos códigos vão ficando mais enxutos, e deixamos a própria linguagem fazer a maior parte da comunicação, com alguns comentários aqui e ali apenas para situar o leitor.
 
-Isso é relevante porque nossos códigos são documentos textuais, como mensagens, memorandos e relatórios. Eles se assemelham muito a uma seção "Métodos" de um artigo científico, porque descrevem as tarefas realizadas para chegar a um resultado. Portanto, boas práticas de produção de textos como pontuação, estilo, conectores, coesão e coerência são importantes aqui também. Esse é um assunto discutido na "Programação Literária" e foge um pouco do tema desse curso.
+Isso é relevante porque nossos códigos são documentos textuais, como mensagens, memorandos e relatórios. Eles se assemelham muito a uma seção "Métodos" de um artigo científico, porque descrevem as tarefas realizadas para chegar a um resultado. Portanto, boas práticas de produção de textos como pontuação, estilo, conectores, coesão e coerência são importantes aqui também. Esse é um assunto discutido na "[Programação Literária](https://pt.wikipedia.org/wiki/Programação_literária)" e foge um pouco do tema desse curso.
 
 ### Loops
 
-Voltando para o nosso banco de dados, agora que recategorizamos a variável renda, temos que resolver um segundo problema: preciso calcular a média e a mediana da renda para cada grupo da variável `cor_pele2`. Já vimos que podemos fazer isso com muita digitação lá em cima, mas não é difícil imaginar situações em que o número de grupos é muito grande e isso não seja recomendado. Além disso, códigos que exigem muita digitação são cansativos e nos levam a cometer muitos erros de digitação.
+Voltando para o nosso banco de dados, agora que recategorizamos a variável renda, temos que resolver um segundo problema: preciso calcular a média e a mediana da renda para cada grupo da variável `cor_pele2`. Já vimos que podemos fazer isso com muita digitação lá em cima, mas não é difícil imaginar situações em que o número de grupos é muito grande e isso não seja recomendado. Além disso, códigos que exigem muita digitação são cansativos e nos levam a cometer muitos erros.
 
 Por essas razões, a solução mais adequada é utilizar laços:
 
@@ -526,7 +563,7 @@ system.time({
 })
 ```
 
-Vejam que mesmo em um banco de dados pequeno, com apenas mil observações, a operação vetorizada foi quase instantânea, enquanto o for loop demorou alguns segundos milisegundos. Na hora que passamos para operações com milhares ou milhões de observações, essa diferença se traduz em tempo perdido e vale a pena considerar procurar uma solução vetorizada para o nosso problema.
+Vejam que mesmo em um banco de dados pequeno, com apenas mil observações, a operação vetorizada foi quase instantânea, enquanto o for loop demorou alguns milisegundos. Na hora que passamos para operações com milhares ou milhões de observações, essa diferença se traduz em tempo perdido e vale a pena considerar procurar uma solução vetorizada para o nosso problema.
 
 O outro ponto que acho importante levantar é que existe uma correspondência entre esses dois tipos de estrutura: sempre que você vir um código que faz uma árvore de decisão dentro de um `for` loop, provavelmente é um problema que pode ser facilmente resolvido com uma lookup table. De quebra, você ainda tem um código muito mais rápido.
 
