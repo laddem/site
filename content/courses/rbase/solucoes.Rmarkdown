@@ -686,3 +686,254 @@ write.csv(cadastro, "cadastro.csv", row.names = FALSE)
 Só para relembrar o uso da função `write.csv`. Não deixem de consultar também as funções `?read.table`, `?write.table`, `?read.csv2`, `?write.csv2`, `?read.fwf` e `?write.fwf`. Essas funções permitem ler a maior parte dos dados em formato texto que vocês encontrarão nas suas vidas como analistas ou pesquisadores, que utilizam convenções como separadores de colunas (`;`, `,`, `\t`, `" "`), separadores de casas decimais (`,`, `.`), caracteres de escape (`\`, `"`), codificação de caracteres acentuados ("UTF-8", "Windows-1252", etc.) e outras questões similares.
 
 _____________________________________________________
+
+## Aula 3: Estatística e visualização: analisando seus dados e obtendo resultados
+
+## Funções de medidas de posição
+
+#### Soma
+
+Some as primeiras três posições da variável V2009 do data frame `df`
+```{r}
+sum(df$V2009[1:3])
+```
+
+O objetivo deste exercício era mostrar que esta e outras funções de estatistica do R, aceitam que você selecione parte de um vetor, não necessariamente você precisa usar os valores de toda a variável caso queira.
+
+#### na.rm
+
+Some as primeiras 30 observações da variável VD4016 do data frame df. O que aconteceu? Foi necessário usar na.rm?
+
+```{r}
+
+sum(df$VD4016)
+
+sum(df$VD4016, na.rm = TRUE)
+```
+
+A ideia era mostrar como o R se comporta caso a coluna do dataframe (o vetor df$VD4016) tenha NA e assim mostrar a funcionalidade do argumento `na.rm`.
+
+#### Média e Média trimmed
+
+Calcule a média da variável V2009 do data frame df. Calcule a média e média trimmed. Quais são as principais diferenças?
+
+```{r}
+mean(df$V2009)
+
+mean(df$V2009, trim = 0.05)
+```
+
+Perceba as diferenças entre usar ou não a média trim, neste caso as diferenças não vão ser significativas por que esta coluna não possue valores extremos que possam viesar a média. Lembre-se que você pode escolher o valor do argumento `trim`.  
+
+#### Mediana
+
+Calcule a mediana da variável V2009 do data frame df. Quais as diferenças encontradas em relação a média calculada no exercício anterior?
+
+```{r}
+median(df$V2009)
+```
+
+#### Amplitude
+
+Calcule o valor máximo, mínimo e a amplitude da variável V2009 do data frame df.
+
+```{r}
+range(df$V2009)
+
+min(df$V2009)
+
+max(df$V2009)
+
+```
+
+Perceba as diferenças entre as medidas de posição que apresentamos para vocês.
+
+#### Percentis e Distância interquartil
+
+Calcule a distância interquatil da variável V2009 do data frame df da pnad. Que valor você encontrou? Compare com os valores encontrados no percentil 25% e 75%.
+
+```{r}
+
+## Aqui pedimos para o R calcular o percentil 25% e 75% da variável V2009 (Idade)
+quantile(df$V2009, probs = c(0.25, 0.75)) 
+
+## Aqui vamos calcular a distância interquartil pedida no exercício
+IQR(df$V2009) 
+```
+
+A medida da distância interquartil nada mais é do que a diferença entre o 3º quartil (percentil 75%) e o 1º quartil (25%). Veja as diferenças. Lembre que a função quantile pode calcular outros percentis, o número de percentis é você que define. 
+
+#### Variância
+
+Calcule a variância da variável V2009 do data frame df.
+
+```{r}
+var(df$V2009)
+```
+
+#### Desvio Padrão
+
+Calcule o desvio padrão da variável V2009 do data frame df.
+
+```{r}
+sd(df$V2009)
+```
+
+#### Desvio absoluto da mediana
+Calcule o Desvio absoluto da mediana da variável V2009 do data frame df.
+
+```{r}
+mad(df$V2009)
+```
+
+#### Escores e testes
+
+Utilize seus conhecimentos de indexação e distribuições para fazer verificar se as diferenças de renda entre a população rural e urbana são estatisticamente significativas ao nível de 0.05.
+```{r}
+
+```
+
+#### Correlação
+
+Faça um teste de correlação linear entre a idade (V2009) e o número de moradores (VD2003). O que esse resultado significa?
+
+```{r}
+
+```
+
+#### use = ???
+
+Agora calcule correlações lineares entre as variáveis renda (VD4016), idade (V2009) e número de moradores (VD4016) tratando adequadamente os NAs na variável renda.
+```{r}
+
+```
+
+
+## Visualizações
+
+#### Função global de gráficos
+
+Plote um gráfico, usando a função `plot()`, da variável V2009 do data frame df. O que ocorre se você tenta plotar a variável Trimeste como gráfico de dispersão? E de linha? 
+
+```{r}
+plot(df$V2009)
+```
+
+Por padrão a função `plot()`faz um gráfico de dispersão com os valores da variável no eixo x, e as posições (index) destes valores no eixo y. 
+
+```{r}
+plot(df$Trimestre)
+
+plot(df$Trimestre, type = "l")
+```
+
+Plotar um gráfico da variável Trimestre, nos mostra que ela tem um único valor em todas as observações (linhas), o valor um. 
+
+#### Histogramas
+
+Considere a variável VD4016 do data frame df. Desenho o histograma, e use diferentes valores no argumento `breaks`, teste aquele que ficará melhor para esta variável. O que acontece se você tentar fazer um histograma da variável V2010?
+```{r}
+hist(df$VD4016, breaks = 3)
+
+hist(df$VD4016, breaks = 10)
+
+hist(df$VD4016, breaks = 50)
+
+hist(df$VD4016, breaks = 80)
+```
+
+Entendam as diferenças produzidas pelo argumento breaks da função gráfica `hist()`, percebam as diferenças e a importância desse argumento para ser possível fazer uma boa análise de qualquer histogramas que vocês forem construir. 
+
+A outra parte do exercício pedia para tentar fazer o histograma da variável V2010 e analisar o erro que aparece. A ideia era ver que só é possível fazer histogramas de variáveis numéricas.
+```{r}
+hist(df$V2010) 
+```
+
+#### Boxplot
+Faça um boxplot da variável VD4016. O que você vê de diferente em relação a variável V2009 usada no exemplo anterior? Como você interpretaria esse boxplot.
+
+Exemplo da aula:
+```{r}
+boxplot(df$V2009)
+```
+
+Resposta do exercício:
+```{r}
+boxplot(df$VD4016)
+```
+
+Percebam que no boxplot da variável VD4016, o R, colocou esses pontos em branco, os outliers, ou seja, para o R, essas variações acima de, aproximadamente, 4500, são fora da distribuição. Olhando o boxplot da variável V2009 (Idade), ela é menos achatada e sem outliers do que variável renda (VD4016). A ideia aqui era perceber as diferenças que podem ser enxergadas através do boxplot e também como o R plota os outliers. 
+
+#### Barplot
+
+Crie um barplot para a variável V2007 do dataframe *df*. 
+
+```{r}
+df$V2007 <- as.factor(df$V2007)
+sexo <- table(df$V2007)
+
+barplot(sexo, names.arg = c("Masculino", "Feminino"))
+```
+
+Para criar o barplot, é necessário transformar a variável como fator (ela antes estava como character), a partir disso, usamos a variável `table()` que conta a frequência absoluta para cada uma das categorias. É possível trocar os rótulos (*labels*) através do argumento `names.arg`. Neste exercício, mudei das categorias de Homem e Mulher, para Masculino e Feminino para vocês entender o que o argumento faz.
+
+#### Gŕafico de pizza (Pie)
+
+Crie um gráfico de pizza da variável V1022.
+
+```{r}
+df$V1022 <- as.factor(df$V1022)
+sit <- table(df$V1022)
+
+pie(sit, labels = c("U", "R"))
+```
+
+Para o gráfico de pizza, seguimos os mesmos passos feitos para a construção do gráfico de barras: transformar em fator e usar a função `table()` para capturar as frequências absolutas. Obs: assim como a função barplot, esta função também tem um argumento em que é possível mudar os rótulos no gráfico, este argumento chama `labels`.
+
+#### Revisão
+
+1. Usando as funções de medidas individuais, rode o dataset 'airquality' (se você escrever assim no R, ele já mostra o dataset). 
+
+```{r}
+sum(airquality$Temp)
+
+mean(airquality$Temp)
+###...
+
+```
+
+Teste todas as opções ensinadas durante a aula, crie a curiosidade de "fuçar" as funções e seus argumentos, e ver o que eles fazem.
+
+2. Crie um histograma para a variável airquality$Temp.
+
+```{r}
+hist(airquality$Temp)
+```
+
+Observe este histograma, lembra do arumento `breaks`? Então, olhe como fica com diferentes números também. A ideia deste exercício era esta, mostrando em uma outra variável, diferente das que a gente vem trabalhando durante as aulas.
+
+3. Use a função que sumarisa as principais informações de estatística básica e também construa um boxplot para comparar as informações escritas e visuais para as seguintes variáveis do dado airquality: Wind, Temp and Ozone).
+
+```{r}
+summary(airquality$Temp) 
+summary(airquality$Wind)
+summary(airquality$Ozone)
+
+```
+
+Olhem as diferenças nas medidas de posição, de minimos e máximos, observe o que elas podem mostrar desse dataset. A média de Temperatura, os ventos, o ozônio (reparem nos NA's no summary dessa variável). Entenda como o summary funciona e a sua utilidade.
+
+4. Agora usando somente os dados da amostra da pnad que temos visto até agora, faça uma análise descritiva usando as medidas individiuais, as de correlação e as de contagem. Além disso observe as diferenças entre a medida sumary para uma variável numérica e uma variável categórica.
+
+Algumas ideias:
+
+a. Use a função table para ver as relações entre a variável V1022 e V2007. Faça também para a variável V2007 e V2010. Veja as contagens de observações para cada categoria e entenda um pouco melhor o perfil dos dados.
+
+b. Faça as medida resumo para a ver a média, mediana, quartis da sua amostra.
+
+Esse exercício tem como objetivo fazermos uma pequena análise dessa amostra da pnad, 2021 - 1º Trimestre. 
+
+```{r}
+
+```
+
